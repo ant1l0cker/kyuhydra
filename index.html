@@ -290,62 +290,26 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div class="bg-black/20 rounded-xl p-4 border border-white/10">
         <p class="text-xs opacity-60">Total Products</p>
-        <p class="text-2xl font-bold">17</p>
+        <p class="text-2xl font-bold" id="adminTotalProducts">0</p>
       </div>
       <div class="bg-black/20 rounded-xl p-4 border border-white/10">
         <p class="text-xs opacity-60">Pending Approval</p>
-        <p class="text-2xl font-bold text-yellow-400">2</p>
+        <p class="text-2xl font-bold text-yellow-400" id="adminPendingProducts">0</p>
       </div>
       <div class="bg-black/20 rounded-xl p-4 border border-white/10">
         <p class="text-xs opacity-60">Active Listings</p>
-        <p class="text-2xl font-bold text-green-400">14</p>
+        <p class="text-2xl font-bold text-green-400" id="adminActiveProducts">0</p>
       </div>
     </div>
 
     <h2 class="text-xl font-bold mb-4"><i class="fas fa-clock" style="color: var(--accent);"></i> Pending Approvals</h2>
     
-    <!-- Pending 1 -->
-    <div class="bg-black/20 rounded-xl p-4 mb-3 border-l-4" style="border-left-color: var(--accent);">
-      <div class="flex flex-wrap justify-between items-start">
-        <div>
-          <span class="vendor-handle text-sm">@KutusTrader</span>
-          <p class="text-sm font-medium mt-1">Vintage Carhartt jacket</p>
-          <p class="text-xs opacity-60">KSh 2,200 · fee: 150</p>
-          <span class="text-xs bg-black/30 px-2 py-0.5 rounded inline-block mt-1">📱 ref: MPS-8821</span>
-        </div>
-        <div class="flex gap-2 mt-2 md:mt-0">
-          <button class="text-xs px-4 py-1.5 rounded-full bg-green-600/30 text-green-300 hover:bg-green-600/50" onclick="handleApproveFull(this)">✓ Approve</button>
-          <button class="text-xs px-4 py-1.5 rounded-full bg-red-600/30 text-red-300 hover:bg-red-600/50" onclick="handleRejectFull(this)">✕ Reject</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Pending 2 -->
-    <div class="bg-black/20 rounded-xl p-4 mb-3 border-l-4" style="border-left-color: #facc15;">
-      <div class="flex flex-wrap justify-between items-start">
-        <div>
-          <span class="vendor-handle text-sm">@HydraPlug01</span>
-          <p class="text-sm font-medium mt-1">Dell XPS 13 (refurb)</p>
-          <p class="text-xs opacity-60">KSh 45,000 · fee: 500</p>
-          <span class="text-xs bg-black/30 px-2 py-0.5 rounded inline-block mt-1">📱 ref: MPS-9945</span>
-        </div>
-        <div class="flex gap-2 mt-2 md:mt-0">
-          <button class="text-xs px-4 py-1.5 rounded-full bg-green-600/30 text-green-300 hover:bg-green-600/50" onclick="handleApproveFull(this)">✓ Approve</button>
-          <button class="text-xs px-4 py-1.5 rounded-full bg-red-600/30 text-red-300 hover:bg-red-600/50" onclick="handleRejectFull(this)">✕ Reject</button>
-        </div>
-      </div>
-    </div>
+    <!-- Dynamic Pending Approvals Will Load Here -->
+    <div id="adminPendingList"></div>
 
     <h2 class="text-xl font-bold mt-8 mb-4"><i class="fas fa-check-circle" style="color: var(--accent);"></i> Active Listings</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-      <div class="bg-black/20 rounded-xl p-3 border border-white/10">
-        <p class="font-medium">Dell XPS 13 · i7 16GB</p>
-        <p class="text-xs opacity-60">@HydraPlug01 · KSh 45,000</p>
-      </div>
-      <div class="bg-black/20 rounded-xl p-3 border border-white/10">
-        <p class="font-medium">Economics past papers (2018-2025)</p>
-        <p class="text-xs opacity-60">@EconPlug · KSh 800</p>
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="adminActiveList">
+      <!-- Dynamic Active Listings Will Load Here -->
     </div>
 
     <div class="mt-8 p-4 rounded-xl" style="background: var(--bg-secondary); border:1px solid var(--border-color);">
@@ -428,105 +392,10 @@
         </div>
       </div>
 
+      <!-- Products load here dynamically from Supabase -->
       <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- product 1 -->
-        <div class="product-card" data-name="dell xps 13 laptop">
-          <div class="flex items-start justify-between">
-            <div>
-              <span class="vendor-handle text-sm">@HydraPlug01</span>
-              <div class="flex items-center gap-2 mt-0.5">
-                <span class="text-xs"><i class="fas fa-star text-yellow-400"></i> 4.8</span>
-                <span class="text-xs opacity-60">· 23 trades</span>
-                <span class="badge-trust"><i class="fas fa-shield-alt"></i> verified</span>
-              </div>
-            </div>
-            <span class="text-xs bg-black/30 px-2 py-0.5 rounded-full">Tech</span>
-          </div>
-          <h3 class="font-bold text-base mt-2">Dell XPS 13 · i7 16GB</h3>
-          <p class="text-sm opacity-70">KSh 45,000 · <span class="text-green-400">active</span></p>
-          <div class="gallery-grid mt-2">
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-          </div>
-          <div class="flex items-center justify-between mt-2 text-xs">
-            <span><i class="far fa-clock"></i> 2h ago · Gate A</span>
-            <span class="opacity-60"><i class="fas fa-phone-alt"></i> +254 7XX XXX</span>
-          </div>
-        </div>
-
-        <!-- product 2 -->
-        <div class="product-card" data-name="vintage carhartt jacket thrift">
-          <div class="flex items-start justify-between">
-            <div>
-              <span class="vendor-handle text-sm">@KutusTrader</span>
-              <div class="flex items-center gap-2 mt-0.5">
-                <span class="text-xs"><i class="fas fa-star text-yellow-400"></i> 4.2</span>
-                <span class="text-xs opacity-60">· 8 trades</span>
-                <span class="badge-trust" style="background:#facc15; color:#0B0C10;">pending</span>
-              </div>
-            </div>
-            <span class="text-xs bg-black/30 px-2 py-0.5 rounded-full">Thrift</span>
-          </div>
-          <h3 class="font-bold text-base mt-2">Vintage Carhartt jacket</h3>
-          <p class="text-sm opacity-70">KSh 2,200 · <span class="status-pending">pending_approval</span></p>
-          <div class="gallery-grid mt-2">
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>
-          </div>
-          <div class="flex items-center justify-between mt-2 text-xs">
-            <span><i class="far fa-clock"></i> 5h ago · Kutus Town</span>
-            <span class="opacity-60"><i class="fas fa-phone-alt"></i> +254 7YY YYY</span>
-          </div>
-        </div>
-
-        <!-- product 3 -->
-        <div class="product-card" data-name="academic past papers economics">
-          <div class="flex items-start justify-between">
-            <div>
-              <span class="vendor-handle text-sm">@EconPlug</span>
-              <div class="flex items-center gap-2 mt-0.5">
-                <span class="text-xs"><i class="fas fa-star text-yellow-400"></i> 4.9</span>
-                <span class="text-xs opacity-60">· 45 trades</span>
-                <span class="badge-trust"><i class="fas fa-check-circle"></i> verified</span>
-              </div>
-            </div>
-            <span class="text-xs bg-black/30 px-2 py-0.5 rounded-full">Academic</span>
-          </div>
-          <h3 class="font-bold text-base mt-2">Economics past papers (2018-2025)</h3>
-          <p class="text-sm opacity-70">KSh 800 · <span class="text-green-400">active</span></p>
-          <div class="gallery-grid mt-2">
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-file-pdf opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-file-pdf opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-file-pdf opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-file-pdf opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-file-pdf opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-file-pdf opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-file-pdf opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-file-pdf opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-file-pdf opacity-30"></i></div>
-            <div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-file-pdf opacity-30"></i></div>
-          </div>
-          <div class="flex items-center justify-between mt-2 text-xs">
-            <span><i class="far fa-clock"></i> 1d ago · Admin Block</span>
-            <span class="opacity-60"><i class="fas fa-phone-alt"></i> +254 7ZZ ZZZ</span>
-          </div>
-        </div>
+        <!-- Static loading placeholder, gets overwritten by JS -->
+        <div class="text-center opacity-50 col-span-2 py-10"><i class="fas fa-circle-notch fa-spin"></i> Loading products...</div>
       </div>
 
       <!-- listing creation / fee with product search -->
@@ -577,9 +446,9 @@
       <div class="mt-4 p-4 rounded-2xl" style="background: var(--bg-secondary); border:1px solid var(--border-color);">
         <p class="text-xs font-bold"><i class="fas fa-store"></i> quick stats</p>
         <div class="mt-2 space-y-1 text-xs">
-          <div class="flex justify-between"><span class="opacity-60">Listings</span><span>17</span></div>
-          <div class="flex justify-between"><span class="opacity-60">Pending</span><span class="text-yellow-400">2</span></div>
-          <div class="flex justify-between"><span class="opacity-60">Active</span><span class="text-green-400">14</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Listings</span><span id="quickStatsTotal">0</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Pending</span><span class="text-yellow-400" id="quickStatsPending">0</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Active</span><span class="text-green-400" id="quickStatsActive">0</span></div>
         </div>
       </div>
     </div>
@@ -601,7 +470,13 @@
 </div>
 
 <!-- ===== JAVASCRIPT ===== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  // ===== SUPABASE CONFIGURATION =====
+  const SUPABASE_URL = 'https://dwonfvnxdojvgfdbrrbi.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_qeRWQSDy8mRIMU-TfSyPXQ_jz_FUx8C';
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   // ===== ALL 100 PRODUCTS =====
   const allProducts = [
     "HP EliteBook / ProBook (Refurbished)", "Dell Latitude Laptops", "Used MacBook Air (Early Models)",
@@ -659,11 +534,13 @@
       if (passwordInput === ADMIN_PASSWORD) {
         adminUnlocked = true;
         document.getElementById('adminFullPage').classList.add('active');
+        loadAdminData(); // Load data into the admin panel when opened
       } else if (passwordInput !== null) {
         alert('✕ Access Denied');
       }
     } else {
       document.getElementById('adminFullPage').classList.add('active');
+      loadAdminData();
     }
   }
 
@@ -717,15 +594,6 @@
     productSuggestions.classList.remove('active');
   }
 
-  function handleSubmitListing() {
-    const product = productSearchInput.value.trim() || 'Custom Item';
-    const fee = document.getElementById('feeSelect').value;
-    alert(`📦 "${product}" submitted for approval\n${fee}\n✅ Status: pending_approval`);
-    productSearchInput.value = '';
-    document.getElementById('fileList').innerHTML = '';
-    uploadedFiles = [];
-  }
-
   // ===== DRAG & DROP =====
   const dropZone = document.getElementById('dropZone');
   const fileInput = document.getElementById('fileInput');
@@ -757,6 +625,10 @@
   function handleFiles(files) {
     for (let file of files) {
       if (file.type.startsWith('image/')) {
+        if (uploadedFiles.length >= 10) {
+          alert("Maximum 10 images allowed!");
+          break;
+        }
         uploadedFiles.push(file);
         const fileItem = document.createElement('div');
         fileItem.className = 'file-item';
@@ -826,35 +698,239 @@
   }
   window.filterProducts = filterProducts;
 
-  // ===== ADMIN FULL PAGE BUTTONS =====
-  function handleApproveFull(btn) {
-    const parent = btn.closest('.bg-black\\/20');
-    if (!parent) return;
-    const statusEl = parent.querySelector('.status-pending');
-    if (statusEl) {
-      statusEl.innerHTML = '<i class="fas fa-check-circle"></i> active';
-      statusEl.className = 'text-xs status-active';
+  // ===== SUPABASE LOGIC =====
+  
+  // Function to render product cards dynamically
+  function renderProducts(products) {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = ''; // Clear placeholders
+    
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="text-center opacity-50 col-span-2 py-10">No products listed yet. Be the first!</div>';
+      return;
     }
-    alert('✅ Product approved & activated');
+
+    products.forEach(product => {
+      const statusClass = product.status === 'active' ? 'status-active' : (product.status === 'pending' ? 'status-pending' : 'status-rejected');
+      const statusText = product.status || 'pending';
+      
+      // Generate gallery images (up to 10)
+      let galleryHTML = '';
+      const imgs = product.image_urls || [];
+      for (let i = 0; i < 10; i++) {
+        if (imgs[i]) {
+          galleryHTML += `<img src="${imgs[i]}" alt="img">`;
+        } else {
+          galleryHTML += `<div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>`;
+        }
+      }
+
+      const card = `
+        <div class="product-card" data-name="${product.name.toLowerCase()}">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="vendor-handle text-sm">@${product.vendor || 'Unknown'}</span>
+              <div class="flex items-center gap-2 mt-0.5">
+                <span class="text-xs"><i class="fas fa-star text-yellow-400"></i> ${product.rating || 'New'}</span>
+                <span class="text-xs opacity-60">· ${product.trades || 0} trades</span>
+                <span class="badge-trust"><i class="fas fa-shield-alt"></i> ${product.status === 'active' ? 'verified' : 'pending'}</span>
+              </div>
+            </div>
+            <span class="text-xs bg-black/30 px-2 py-0.5 rounded-full">${product.category || 'General'}</span>
+          </div>
+          <h3 class="font-bold text-base mt-2">${product.name}</h3>
+          <p class="text-sm opacity-70">KSh ${product.price} · <span class="${statusClass}">${statusText}</span></p>
+          <div class="gallery-grid mt-2">
+            ${galleryHTML}
+          </div>
+          <div class="flex items-center justify-between mt-2 text-xs">
+            <span><i class="far fa-clock"></i> ${new Date(product.created_at).toLocaleString()}</span>
+            <span class="opacity-60"><i class="fas fa-phone-alt"></i> ${product.contact || 'N/A'}</span>
+          </div>
+        </div>
+      `;
+      grid.innerHTML += card;
+    });
   }
 
-  function handleRejectFull(btn) {
-    const parent = btn.closest('.bg-black\\/20');
-    if (!parent) return;
-    const statusEl = parent.querySelector('.status-pending');
-    if (statusEl) {
-      statusEl.innerHTML = '<i class="fas fa-times-circle"></i> rejected';
-      statusEl.className = 'text-xs status-rejected';
+  // Fetch all products on load
+  async function loadProducts() {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error loading products:', error.message);
+      document.getElementById('productGrid').innerHTML = '<div class="text-center opacity-50 col-span-2 py-10">Error loading products. Check console.</div>';
+      return;
     }
-    alert('✕ Product rejected');
+    
+    renderProducts(data);
+    updateQuickStats(data);
   }
 
-  window.handleApproveFull = handleApproveFull;
-  window.handleRejectFull = handleRejectFull;
+  // Update the right sidebar stats
+  function updateQuickStats(data) {
+    const total = data.length;
+    const pending = data.filter(p => p.status === 'pending').length;
+    const active = data.filter(p => p.status === 'active').length;
+
+    document.getElementById('quickStatsTotal').innerText = total;
+    document.getElementById('quickStatsPending').innerText = pending;
+    document.getElementById('quickStatsActive').innerText = active;
+  }
+
+  // Handle Submit Listing (Upload images & Insert DB)
+  async function handleSubmitListing() {
+    const product = productSearchInput.value.trim();
+    const feeText = document.getElementById('feeSelect').value;
+    
+    if (!product) {
+      alert('Please select or type a product name.');
+      return;
+    }
+    
+    if (uploadedFiles.length === 0) {
+      alert('Please add at least 1 image (max 10).');
+      return;
+    }
+
+    // Extract Price from fee or prompt (for demo, we'll just prompt)
+    let price = prompt("Enter the selling price in KSh:", "1000");
+    if (!price) return;
+
+    const submitBtn = document.querySelector('#feedSection button[onclick="handleSubmitListing()"]');
+    submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Uploading...';
+    submitBtn.disabled = true;
+
+    try {
+      // 1. Upload Images to Storage
+      const imageUrls = [];
+      for (const file of uploadedFiles) {
+        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+        const { data, error } = await supabase.storage
+          .from('product-images')
+          .upload(fileName, file);
+
+        if (error) throw error;
+
+        const { data: publicURL } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(fileName);
+        
+        imageUrls.push(publicURL.publicUrl);
+      }
+
+      // 2. Insert into Database
+      const { error: dbError } = await supabase
+        .from('products')
+        .insert([
+          { 
+            name: product, 
+            price: parseFloat(price), 
+            image_urls: imageUrls,
+            status: 'pending', 
+            vendor: 'Anonymous'
+          }
+        ]);
+
+      if (dbError) throw dbError;
+
+      alert(`✅ "${product}" submitted for approval!\n${feeText}`);
+      
+      // Reset Form
+      productSearchInput.value = '';
+      document.getElementById('fileList').innerHTML = '';
+      uploadedFiles = [];
+      loadProducts(); // Refresh feed
+
+    } catch (error) {
+      console.error("Error submitting:", error);
+      alert("Failed to submit: " + error.message);
+    } finally {
+      submitBtn.innerHTML = 'submit for approval';
+      submitBtn.disabled = false;
+    }
+  }
+
+  // ===== ADMIN DASHBOARD LOGIC (Dynamic) =====
+  async function loadAdminData() {
+    const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+    if (error) return;
+
+    const total = data.length;
+    const pending = data.filter(p => p.status === 'pending');
+    const active = data.filter(p => p.status === 'active');
+
+    document.getElementById('adminTotalProducts').innerText = total;
+    document.getElementById('adminPendingProducts').innerText = pending.length;
+    document.getElementById('adminActiveProducts').innerText = active.length;
+
+    // Render Pending
+    const pendingList = document.getElementById('adminPendingList');
+    pendingList.innerHTML = '';
+    pending.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'bg-black/20 rounded-xl p-4 mb-3 border-l-4';
+      div.style.borderLeftColor = 'var(--accent)';
+      div.innerHTML = `
+        <div class="flex flex-wrap justify-between items-start">
+          <div>
+            <span class="vendor-handle text-sm">@${p.vendor || 'Anonymous'}</span>
+            <p class="text-sm font-medium mt-1">${p.name}</p>
+            <p class="text-xs opacity-60">KSh ${p.price} · ${p.image_urls.length} images</p>
+          </div>
+          <div class="flex gap-2 mt-2 md:mt-0">
+            <button class="text-xs px-4 py-1.5 rounded-full bg-green-600/30 text-green-300 hover:bg-green-600/50" onclick="handleApproveFull('${p.id}')">✓ Approve</button>
+            <button class="text-xs px-4 py-1.5 rounded-full bg-red-600/30 text-red-300 hover:bg-red-600/50" onclick="handleRejectFull('${p.id}')">✕ Reject</button>
+          </div>
+        </div>
+      `;
+      pendingList.appendChild(div);
+    });
+
+    // Render Active
+    const activeList = document.getElementById('adminActiveList');
+    activeList.innerHTML = '';
+    active.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'bg-black/20 rounded-xl p-3 border border-white/10';
+      div.innerHTML = `
+        <p class="font-medium">${p.name}</p>
+        <p class="text-xs opacity-60">@${p.vendor || 'Anonymous'} · KSh ${p.price}</p>
+      `;
+      activeList.appendChild(div);
+    });
+  }
+
+  // Admin actions (Update DB)
+  async function handleApproveFull(id) {
+    const { error } = await supabase.from('products').update({ status: 'active' }).eq('id', id);
+    if (!error) {
+      alert('✅ Product approved & activated');
+      loadAdminData();
+    }
+  }
+
+  async function handleRejectFull(id) {
+    const { error } = await supabase.from('products').update({ status: 'rejected' }).eq('id', id);
+    if (!error) {
+      alert('✕ Product rejected');
+      loadAdminData();
+    }
+  }
+
+  // Expose functions to window for inline onclick
   window.selectProduct = selectProduct;
   window.handleSubmitListing = handleSubmitListing;
   window.removeFile = removeFile;
   window.closeAdminPanel = closeAdminPanel;
+  window.handleApproveFull = handleApproveFull;
+  window.handleRejectFull = handleRejectFull;
+
+  // Initial Load
+  loadProducts();
 </script>
 
 </body>
