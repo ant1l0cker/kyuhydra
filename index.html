@@ -1053,7 +1053,7 @@
       <h2 class="fashion-gala-title" id="galaDisplayTitle" style="font-size: 1.6rem; margin-bottom: 0.6rem;">Fashion Gala 2026</h2>
       
       <div id="galaImgContainer" style="width: 100%; height: 220px; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1rem; background: #000; border: 1px solid var(--border-color); display: none;">
-        <img id="galaDisplayImg" src="" alt="Fashion Gala Poster" style="width: 100%; height: 100%; object-fit: cover;">
+        <img id="galaDisplayImg" src="" alt="Fashion Gala Poster" style="width: 100%; height: 100%; object-fit: cover; display: block;">
       </div>
 
       <p id="galaDisplayDetails" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.5; white-space: pre-line;">
@@ -1293,7 +1293,10 @@
           <input type="text" id="adminGalaImageUrlInput" placeholder="OR paste external Image URL (e.g., https://...)">
         </div>
 
-        <button type="button" class="btn" style="background: #ff007f; color: #fff;" onclick="saveFashionGalaConfig()">Save Fashion Gala Settings</button>
+        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+          <button type="button" class="btn" style="background: #ff007f; color: #fff;" onclick="saveFashionGalaConfig()">Save Fashion Gala Settings</button>
+          <button type="button" class="btn btn-secondary" onclick="openFashionGalaModal()">Preview Pop-Up</button>
+        </div>
       </div>
 
       <!-- Dashboard Control 1: Recurring News Ticker -->
@@ -1432,6 +1435,7 @@
             <strong>Error:</strong> Could not load Supabase SDK.<br>
             Please run via local server (e.g. <code>python3 -m http.server</code>).
           </div>`;
+        fetchFashionGalaConfig();
       }
 
       checkAndShowFeaturedPopups();
@@ -1550,7 +1554,6 @@
 
     /* Fashion Gala Pop-Up Config & Storage Functions */
     async function fetchFashionGalaConfig() {
-      // Local fallback
       const savedGala = localStorage.getItem('kyu_fashion_gala_config');
       if (savedGala) {
         try {
@@ -1561,22 +1564,26 @@
       }
 
       if (supabaseClient) {
-        const { data, error } = await supabaseClient
-          .from('fashion_gala_config')
-          .select('*')
-          .eq('id', 1)
-          .single();
+        try {
+          const { data, error } = await supabaseClient
+            .from('fashion_gala_config')
+            .select('*')
+            .eq('id', 1)
+            .single();
 
-        if (!error && data) {
-          fashionGalaData = data;
-          localStorage.setItem('kyu_fashion_gala_config', JSON.stringify(data));
+          if (!error && data) {
+            fashionGalaData = data;
+            localStorage.setItem('kyu_fashion_gala_config', JSON.stringify(data));
+          }
+        } catch(e) {
+          console.log('Supabase Fashion Gala table optional load', e);
         }
       }
 
       updateFashionGalaUI();
 
       if (fashionGalaData.is_active) {
-        showFashionGalaModal();
+        openFashionGalaModal();
       }
     }
 
@@ -1586,7 +1593,8 @@
 
       const imgContainer = document.getElementById('galaImgContainer');
       const imgElem = document.getElementById('galaDisplayImg');
-      if (fashionGalaData.image_url) {
+      
+      if (fashionGalaData.image_url && fashionGalaData.image_url.trim() !== '') {
         imgElem.src = fashionGalaData.image_url;
         imgContainer.style.display = 'block';
       } else {
@@ -1610,6 +1618,15 @@
       document.getElementById('adminGalaImageUrlInput').value = fashionGalaData.image_url || '';
     }
 
+    function fileToDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
     async function saveFashionGalaConfig() {
       const is_active = document.getElementById('adminGalaActiveToggle').checked;
       const title = document.getElementById('adminGalaTitleInput').value.trim() || 'Fashion Gala 2026';
@@ -1617,22 +1634,27 @@
       const description = document.getElementById('adminGalaDetailsInput').value.trim();
       let image_url = document.getElementById('adminGalaImageUrlInput').value.trim();
 
-      const imageFile = document.getElementById('adminGalaImageFile').files[0];
+      const imageFileInput = document.getElementById('adminGalaImageFile');
+      if (imageFileInput.files && imageFileInput.files[0]) {
+        const imageFile = imageFileInput.files[0];
+        if (supabaseClient) {
+          const fileExt = imageFile.name.split('.').pop();
+          const fileName = `fashion_gala_${Date.now()}.${fileExt}`;
+          const { data, error } = await supabaseClient.storage
+            .from('product-images')
+            .upload(fileName, imageFile, { upsert: true });
 
-      if (imageFile && supabaseClient) {
-        const fileExt = imageFile.name.split('.').pop();
-        const fileName = `fashion_gala_${Date.now()}.${fileExt}`;
-        const { data, error } = await supabaseClient.storage
-          .from('static-assets')
-          .upload(fileName, imageFile, { upsert: true });
-
-        if (!error) {
-          const { data: publicUrlData } = supabaseClient.storage
-            .from('static-assets')
-            .getPublicUrl(fileName);
-          if (publicUrlData) image_url = publicUrlData.publicUrl;
+          if (!error) {
+            const { data: publicUrlData } = supabaseClient.storage
+              .from('product-images')
+              .getPublicUrl(fileName);
+            if (publicUrlData) image_url = publicUrlData.publicUrl;
+          } else {
+            console.error('Gala Storage Error, using DataURL fallback:', error);
+            image_url = await fileToDataURL(imageFile);
+          }
         } else {
-          console.error('Gala Image Upload Error:', error);
+          image_url = await fileToDataURL(imageFile);
         }
       }
 
@@ -1640,14 +1662,21 @@
       localStorage.setItem('kyu_fashion_gala_config', JSON.stringify(fashionGalaData));
 
       if (supabaseClient) {
-        await supabaseClient.from('fashion_gala_config').upsert(fashionGalaData);
+        try {
+          await supabaseClient.from('fashion_gala_config').upsert(fashionGalaData);
+        } catch (e) {
+          console.error(e);
+        }
       }
 
       updateFashionGalaUI();
       alert('Fashion Gala pop-up config updated successfully!');
+      if (is_active) {
+        openFashionGalaModal();
+      }
     }
 
-    function showFashionGalaModal() {
+    function openFashionGalaModal() {
       document.getElementById('fashionGalaModal').classList.add('active');
     }
 
@@ -1657,7 +1686,6 @@
 
     /* Event Show Tickets System Integration */
     async function fetchEventTicketConfig() {
-      // Load local cache fallback
       const savedTitle = localStorage.getItem('kyu_event_title');
       const savedDetails = localStorage.getItem('kyu_event_details');
       if (savedTitle) currentEventData.title = savedTitle;
@@ -1715,7 +1743,6 @@
       const qty = document.getElementById('ticketQuantity').value || 1;
       const notes = document.getElementById('ticketNotes').value.trim();
 
-      // Extract seller contact number from event description if present, else fallback
       let vendorNum = '0110493736';
       const extractedMatch = currentEventData.details.match(/(?:01|07|254)\d{8}/);
       if (extractedMatch) vendorNum = extractedMatch[0];
