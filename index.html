@@ -38,7 +38,7 @@
       position: relative;
     }
 
-    /* Animated 20-Image Background Container */
+    /* Background Container */
     .bg-slideshow {
       position: fixed;
       top: 0;
@@ -49,108 +49,41 @@
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      animation: backgroundFade 120s infinite ease-in-out;
+      animation: multiProductFade 120s infinite ease-in-out;
     }
 
-    /* Keyframe Crossfade Animation Cycling Through 20 Dark Automotive Backdrops */
-    @keyframes backgroundFade {
-      0%, 4.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=1920&auto=format&fit=crop');
+    @keyframes multiProductFade {
+      0%, 100% {
+        background-image: linear-gradient(180deg, rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.98)),
+          radial-gradient(circle at 50% 20%, rgba(255, 215, 0, 0.15), transparent 70%),
+          url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1920&auto=format&fit=crop');
       }
-      5%, 9.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1920&auto=format&fit=crop');
-      }
-      10%, 14.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1920&auto=format&fit=crop');
-      }
-      15%, 19.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?q=80&w=1920&auto=format&fit=crop');
-      }
-      20%, 24.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1920&auto=format&fit=crop');
-      }
-      25%, 29.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?q=80&w=1920&auto=format&fit=crop');
-      }
-      30%, 34.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1920&auto=format&fit=crop');
-      }
-      35%, 39.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=1920&auto=format&fit=crop');
-      }
-      40%, 44.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1541348263662-e082662d82da?q=80&w=1920&auto=format&fit=crop');
-      }
-      45%, 49.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1920&auto=format&fit=crop');
-      }
-      50%, 54.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1920&auto=format&fit=crop');
-      }
-      55%, 59.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1920&auto=format&fit=crop');
-      }
-      60%, 64.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1920&auto=format&fit=crop');
-      }
-      65%, 69.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?q=80&w=1920&auto=format&fit=crop');
-      }
-      70%, 74.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1920&auto=format&fit=crop');
-      }
-      75%, 79.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1920&auto=format&fit=crop');
-      }
-      80%, 84.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920&auto=format&fit=crop');
-      }
-      85%, 89.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?q=80&w=1920&auto=format&fit=crop');
-      }
-      90%, 94.9% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=1920&auto=format&fit=crop');
-      }
-      95%, 100% {
-        background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0.98)),
-          url('https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=1920&auto=format&fit=crop');
+      50% {
+        background-image: linear-gradient(180deg, rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.98)),
+          radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.18), transparent 70%),
+          url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1920&auto=format&fit=crop');
       }
     }
 
-    .container {
+    /* Top Sticky Header, Menu & Search Bar */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: rgba(10, 10, 10, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+      padding: 0.75rem 1rem;
+    }
+
+    .header-content {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 1.5rem 1rem;
-    }
-
-    /* Header & Navbar */
-    header {
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
       align-items: center;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border-color);
-      margin-bottom: 2rem;
-      backdrop-filter: blur(5px);
+      justify-content: space-between;
+      gap: 1rem;
     }
 
     .logo-container {
@@ -162,7 +95,7 @@
     }
 
     .logo-title {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 900;
       letter-spacing: -0.05em;
       color: var(--accent);
@@ -178,25 +111,114 @@
       border-radius: 9999px;
     }
 
-    .nav-actions {
+    .search-box {
+      flex: 1;
+      max-width: 450px;
       display: flex;
-      align-items: center;
-      gap: 1rem;
+      gap: 0.5rem;
     }
 
-    /* Hero Section with Dynamic Background Blend */
+    .search-box input {
+      flex: 1;
+      padding: 0.5rem 0.85rem;
+      border-radius: 9999px;
+      background: rgba(20, 20, 20, 0.9);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      outline: none;
+      font-size: 0.875rem;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .nav-menu a:hover {
+      color: var(--accent);
+    }
+
+    /* Continuously Recurring News Ticker Bar */
+    .news-ticker-container {
+      background: rgba(18, 18, 18, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      white-space: nowrap;
+      height: 38px;
+      font-size: 0.85rem;
+    }
+
+    .news-label {
+      background: var(--accent);
+      color: #000;
+      padding: 0 1rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      z-index: 5;
+    }
+
+    .news-scroll-wrapper {
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .news-scroll-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeContinuous 18s linear infinite;
+    }
+
+    .news-scroll-text {
+      padding-right: 3rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    @keyframes marqueeContinuous {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Container Structure */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+    }
+
+    /* Hero Section */
     .hero-section {
       position: relative;
       background-image: 
         linear-gradient(180deg, rgba(10, 10, 10, 0.6) 0%, rgba(10, 10, 10, 0.92) 100%),
-        radial-gradient(circle at center, rgba(255, 215, 0, 0.1) 0%, transparent 70%),
-        url('https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1200&auto=format&fit=crop');
+        radial-gradient(circle at center, rgba(255, 215, 0, 0.12) 0%, transparent 70%),
+        url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1200&auto=format&fit=crop');
       background-size: cover;
       background-position: center;
       background-blend-mode: multiply, normal, normal;
       border: 1px solid var(--border-color);
       border-radius: 1.25rem;
-      padding: 3.5rem 2rem;
+      padding: 3rem 2rem;
       margin-bottom: 2.5rem;
       text-align: center;
       overflow: hidden;
@@ -205,31 +227,20 @@
     }
 
     .hero-title {
-      font-size: 2.5rem;
+      font-size: 2.25rem;
       font-weight: 900;
       letter-spacing: -0.03em;
       margin-bottom: 0.75rem;
       background: linear-gradient(180deg, #ffffff 0%, #d0d0d0 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
 
     .hero-subtitle {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--text-muted);
       max-width: 600px;
-      margin: 0 auto 1.75rem auto;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.85rem 1.75rem;
-      font-size: 1rem;
-      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.25);
+      margin: 0 auto 1.5rem auto;
     }
 
     /* Form Controls */
@@ -266,7 +277,7 @@
       border-color: var(--accent);
     }
 
-    /* Fee Notification Box */
+    /* Fee Box */
     .payment-box {
       background: rgba(20, 24, 16, 0.9);
       border: 1px solid #224c1e;
@@ -440,7 +451,7 @@
       gap: 0.5rem;
     }
 
-    /* Product Grid & Cards with Glassmorphism */
+    /* Product Grid & Cards */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -492,10 +503,19 @@
       font-size: 0.8rem;
       font-weight: 700;
       color: var(--vendor-color);
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.5rem;
       margin-bottom: 0.2rem;
+    }
+
+    .product-category-tag {
+      font-size: 0.7rem;
+      background: rgba(255, 215, 0, 0.1);
+      color: var(--accent);
+      padding: 0.1rem 0.4rem;
+      border-radius: 0.25rem;
+      border: 1px solid rgba(255, 215, 0, 0.2);
     }
 
     .product-meta {
@@ -506,7 +526,6 @@
       gap: 0.2rem;
     }
 
-    /* Product Image Gallery */
     .product-image-container {
       margin-top: 0.5rem;
       display: flex;
@@ -528,11 +547,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.3s ease;
-    }
-
-    .product-main-image img:hover {
-      transform: scale(1.03);
     }
 
     .product-thumbnails-grid {
@@ -545,16 +559,9 @@
       aspect-ratio: 1/1;
       border-radius: 0.3rem;
       overflow: hidden;
-      display: block;
       background: #000;
       border: 1px solid var(--border-color);
       opacity: 0.8;
-      transition: opacity 0.2s;
-    }
-
-    .product-thumb:hover {
-      opacity: 1;
-      border-color: var(--accent);
     }
 
     .product-thumb img {
@@ -563,7 +570,7 @@
       object-fit: cover;
     }
 
-    /* Modals */
+    /* Modals & Popups System */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -595,6 +602,39 @@
       overflow-y: auto;
       position: relative;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Multi-Popup Stack Overlay Engine */
+    .popup-stack-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1500;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .popup-stack-container.active {
+      display: flex;
+    }
+
+    .popup-card-item {
+      position: absolute;
+      width: 90%;
+      max-width: 460px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--accent);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .modal-header {
@@ -639,10 +679,9 @@
     .modal-close-btn:hover {
       background: var(--status-rejected);
       color: #fff;
-      border-color: var(--status-rejected);
     }
 
-    /* Lightbox Modal Carousel Styles */
+    /* Lightbox & Carousel Styles */
     .carousel-view {
       position: relative;
       width: 100%;
@@ -654,7 +693,6 @@
       justify-content: center;
       margin-bottom: 1rem;
       border: 1px solid var(--border-color);
-      margin-top: 0.5rem;
     }
 
     .carousel-view img {
@@ -675,11 +713,10 @@
       cursor: pointer;
       border-radius: 0.25rem;
     }
-    .carousel-btn:hover { background: rgba(0, 0, 0, 0.9); border-color: var(--accent); }
     .carousel-prev { left: 8px; }
     .carousel-next { right: 8px; }
 
-    /* Admin Panel Overlay & Bulk Actions */
+    /* Admin Panel Overlay */
     .admin-overlay {
       display: none;
       position: fixed;
@@ -727,6 +764,21 @@
       font-size: 1.75rem;
       font-weight: 800;
       margin-top: 0.25rem;
+    }
+
+    .admin-card-section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .admin-popup-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
     }
 
     .admin-batch-bar {
@@ -777,26 +829,45 @@
 </head>
 <body>
 
-  <!-- Dynamic Faded 20-Image Background Container -->
+  <!-- Dynamic Faded Multi-Product Background Container -->
   <div class="bg-slideshow"></div>
 
-  <div class="container">
-    <!-- Header Navigation -->
-    <header>
+  <!-- Sticky Top Search Bar Header & Nav Menu -->
+  <header class="top-header">
+    <div class="header-content">
       <div class="logo-container" id="logoTrigger">
         <span class="logo-title">KYU Hydra</span>
-        <span class="logo-badge">Darknet Marketplace</span>
+        <span class="logo-badge">Marketplace</span>
       </div>
-      <div class="nav-actions">
-        <button type="button" class="btn" id="btnOpenPostModal">+ Post Listing</button>
-      </div>
-    </header>
 
-    <!-- Welcome Hero Section -->
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search products or categories..." oninput="filterProducts()">
+      </div>
+
+      <ul class="nav-menu">
+        <li><a href="#activeFeed">Products</a></li>
+        <li><a href="#" id="navSellItem">+ Sell Item</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Dynamic Left-to-Right Recurring News Ticker -->
+  <div class="news-ticker-container">
+    <div class="news-label">NEWS</div>
+    <div class="news-scroll-wrapper">
+      <div class="news-scroll-track" id="newsTickerTrack">
+        <div class="news-scroll-text" id="newsTickerText1">Welcome to KYU Hydra Marketplace! Post your listings directly from your mobile or laptop today.</div>
+        <div class="news-scroll-text" id="newsTickerText2">Welcome to KYU Hydra Marketplace! Post your listings directly from your mobile or laptop today.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Hero Section -->
     <section class="hero-section">
       <h1 class="hero-title">Exclusive Peer-to-Peer Marketplace</h1>
       <p class="hero-subtitle">Discover high-end listings directly from verified vendors in your zone. Fast, direct, and verified trading.</p>
-      <button type="button" class="btn hero-cta" id="btnHeroPost">+ Start Selling Item</button>
+      <button type="button" class="btn" id="btnHeroPost">+ Start Selling Item</button>
     </section>
 
     <!-- Active Products Feed -->
@@ -808,7 +879,12 @@
     </section>
   </div>
 
-  <!-- Single Combined Post Item Modal -->
+  <!-- Multi-Popup Stack Shell Container (Up to 5 Popups simultaneously) -->
+  <div class="popup-stack-container" id="popupStackContainer">
+    <div id="popupCardStack" style="position: relative; width: 100%; max-width: 480px; height: 500px; display: flex; align-items: center; justify-content: center;"></div>
+  </div>
+
+  <!-- Single Combined Post Item Modal with 50 Categories + Default -->
   <div class="modal-overlay" id="postModal">
     <div class="modal">
       <button class="modal-close-btn" id="btnClosePostModal">&times;</button>
@@ -827,11 +903,66 @@
         </div>
 
         <div class="form-group">
+          <label for="itemCategory">Product Category *</label>
+          <select id="itemCategory" required>
+            <option value="General (Default)" selected>General (Default)</option>
+            <option value="Antiques & Collectibles">Antiques & Collectibles</option>
+            <option value="Art & Craft Supplies">Art & Craft Supplies</option>
+            <option value="Audio & Sound Systems">Audio & Sound Systems</option>
+            <option value="Baby & Kids Products">Baby & Kids Products</option>
+            <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+            <option value="Bicycles & Cycling Gear">Bicycles & Cycling Gear</option>
+            <option value="Books & Magazines">Books & Magazines</option>
+            <option value="Building Materials">Building Materials</option>
+            <option value="Business & Industrial">Business & Industrial</option>
+            <option value="Cameras & Photography">Cameras & Photography</option>
+            <option value="Car Parts & Accessories">Car Parts & Accessories</option>
+            <option value="Cell Phones & Accessories">Cell Phones & Accessories</option>
+            <option value="Clothing - Men">Clothing - Men</option>
+            <option value="Clothing - Women">Clothing - Women</option>
+            <option value="Computers & Laptops">Computers & Laptops</option>
+            <option value="Costumes & Accessories">Costumes & Accessories</option>
+            <option value="Desktops & Servers">Desktops & Servers</option>
+            <option value="Drone & Aerial Gear">Drone & Aerial Gear</option>
+            <option value="DVDs & Movies">DVDs & Movies</option>
+            <option value="Electronics Accessories">Electronics Accessories</option>
+            <option value="Event Supplies & Tickets">Event Supplies & Tickets</option>
+            <option value="Farm & Agriculture">Farm & Agriculture</option>
+            <option value="Fitness & Gym Equipment">Fitness & Gym Equipment</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Gaming Consoles & Games">Gaming Consoles & Games</option>
+            <option value="Garden & Outdoor Living">Garden & Outdoor Living</option>
+            <option value="Health & Wellness">Health & Wellness</option>
+            <option value="Heating & Cooling">Heating & Cooling</option>
+            <option value="Hobbies & Models">Hobbies & Models</option>
+            <option value="Home Appliances">Home Appliances</option>
+            <option value="Home Decor">Home Decor</option>
+            <option value="Jewelry & Watches">Jewelry & Watches</option>
+            <option value="Kitchen & Dining">Kitchen & Dining</option>
+            <option value="Luggage & Travel Gear">Luggage & Travel Gear</option>
+            <option value="Musical Instruments">Musical Instruments</option>
+            <option value="Office Supplies">Office Supplies</option>
+            <option value="Pet Supplies">Pet Supplies</option>
+            <option value="Plumbing & Electrical">Plumbing & Electrical</option>
+            <option value="Real Estate & Property">Real Estate & Property</option>
+            <option value="Services & Freelancing">Services & Freelancing</option>
+            <option value="Shoes - Men">Shoes - Men</option>
+            <option value="Shoes - Women">Shoes - Women</option>
+            <option value="Software & Digital Goods">Software & Digital Goods</option>
+            <option value="Solar & Renewable Energy">Solar & Renewable Energy</option>
+            <option value="Sporting Goods">Sporting Goods</option>
+            <option value="Tools & Hardware">Tools & Hardware</option>
+            <option value="Toys & Games">Toys & Games</option>
+            <option value="Vehicles & Motorcycles">Vehicles & Motorcycles</option>
+            <option value="Video Games & VR">Video Games & VR</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label for="modalPrice">Price (KSh)</label>
           <input type="number" id="modalPrice" required min="0" placeholder="e.g., 2500">
         </div>
 
-        <!-- Dynamic Payment Instructions Box -->
         <div class="payment-box">
           <div class="payment-box-title">Listing Fee Payment Instructions</div>
           <div class="payment-details">
@@ -898,15 +1029,15 @@
     </div>
   </div>
 
-  <!-- Full Screen Secret Admin Overlay -->
+  <!-- Admin Dashboard Overlay -->
   <div class="admin-overlay" id="adminPanel">
     <div class="container">
       <div class="admin-header">
         <div>
-          <h1 class="section-title" style="font-size: 1.75rem;">Admin Moderation & Payments</h1>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Manage listings, verify payments, and delete items</p>
+          <h1 class="section-title" style="font-size: 1.75rem;">Admin Moderation & Dashboard Controls</h1>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Manage listings, verify payments, news announcements, and up to 5 featured popups</p>
         </div>
-        <button type="button" class="btn btn-secondary" id="btnCloseAdmin">Exit Admin</button>
+        <button type="button" class="btn btn-secondary" id="btnCloseAdmin">Exit Dashboard</button>
       </div>
 
       <div class="admin-stats">
@@ -922,6 +1053,47 @@
           <div class="stat-card-title">ACTIVE LISTINGS</div>
           <div class="stat-card-value" id="statActive" style="color: var(--status-active);">0</div>
         </div>
+      </div>
+
+      <!-- Dashboard Control 1: Recurring News Ticker -->
+      <div class="admin-card-section">
+        <h2 class="section-title">1. Dashboard News Ticker Control (Continuous Scroll)</h2>
+        <div class="form-group">
+          <label for="adminNewsInput">Set Scrolling Banner Announcement Text</label>
+          <input type="text" id="adminNewsInput" placeholder="Type custom announcement news to scroll continuously across the header...">
+        </div>
+        <button type="button" class="btn" onclick="updateNewsTicker()">Update Live News Ticker</button>
+      </div>
+
+      <!-- Dashboard Control 2: Configure Up to 5 Pop-Ups simultaneously -->
+      <div class="admin-card-section">
+        <h2 class="section-title">2. Configure Pop-Up Featured Announcements (Up to 5 at once)</h2>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Select up to 5 active market listings to pop up on user screen simultaneously when opening the page.
+        </p>
+        <div class="admin-popup-grid">
+          <div class="form-group">
+            <label>Pop-Up Slot 1</label>
+            <select id="adminPopupSelect1" class="admin-popup-select"><option value="">-- None --</option></select>
+          </div>
+          <div class="form-group">
+            <label>Pop-Up Slot 2</label>
+            <select id="adminPopupSelect2" class="admin-popup-select"><option value="">-- None --</option></select>
+          </div>
+          <div class="form-group">
+            <label>Pop-Up Slot 3</label>
+            <select id="adminPopupSelect3" class="admin-popup-select"><option value="">-- None --</option></select>
+          </div>
+          <div class="form-group">
+            <label>Pop-Up Slot 4</label>
+            <select id="adminPopupSelect4" class="admin-popup-select"><option value="">-- None --</option></select>
+          </div>
+          <div class="form-group">
+            <label>Pop-Up Slot 5</label>
+            <select id="adminPopupSelect5" class="admin-popup-select"><option value="">-- None --</option></select>
+          </div>
+        </div>
+        <button type="button" class="btn" onclick="saveMultiplePopups()">Save Pop-Up Preference Stack</button>
       </div>
 
       <div class="admin-batch-bar">
@@ -951,13 +1123,15 @@
     let supabaseClient = null;
     let selectedFiles = [];
     let isAdminUnlocked = false;
+    let fetchedProducts = [];
+    let activePopupsList = [];
 
     let detailImages = [];
     let detailImageIdx = 0;
 
     // DOM Elements
     const logoTrigger = document.getElementById('logoTrigger');
-    const btnOpenPostModal = document.getElementById('btnOpenPostModal');
+    const navSellItem = document.getElementById('navSellItem');
     const btnHeroPost = document.getElementById('btnHeroPost');
     const btnClosePostModal = document.getElementById('btnClosePostModal');
     const btnCancelPost = document.getElementById('btnCancelPost');
@@ -985,7 +1159,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       setupEventListeners();
       
-      // Safe Supabase Initialization Check
       if (window.supabase) {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         fetchActiveProducts();
@@ -993,9 +1166,11 @@
         activeFeed.innerHTML = `
           <div class="empty-msg" style="color: var(--status-rejected);">
             <strong>Error:</strong> Could not load Supabase SDK.<br>
-            Please run via localhost (e.g. <code>python3 -m http.server</code>) instead of opening directly as a local file (file:///).
+            Please run via local server (e.g. <code>python3 -m http.server</code>).
           </div>`;
       }
+
+      checkAndShowFeaturedPopups();
     });
 
     function calculateListingFee(price) {
@@ -1016,13 +1191,15 @@
         calculatedFeeDisplay.innerText = `KSh ${fee}`;
       });
 
-      btnOpenPostModal.addEventListener('click', () => postModal.classList.add('active'));
-      btnHeroPost.addEventListener('click', () => postModal.classList.add('active'));
+      navSellItem.addEventListener('click', (e) => {
+        e.preventDefault();
+        postModal.classList.add('active');
+      });
 
+      btnHeroPost.addEventListener('click', () => postModal.classList.add('active'));
       btnClosePostModal.addEventListener('click', () => postModal.classList.remove('active'));
       btnCancelPost.addEventListener('click', () => postModal.classList.remove('active'));
 
-      // Click outside overlay to close detail and post modals
       detailModal.addEventListener('click', (e) => {
         if (e.target === detailModal) closeDetailModal();
       });
@@ -1031,11 +1208,11 @@
         if (e.target === postModal) postModal.classList.remove('active');
       });
 
-      // Keyboard ESC key listener
       document.addEventListener('keyup', (e) => {
         if (e.key === 'Escape') {
           closeDetailModal();
           postModal.classList.remove('active');
+          closeAllPopups();
         }
       });
 
@@ -1123,8 +1300,13 @@
         return;
       }
 
+      fetchedProducts = products || [];
+      renderProductsGrid(fetchedProducts);
+    }
+
+    function renderProductsGrid(products) {
       if (!products || products.length === 0) {
-        activeFeed.innerHTML = '<div class="empty-msg">No active products found on the market.</div>';
+        activeFeed.innerHTML = '<div class="empty-msg">No products found matching criteria.</div>';
         return;
       }
 
@@ -1132,6 +1314,17 @@
       products.forEach(product => {
         activeFeed.appendChild(createProductCard(product));
       });
+    }
+
+    function filterProducts() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = fetchedProducts.filter(item => {
+        const nameMatch = item.name && item.name.toLowerCase().includes(query);
+        const catMatch = item.category && item.category.toLowerCase().includes(query);
+        const vendorMatch = item.vendor_name && item.vendor_name.toLowerCase().includes(query);
+        return nameMatch || catMatch || vendorMatch;
+      });
+      renderProductsGrid(filtered);
     }
 
     function extractImages(product) {
@@ -1153,11 +1346,15 @@
       const images = extractImages(product);
       const bargainText = product.accepts_bargain ? 'Yes' : 'No';
       const vendorName = product.vendor_name ? product.vendor_name : 'Anonymous';
+      const categoryName = product.category ? product.category : 'General (Default)';
 
       card.innerHTML = `
         <div class="product-header">
           <div>
-            <div class="product-vendor">⚡ ${escapeHtml(vendorName)}</div>
+            <div class="product-vendor">
+              ⚡ ${escapeHtml(vendorName)}
+              <span class="product-category-tag">${escapeHtml(categoryName)}</span>
+            </div>
             <div class="product-title">${escapeHtml(product.name)}</div>
           </div>
           <div class="product-price">KSh ${Number(product.price || 0).toLocaleString()}</div>
@@ -1211,7 +1408,122 @@
       return card;
     }
 
-    // Modal Details & Lightbox Operations
+    /* Continuously Recurring Ticker Operations */
+    function updateNewsTicker() {
+      const text = document.getElementById('adminNewsInput').value.trim();
+      if (!text) {
+        alert('Please enter announcement text for the ticker.');
+        return;
+      }
+      document.getElementById('newsTickerText1').innerText = text;
+      document.getElementById('newsTickerText2').innerText = text;
+      localStorage.setItem('kyu_news_ticker', text);
+      alert('Live news ticker updated!');
+    }
+
+    /* Multi-Popup Manager (Up to 5 Popups simultaneously) */
+    function saveMultiplePopups() {
+      const selectedPopups = [];
+      for (let i = 1; i <= 5; i++) {
+        const val = document.getElementById(`adminPopupSelect${i}`).value;
+        if (val) {
+          const target = fetchedProducts.find(p => String(p.id) === String(val));
+          if (target) selectedPopups.push(target);
+        }
+      }
+
+      if (selectedPopups.length === 0) {
+        localStorage.removeItem('kyu_featured_popups_data');
+        alert('All pop-ups cleared.');
+      } else {
+        localStorage.setItem('kyu_featured_popups_data', JSON.stringify(selectedPopups));
+        alert(`Saved ${selectedPopups.length} pop-up items!`);
+      }
+    }
+
+    function checkAndShowFeaturedPopups() {
+      const savedTicker = localStorage.getItem('kyu_news_ticker');
+      if (savedTicker) {
+        document.getElementById('newsTickerText1').innerText = savedTicker;
+        document.getElementById('newsTickerText2').innerText = savedTicker;
+      }
+
+      const savedData = localStorage.getItem('kyu_featured_popups_data');
+      if (savedData) {
+        try {
+          activePopupsList = JSON.parse(savedData);
+          if (Array.isArray(activePopupsList) && activePopupsList.length > 0) {
+            renderStackedPopups(activePopupsList);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    function renderStackedPopups(popups) {
+      const stackContainer = document.getElementById('popupStackContainer');
+      const cardStack = document.getElementById('popupCardStack');
+      cardStack.innerHTML = '';
+
+      const maxCount = Math.min(popups.length, 5);
+
+      popups.slice(0, maxCount).forEach((item, index) => {
+        const images = extractImages(item);
+        const card = document.createElement('div');
+        card.className = 'popup-card-item';
+        card.id = `popup-card-${index}`;
+
+        const offset = (maxCount - 1 - index) * 12;
+        const scale = 1 - (maxCount - 1 - index) * 0.04;
+        card.style.transform = `translateY(${offset}px) scale(${scale})`;
+        card.style.zIndex = 1500 + index;
+
+        const imgUrl = images.length > 0 ? images[0] : 'https://via.placeholder.com/500x300?text=Featured+Item';
+
+        card.innerHTML = `
+          <button class="modal-close-btn" onclick="dismissSinglePopup(${index})">&times;</button>
+          <div style="font-size: 0.8rem; font-weight: 800; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 0.4rem; text-transform: uppercase;">
+            🔥 Featured Listing (${index + 1} of ${maxCount})
+          </div>
+          <img src="${imgUrl}" alt="${escapeHtml(item.name)}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 0.75rem; border: 1px solid var(--border-color);">
+          <h2 style="font-size: 1.25rem; margin-bottom: 0.3rem;">${escapeHtml(item.name)}</h2>
+          <div style="font-size: 1.2rem; font-weight: 800; color: var(--accent); margin-bottom: 0.4rem;">KSh ${Number(item.price || 0).toLocaleString()}</div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; max-height: 40px; overflow: hidden; text-overflow: ellipsis;">
+            ${escapeHtml(item.extra_info || 'Exclusive deal verified on KYU Hydra Marketplace.')}
+          </p>
+          <div style="display: flex; gap: 0.5rem; justify-content: center;">
+            <button type="button" class="btn" onclick="dismissSinglePopup(${index})">Next / Close</button>
+            ${maxCount > 1 ? `<button type="button" class="btn btn-secondary" onclick="closeAllPopups()">Dismiss All (${maxCount})</button>` : ''}
+          </div>
+        `;
+
+        cardStack.appendChild(card);
+      });
+
+      stackContainer.classList.add('active');
+    }
+
+    function dismissSinglePopup(index) {
+      const card = document.getElementById(`popup-card-${index}`);
+      if (card) {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(-40px) scale(0.9)';
+        setTimeout(() => {
+          card.remove();
+          const remaining = document.querySelectorAll('.popup-card-item');
+          if (remaining.length === 0) {
+            closeAllPopups();
+          }
+        }, 200);
+      }
+    }
+
+    function closeAllPopups() {
+      document.getElementById('popupStackContainer').classList.remove('active');
+    }
+
+    /* Modal Details & Lightbox Operations */
     function openDetailModal(product) {
       detailImages = extractImages(product);
       if (detailImages.length === 0) {
@@ -1222,12 +1534,14 @@
 
       const bargainText = product.accepts_bargain ? 'Yes' : 'No';
       const vendorName = product.vendor_name ? product.vendor_name : 'Anonymous';
+      const categoryName = product.category ? product.category : 'General (Default)';
 
       document.getElementById('detailModalBody').innerHTML = `
         <h2 style="color: var(--accent); font-size: 1.4rem; margin-bottom: 0.2rem;">${escapeHtml(product.name)}</h2>
         <div style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem;">KSh ${Number(product.price || 0).toLocaleString()}</div>
         <div class="product-meta" style="font-size: 0.9rem; gap: 0.4rem;">
           <div><strong style="color: var(--vendor-color);">Vendor:</strong> ${escapeHtml(vendorName)}</div>
+          <div><strong style="color: var(--accent);">Category:</strong> ${escapeHtml(categoryName)}</div>
           <div><strong>Phone:</strong> ${escapeHtml(product.phone)}</div>
           <div><strong>Location:</strong> ${escapeHtml(product.location)}</div>
           <div><strong>Negotiable:</strong> ${bargainText}</div>
@@ -1262,7 +1576,7 @@
       e.preventDefault();
 
       if (!supabaseClient) {
-        alert('Supabase client not loaded. Run via localhost web server.');
+        alert('Supabase client not loaded.');
         return;
       }
 
@@ -1272,6 +1586,7 @@
 
       const vendor_name = document.getElementById('vendorName').value.trim();
       const name = document.getElementById('itemTitle').value.trim();
+      const category = document.getElementById('itemCategory').value;
       const price = parseFloat(document.getElementById('modalPrice').value);
       const payment_sender_name = document.getElementById('paymentSenderName').value.trim();
       const phone = document.getElementById('modalPhone').value.trim();
@@ -1309,6 +1624,7 @@
         .insert([{
           vendor_name,
           name,
+          category,
           price,
           listing_fee,
           payment_sender_name,
@@ -1381,6 +1697,18 @@
       statPending.innerText = pending.length;
       statActive.innerText = active.length;
 
+      // Populate 5 Pop-Up Slots
+      for (let i = 1; i <= 5; i++) {
+        const popupSelect = document.getElementById(`adminPopupSelect${i}`);
+        popupSelect.innerHTML = '<option value="">-- None --</option>';
+        active.forEach(prod => {
+          const opt = document.createElement('option');
+          opt.value = prod.id;
+          opt.textContent = `${prod.name} (KSh ${prod.price})`;
+          popupSelect.appendChild(opt);
+        });
+      }
+
       if (pending.length === 0) {
         pendingContainer.innerHTML = '<div class="empty-msg">No pending products waiting for moderation.</div>';
       } else {
@@ -1406,6 +1734,7 @@
 
       const bargainText = item.accepts_bargain ? 'Yes' : 'No';
       const vendorName = item.vendor_name ? item.vendor_name : 'Anonymous';
+      const categoryName = item.category ? item.category : 'General (Default)';
       const senderName = item.payment_sender_name ? item.payment_sender_name : 'Not Specified';
       const requiredFee = item.listing_fee || calculateListingFee(item.price);
 
@@ -1420,7 +1749,8 @@
       const infoDiv = document.createElement('div');
       infoDiv.innerHTML = `
         <div style="font-weight: 700; font-size: 1rem;">
-          <span style="color: var(--vendor-color);">[Vendor: ${escapeHtml(vendorName)}]</span> ${escapeHtml(item.name)} - KSh ${Number(item.price || 0).toLocaleString()}
+          <span style="color: var(--vendor-color);">[Vendor: ${escapeHtml(vendorName)}]</span> ${escapeHtml(item.name)} 
+          <span style="font-size: 0.75rem; color: var(--accent);">(${escapeHtml(categoryName)})</span> - KSh ${Number(item.price || 0).toLocaleString()}
         </div>
         <div style="font-size: 0.85rem; color: var(--accent); margin-top: 0.2rem;">
           <strong>Paid By:</strong> ${escapeHtml(senderName)} | <strong>Fee Due:</strong> KSh ${requiredFee}
@@ -1462,7 +1792,6 @@
       return card;
     }
 
-    // Admin Multi-Delete Handlers
     function toggleSelectAllAdmin(master) {
       const checkboxes = document.querySelectorAll('.item-select-cb');
       checkboxes.forEach(cb => cb.checked = master.checked);
