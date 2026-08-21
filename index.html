@@ -276,6 +276,43 @@
       background: var(--accent);
       color: #0B0C10;
     }
+
+    /* New Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-content {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .modal-content input, .modal-content textarea {
+      width: 100%;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      padding: 0.6rem;
+      border-radius: 0.5rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+    .modal-content input:focus, .modal-content textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
   </style>
 </head>
 <body>
@@ -303,23 +340,14 @@
     </div>
 
     <h2 class="text-xl font-bold mb-4"><i class="fas fa-clock" style="color: var(--accent);"></i> Pending Approvals</h2>
-    
-    <!-- Dynamic Pending Approvals Will Load Here -->
     <div id="adminPendingList"></div>
 
     <h2 class="text-xl font-bold mt-8 mb-4"><i class="fas fa-check-circle" style="color: var(--accent);"></i> Active Listings</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="adminActiveList">
-      <!-- Dynamic Active Listings Will Load Here -->
-    </div>
-
-    <div class="mt-8 p-4 rounded-xl" style="background: var(--bg-secondary); border:1px solid var(--border-color);">
-      <p class="text-xs opacity-60"><i class="fas fa-shield-alt" style="color: var(--accent);"></i> Admin session active · RLS enabled</p>
-    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="adminActiveList"></div>
   </div>
 </div>
 
 <div id="app" class="max-w-7xl mx-auto px-4 py-5">
-
   <!-- ===== HEADER ===== -->
   <header class="flex flex-wrap items-center justify-between gap-3 mb-5">
     <div class="flex items-center gap-3 cursor-pointer select-none" id="brandLogo" title="Double-click for admin access">
@@ -381,8 +409,6 @@
 
   <!-- ===== MAIN: feed ===== -->
   <div id="feedSection" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-
-    <!-- LEFT: marketplace feed -->
     <div class="lg:col-span-3">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-store"></i> campus feed</h2>
@@ -392,9 +418,7 @@
         </div>
       </div>
 
-      <!-- Products load here dynamically from Supabase -->
       <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Static loading placeholder, gets overwritten by JS -->
         <div class="text-center opacity-50 col-span-2 py-10"><i class="fas fa-circle-notch fa-spin"></i> Loading products...</div>
       </div>
 
@@ -413,7 +437,7 @@
             <option>Mid-range (1,001–5,000) · fee 150</option>
             <option>High-value (5,001+) · fee 300</option>
           </select>
-          <button class="text-xs px-4 py-1.5 rounded-full" style="background:var(--accent); color:#0B0C10; font-weight:700;" onclick="handleSubmitListing()">submit for approval</button>
+          <button class="text-xs px-4 py-1.5 rounded-full" style="background:var(--accent); color:#0B0C10; font-weight:700;" onclick="openListingModal()">submit for approval</button>
           <span class="text-xs opacity-50"><i class="fas fa-credit-card"></i> M-Pesa Till: 123456</span>
         </div>
         
@@ -466,6 +490,39 @@
       <span class="bg-black/30 px-3 py-1 rounded-full">Non-Res Hostels</span>
     </div>
     <div class="opacity-40">© KYU Hydra · darknet P2P</div>
+  </div>
+</div>
+
+<!-- ===== LISTING MODAL ===== -->
+<div class="modal-overlay" id="listingModal">
+  <div class="modal-content">
+    <h2 class="text-xl font-bold mb-4"><i class="fas fa-plus-circle" style="color:var(--accent);"></i> Product Details</h2>
+    
+    <label class="text-xs opacity-70">Product Name</label>
+    <input type="text" id="modalName" placeholder="e.g., Dell XPS 13" readonly>
+
+    <label class="text-xs opacity-70">Price (KSh)</label>
+    <input type="number" id="modalPrice" placeholder="e.g., 45000" required>
+
+    <label class="text-xs opacity-70">Your Phone Number</label>
+    <input type="text" id="modalPhone" placeholder="e.g., 0712345678" required>
+
+    <label class="text-xs opacity-70">Location (Zone)</label>
+    <input type="text" id="modalLocation" placeholder="e.g., Gate A, Kutus Town" required>
+
+    <label class="text-xs opacity-70">Accept Bargain?</label>
+    <select id="modalBargain" class="w-full bg-black/30 text-sm px-3 py-1.5 rounded-full border border-white/10 mb-4">
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+
+    <label class="text-xs opacity-70">Additional Info</label>
+    <textarea id="modalExtraInfo" rows="3" placeholder="Condition, reason for selling, delivery options..."></textarea>
+
+    <div class="flex gap-2">
+      <button class="btn-primary w-full" onclick="submitListingData()">Submit to Admin</button>
+      <button class="btn-outline w-full" onclick="closeListingModal()">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -534,7 +591,7 @@
       if (passwordInput === ADMIN_PASSWORD) {
         adminUnlocked = true;
         document.getElementById('adminFullPage').classList.add('active');
-        loadAdminData(); // Load data into the admin panel when opened
+        loadAdminData();
       } else if (passwordInput !== null) {
         alert('✕ Access Denied');
       }
@@ -544,7 +601,6 @@
     }
   }
 
-  // Keyboard shortcut: Ctrl + Shift + A
   document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
       e.preventDefault();
@@ -552,7 +608,6 @@
     }
   });
 
-  // Stealth Trigger: Double click logo
   document.getElementById('brandLogo').addEventListener('dblclick', function() {
     triggerAdminAccess();
   });
@@ -698,28 +753,129 @@
   }
   window.filterProducts = filterProducts;
 
-  // ===== SUPABASE LOGIC =====
-  
-  // Function to render product cards dynamically
-  function renderProducts(products) {
-    const grid = document.getElementById('productGrid');
-    grid.innerHTML = ''; // Clear placeholders
-    
-    if (products.length === 0) {
-      grid.innerHTML = '<div class="text-center opacity-50 col-span-2 py-10">No products listed yet. Be the first!</div>';
+  // ===== NEW MODAL LOGIC =====
+  function openListingModal() {
+    const product = productSearchInput.value.trim();
+    if (!product) {
+      alert('Please select or type a product name first.');
+      return;
+    }
+    if (uploadedFiles.length === 0) {
+      alert('Please add at least 1 image (max 10).');
+      return;
+    }
+    document.getElementById('modalName').value = product;
+    document.getElementById('listingModal').classList.add('active');
+  }
+
+  function closeListingModal() {
+    document.getElementById('listingModal').classList.remove('active');
+  }
+
+  async function submitListingData() {
+    const product = document.getElementById('modalName').value;
+    const price = document.getElementById('modalPrice').value;
+    const phone = document.getElementById('modalPhone').value;
+    const location = document.getElementById('modalLocation').value;
+    const bargain = document.getElementById('modalBargain').value;
+    const extraInfo = document.getElementById('modalExtraInfo').value;
+
+    if (!price || !phone || !location) {
+      alert("Please fill out Price, Phone, and Location.");
       return;
     }
 
-    products.forEach(product => {
-      const statusClass = product.status === 'active' ? 'status-active' : (product.status === 'pending' ? 'status-pending' : 'status-rejected');
-      const statusText = product.status || 'pending';
+    const submitBtn = document.querySelector('.modal-content .btn-primary');
+    submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Uploading...';
+    submitBtn.disabled = true;
+
+    try {
+      // 1. Upload Images
+      const imageUrls = [];
+      for (const file of uploadedFiles) {
+        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+        const { error } = await supabase.storage.from('product-images').upload(fileName, file);
+        if (error) throw error;
+        const { data: publicURL } = supabase.storage.from('product-images').getPublicUrl(fileName);
+        imageUrls.push(publicURL.publicUrl);
+      }
+
+      // 2. Insert into database with all new details
+      const { error: dbError } = await supabase
+        .from('products')
+        .insert([
+          { 
+            name: product, 
+            price: parseFloat(price), 
+            phone: phone,
+            location: location,
+            extra_info: extraInfo,
+            accepts_bargain: bargain === 'true',
+            image_urls: imageUrls,
+            status: 'pending', 
+            vendor: 'Anonymous'
+          }
+        ]);
+
+      if (dbError) throw dbError;
+
+      alert(`✅ "${product}" submitted for approval!\nAdmin will review it shortly.`);
       
+      // Reset Form
+      productSearchInput.value = '';
+      document.getElementById('fileList').innerHTML = '';
+      uploadedFiles = [];
+      document.getElementById('modalPrice').value = '';
+      document.getElementById('modalPhone').value = '';
+      document.getElementById('modalLocation').value = '';
+      document.getElementById('modalExtraInfo').value = '';
+      closeListingModal();
+      loadProducts();
+
+    } catch (error) {
+      console.error("Error submitting:", error);
+      alert("Failed to submit: " + error.message);
+    } finally {
+      submitBtn.innerHTML = 'Submit to Admin';
+      submitBtn.disabled = false;
+    }
+  }
+
+  // ===== LOAD PRODUCTS =====
+  async function loadProducts() {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error loading products:', error.message);
+      return;
+    }
+    
+    renderProducts(data);
+    updateQuickStats(data);
+  }
+
+  function renderProducts(products) {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = ''; 
+    
+    // Only show active products on the public home page
+    const activeProducts = products.filter(p => p.status === 'active');
+
+    if (activeProducts.length === 0) {
+      grid.innerHTML = '<div class="text-center opacity-50 col-span-2 py-10">No active listings yet. Check back soon!</div>';
+      return;
+    }
+
+    activeProducts.forEach(product => {
       // Generate gallery images (up to 10)
       let galleryHTML = '';
       const imgs = product.image_urls || [];
       for (let i = 0; i < 10; i++) {
         if (imgs[i]) {
-          galleryHTML += `<img src="${imgs[i]}" alt="img">`;
+          galleryHTML += `<img src="${imgs[i]}" alt="img" onclick="window.open('${imgs[i]}', '_blank')" style="cursor:pointer;" title="Click to enlarge">`;
         } else {
           galleryHTML += `<div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>`;
         }
@@ -733,19 +889,25 @@
               <div class="flex items-center gap-2 mt-0.5">
                 <span class="text-xs"><i class="fas fa-star text-yellow-400"></i> ${product.rating || 'New'}</span>
                 <span class="text-xs opacity-60">· ${product.trades || 0} trades</span>
-                <span class="badge-trust"><i class="fas fa-shield-alt"></i> ${product.status === 'active' ? 'verified' : 'pending'}</span>
+                <span class="badge-trust"><i class="fas fa-shield-alt"></i> verified</span>
               </div>
             </div>
             <span class="text-xs bg-black/30 px-2 py-0.5 rounded-full">${product.category || 'General'}</span>
           </div>
           <h3 class="font-bold text-base mt-2">${product.name}</h3>
-          <p class="text-sm opacity-70">KSh ${product.price} · <span class="${statusClass}">${statusText}</span></p>
+          <p class="text-sm opacity-70">KSh ${product.price} 
+            ${product.accepts_bargain ? '<span class="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full ml-2">bargain accepted</span>' : ''}
+          </p>
           <div class="gallery-grid mt-2">
             ${galleryHTML}
           </div>
+          <div class="mt-2 text-xs opacity-80 space-y-1">
+            <p><i class="fas fa-phone-alt" style="color:var(--accent);"></i> <a href="tel:${product.phone}" style="color:var(--text-primary); text-decoration:underline;">${product.phone || 'N/A'}</a></p>
+            <p><i class="fas fa-map-marker-alt" style="color:var(--accent);"></i> ${product.location || 'N/A'}</p>
+            ${product.extra_info ? `<p class="opacity-60"><i class="fas fa-info-circle" style="color:var(--accent);"></i> ${product.extra_info}</p>` : ''}
+          </div>
           <div class="flex items-center justify-between mt-2 text-xs">
             <span><i class="far fa-clock"></i> ${new Date(product.created_at).toLocaleString()}</span>
-            <span class="opacity-60"><i class="fas fa-phone-alt"></i> ${product.contact || 'N/A'}</span>
           </div>
         </div>
       `;
@@ -753,24 +915,6 @@
     });
   }
 
-  // Fetch all products on load
-  async function loadProducts() {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error loading products:', error.message);
-      document.getElementById('productGrid').innerHTML = '<div class="text-center opacity-50 col-span-2 py-10">Error loading products. Check console.</div>';
-      return;
-    }
-    
-    renderProducts(data);
-    updateQuickStats(data);
-  }
-
-  // Update the right sidebar stats
   function updateQuickStats(data) {
     const total = data.length;
     const pending = data.filter(p => p.status === 'pending').length;
@@ -781,80 +925,7 @@
     document.getElementById('quickStatsActive').innerText = active;
   }
 
-  // Handle Submit Listing (Upload images & Insert DB)
-  async function handleSubmitListing() {
-    const product = productSearchInput.value.trim();
-    const feeText = document.getElementById('feeSelect').value;
-    
-    if (!product) {
-      alert('Please select or type a product name.');
-      return;
-    }
-    
-    if (uploadedFiles.length === 0) {
-      alert('Please add at least 1 image (max 10).');
-      return;
-    }
-
-    // Extract Price from fee or prompt (for demo, we'll just prompt)
-    let price = prompt("Enter the selling price in KSh:", "1000");
-    if (!price) return;
-
-    const submitBtn = document.querySelector('#feedSection button[onclick="handleSubmitListing()"]');
-    submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Uploading...';
-    submitBtn.disabled = true;
-
-    try {
-      // 1. Upload Images to Storage
-      const imageUrls = [];
-      for (const file of uploadedFiles) {
-        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
-        const { data, error } = await supabase.storage
-          .from('product-images')
-          .upload(fileName, file);
-
-        if (error) throw error;
-
-        const { data: publicURL } = supabase.storage
-          .from('product-images')
-          .getPublicUrl(fileName);
-        
-        imageUrls.push(publicURL.publicUrl);
-      }
-
-      // 2. Insert into Database
-      const { error: dbError } = await supabase
-        .from('products')
-        .insert([
-          { 
-            name: product, 
-            price: parseFloat(price), 
-            image_urls: imageUrls,
-            status: 'pending', 
-            vendor: 'Anonymous'
-          }
-        ]);
-
-      if (dbError) throw dbError;
-
-      alert(`✅ "${product}" submitted for approval!\n${feeText}`);
-      
-      // Reset Form
-      productSearchInput.value = '';
-      document.getElementById('fileList').innerHTML = '';
-      uploadedFiles = [];
-      loadProducts(); // Refresh feed
-
-    } catch (error) {
-      console.error("Error submitting:", error);
-      alert("Failed to submit: " + error.message);
-    } finally {
-      submitBtn.innerHTML = 'submit for approval';
-      submitBtn.disabled = false;
-    }
-  }
-
-  // ===== ADMIN DASHBOARD LOGIC (Dynamic) =====
+  // ===== ADMIN DASHBOARD LOGIC =====
   async function loadAdminData() {
     const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
     if (error) return;
@@ -880,6 +951,8 @@
             <span class="vendor-handle text-sm">@${p.vendor || 'Anonymous'}</span>
             <p class="text-sm font-medium mt-1">${p.name}</p>
             <p class="text-xs opacity-60">KSh ${p.price} · ${p.image_urls.length} images</p>
+            <p class="text-xs opacity-60 mt-1"><i class="fas fa-phone"></i> ${p.phone || 'N/A'} · <i class="fas fa-map-pin"></i> ${p.location || 'N/A'}</p>
+            <p class="text-xs opacity-60">Bargain: ${p.accepts_bargain ? 'Yes' : 'No'} · ${p.extra_info || 'No extra info'}</p>
           </div>
           <div class="flex gap-2 mt-2 md:mt-0">
             <button class="text-xs px-4 py-1.5 rounded-full bg-green-600/30 text-green-300 hover:bg-green-600/50" onclick="handleApproveFull('${p.id}')">✓ Approve</button>
@@ -898,18 +971,18 @@
       div.className = 'bg-black/20 rounded-xl p-3 border border-white/10';
       div.innerHTML = `
         <p class="font-medium">${p.name}</p>
-        <p class="text-xs opacity-60">@${p.vendor || 'Anonymous'} · KSh ${p.price}</p>
+        <p class="text-xs opacity-60">@${p.vendor || 'Anonymous'} · KSh ${p.price} · ${p.location}</p>
       `;
       activeList.appendChild(div);
     });
   }
 
-  // Admin actions (Update DB)
   async function handleApproveFull(id) {
     const { error } = await supabase.from('products').update({ status: 'active' }).eq('id', id);
     if (!error) {
       alert('✅ Product approved & activated');
       loadAdminData();
+      loadProducts();
     }
   }
 
@@ -923,7 +996,9 @@
 
   // Expose functions to window for inline onclick
   window.selectProduct = selectProduct;
-  window.handleSubmitListing = handleSubmitListing;
+  window.openListingModal = openListingModal;
+  window.closeListingModal = closeListingModal;
+  window.submitListingData = submitListingData;
   window.removeFile = removeFile;
   window.closeAdminPanel = closeAdminPanel;
   window.handleApproveFull = handleApproveFull;
