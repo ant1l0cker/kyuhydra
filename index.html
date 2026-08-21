@@ -4,8 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KYU Hydra · darknet campus marketplace</title>
+  
+  <!-- TAILWIND -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FONT AWESOME -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <!-- STYLES -->
   <style>
     /* custom theme variables */
     body {
@@ -77,7 +83,6 @@
     ::-webkit-scrollbar-track { background: var(--bg-primary); }
     ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 8px; }
 
-    /* theme panel slide */
     .theme-panel {
       max-height: 0;
       overflow: hidden;
@@ -89,7 +94,6 @@
       opacity: 1;
     }
 
-    /* hero / welcome */
     .hero-glow {
       background: radial-gradient(circle at 20% 30%, var(--accent) 0%, transparent 60%);
       opacity: 0.15;
@@ -150,7 +154,6 @@
       box-shadow: 0 0 12px rgba(255,215,0,0.2);
     }
 
-    /* drag & drop */
     .drop-zone {
       border: 2px dashed var(--border-color);
       border-radius: 1rem;
@@ -194,7 +197,6 @@
       color: #f87171;
     }
 
-    /* product search dropdown */
     .product-search-container {
       position: relative;
       flex: 1;
@@ -244,7 +246,6 @@
       border-bottom: none;
     }
 
-    /* Full page admin */
     .admin-full-page {
       display: none;
       position: fixed;
@@ -277,7 +278,7 @@
       color: #0B0C10;
     }
 
-    /* New Modal Styling */
+    /* Modal Styling */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -529,6 +530,14 @@
 <!-- ===== JAVASCRIPT ===== -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  // Add a global error handler to prevent white screens
+  window.onerror = function(message, source, lineno, colno, error) {
+    document.body.style.backgroundColor = '#0B0C10';
+    document.body.style.color = '#FFD700';
+    document.body.innerHTML = '<div style="padding: 2rem; font-family: monospace;"><h1>Oops! An error occurred.</h1><p style="color: red;">' + message + '</p><p>Check your browser console (F12) for more details.</p></div>';
+    return false;
+  };
+
   // ===== SUPABASE CONFIGURATION =====
   const SUPABASE_URL = 'https://dwonfvnxdojvgfdbrrbi.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_qeRWQSDy8mRIMU-TfSyPXQ_jz_FUx8C';
