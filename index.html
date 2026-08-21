@@ -8,21 +8,22 @@
   <!-- TAILWIND -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- FONT AWESOME -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- FONT AWESOME (UPDATED TO STABLE VERSION) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   
   <!-- STYLES -->
   <style>
-    /* custom theme variables */
     body {
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
+      /* Force dark background with !important */
+      background-color: #0B0C10 !important;
+      color: var(--text-primary, #f0f0f0);
       transition: background-color 0.25s ease, color 0.25s ease;
     }
+    
     .theme-switcher-btn {
-      border: 1px solid var(--border-color);
-      background: var(--bg-secondary);
-      color: var(--text-primary);
+      border: 1px solid var(--border-color, #2a2a2a);
+      background: var(--bg-secondary, #121212);
+      color: var(--text-primary, #f0f0f0);
       padding: 0.3rem 0.7rem;
       border-radius: 9999px;
       font-size: 0.7rem;
@@ -31,11 +32,11 @@
       white-space: nowrap;
     }
     .theme-switcher-btn:hover {
-      background: var(--accent);
+      background: var(--accent, #FFD700);
       color: #0B0C10;
     }
     .badge-trust {
-      background: var(--accent);
+      background: var(--accent, #FFD700);
       color: #0B0C10;
       padding: 0.1rem 0.6rem;
       border-radius: 9999px;
@@ -44,20 +45,20 @@
     }
     .vendor-handle {
       font-family: 'Courier New', monospace;
-      background: var(--bg-secondary);
+      background: var(--bg-secondary, #121212);
       padding: 0.1rem 0.5rem;
       border-radius: 0.3rem;
-      border-left: 3px solid var(--accent);
+      border-left: 3px solid var(--accent, #FFD700);
     }
     .product-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--bg-secondary, #121212);
+      border: 1px solid var(--border-color, #2a2a2a);
       border-radius: 1.2rem;
       padding: 1rem;
       transition: 0.15s;
     }
     .product-card:hover {
-      border-color: var(--accent);
+      border-color: var(--accent, #FFD700);
       box-shadow: 0 4px 16px rgba(0,0,0,0.5);
       transform: translateY(-2px);
     }
@@ -73,15 +74,15 @@
       aspect-ratio: 1/1;
       object-fit: cover;
       border-radius: 0.5rem;
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
+      background: var(--bg-primary, #0B0C10);
+      border: 1px solid var(--border-color, #2a2a2a);
     }
     @media (max-width: 640px) {
       .gallery-grid { grid-template-columns: repeat(3, 1fr); }
     }
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg-primary); }
-    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary, #0B0C10); }
+    ::-webkit-scrollbar-thumb { background: var(--accent, #FFD700); border-radius: 8px; }
 
     .theme-panel {
       max-height: 0;
@@ -95,7 +96,7 @@
     }
 
     .hero-glow {
-      background: radial-gradient(circle at 20% 30%, var(--accent) 0%, transparent 60%);
+      background: radial-gradient(circle at 20% 30%, var(--accent, #FFD700) 0%, transparent 60%);
       opacity: 0.15;
       position: absolute;
       inset: 0;
@@ -105,13 +106,13 @@
     .hero-card {
       position: relative;
       overflow: hidden;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--bg-secondary, #121212);
+      border: 1px solid var(--border-color, #2a2a2a);
       border-radius: 2rem;
       padding: 2rem 2rem 2.5rem;
     }
     .btn-primary {
-      background: var(--accent);
+      background: var(--accent, #FFD700);
       color: #0B0C10;
       font-weight: 700;
       padding: 0.6rem 1.8rem;
@@ -122,50 +123,50 @@
     }
     .btn-primary:hover {
       transform: scale(1.03);
-      box-shadow: 0 0 20px var(--accent);
+      box-shadow: 0 0 20px var(--accent, #FFD700);
     }
     .btn-outline {
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border-color, #2a2a2a);
       background: transparent;
-      color: var(--text-primary);
+      color: var(--text-primary, #f0f0f0);
       padding: 0.6rem 1.8rem;
       border-radius: 9999px;
       cursor: pointer;
       transition: 0.15s;
     }
     .btn-outline:hover {
-      background: var(--accent);
+      background: var(--accent, #FFD700);
       color: #0B0C10;
-      border-color: var(--accent);
+      border-color: var(--accent, #FFD700);
     }
     .search-bar {
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
+      background: var(--bg-primary, #0B0C10);
+      border: 1px solid var(--border-color, #2a2a2a);
       border-radius: 9999px;
       padding: 0.5rem 1.2rem;
-      color: var(--text-primary);
+      color: var(--text-primary, #f0f0f0);
       width: 100%;
       max-width: 320px;
       transition: 0.2s;
     }
     .search-bar:focus {
       outline: none;
-      border-color: var(--accent);
+      border-color: var(--accent, #FFD700);
       box-shadow: 0 0 12px rgba(255,215,0,0.2);
     }
 
     .drop-zone {
-      border: 2px dashed var(--border-color);
+      border: 2px dashed var(--border-color, #2a2a2a);
       border-radius: 1rem;
       padding: 1.5rem;
       text-align: center;
       transition: all 0.2s;
       cursor: pointer;
-      background: var(--bg-primary);
+      background: var(--bg-primary, #0B0C10);
     }
     .drop-zone.dragover {
-      border-color: var(--accent);
-      background: var(--bg-secondary);
+      border-color: var(--accent, #FFD700);
+      background: var(--bg-secondary, #121212);
     }
     .drop-zone .drop-text {
       opacity: 0.6;
@@ -178,8 +179,8 @@
       margin-top: 0.5rem;
     }
     .file-item {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--bg-secondary, #121212);
+      border: 1px solid var(--border-color, #2a2a2a);
       border-radius: 0.5rem;
       padding: 0.25rem 0.75rem;
       font-size: 0.75rem;
@@ -204,24 +205,24 @@
     }
     .product-search-container input {
       width: 100%;
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
+      background: var(--bg-primary, #0B0C10);
+      border: 1px solid var(--border-color, #2a2a2a);
       border-radius: 9999px;
       padding: 0.5rem 1rem;
-      color: var(--text-primary);
+      color: var(--text-primary, #f0f0f0);
       font-size: 0.85rem;
     }
     .product-search-container input:focus {
       outline: none;
-      border-color: var(--accent);
+      border-color: var(--accent, #FFD700);
     }
     .product-suggestions {
       position: absolute;
       top: 110%;
       left: 0;
       right: 0;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--bg-secondary, #121212);
+      border: 1px solid var(--border-color, #2a2a2a);
       border-radius: 1rem;
       max-height: 200px;
       overflow-y: auto;
@@ -236,10 +237,10 @@
       cursor: pointer;
       transition: 0.1s;
       font-size: 0.8rem;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color, #2a2a2a);
     }
     .product-suggestions .suggestion-item:hover {
-      background: var(--accent);
+      background: var(--accent, #FFD700);
       color: #0B0C10;
     }
     .product-suggestions .suggestion-item:last-child {
@@ -253,7 +254,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: var(--bg-primary);
+      background: var(--bg-primary, #0B0C10);
       z-index: 999;
       overflow-y: auto;
       padding: 2rem;
@@ -265,20 +266,19 @@
       position: sticky;
       top: 0;
       float: right;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
+      background: var(--bg-secondary, #121212);
+      border: 1px solid var(--border-color, #2a2a2a);
+      color: var(--text-primary, #f0f0f0);
       padding: 0.5rem 1rem;
       border-radius: 9999px;
       cursor: pointer;
       z-index: 10;
     }
     .admin-full-page .close-admin:hover {
-      background: var(--accent);
+      background: var(--accent, #FFD700);
       color: #0B0C10;
     }
 
-    /* Modal Styling */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -293,8 +293,8 @@
       display: flex;
     }
     .modal-content {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--bg-secondary, #121212);
+      border: 1px solid var(--border-color, #2a2a2a);
       border-radius: 1rem;
       padding: 2rem;
       max-width: 500px;
@@ -303,53 +303,40 @@
     }
     .modal-content input, .modal-content textarea, .modal-content select {
       width: 100%;
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
+      background: var(--bg-primary, #0B0C10);
+      border: 1px solid var(--border-color, #2a2a2a);
       padding: 0.6rem;
       border-radius: 0.5rem;
-      color: var(--text-primary);
+      color: var(--text-primary, #f0f0f0);
       margin-bottom: 1rem;
     }
     .modal-content input:focus, .modal-content textarea:focus {
       outline: none;
-      border-color: var(--accent);
+      border-color: var(--accent, #FFD700);
     }
   </style>
 </head>
 <body>
 
-<!-- ===== FULL PAGE ADMIN PANEL ===== -->
+<!-- ADMIN PANEL -->
 <div id="adminFullPage" class="admin-full-page">
   <button class="close-admin" onclick="closeAdminPanel()"><i class="fas fa-times"></i> Close Admin</button>
   <div class="max-w-6xl mx-auto">
     <h1 class="text-3xl font-black mb-2" style="color: var(--accent);"><i class="fas fa-user-cog"></i> Admin Dashboard</h1>
     <p class="text-sm opacity-60 mb-6">Secure admin panel · Kirinyaga University · Kutus</p>
-    
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div class="bg-black/20 rounded-xl p-4 border border-white/10">
-        <p class="text-xs opacity-60">Total Products</p>
-        <p class="text-2xl font-bold" id="adminTotalProducts">0</p>
-      </div>
-      <div class="bg-black/20 rounded-xl p-4 border border-white/10">
-        <p class="text-xs opacity-60">Pending Approval</p>
-        <p class="text-2xl font-bold text-yellow-400" id="adminPendingProducts">0</p>
-      </div>
-      <div class="bg-black/20 rounded-xl p-4 border border-white/10">
-        <p class="text-xs opacity-60">Active Listings</p>
-        <p class="text-2xl font-bold text-green-400" id="adminActiveProducts">0</p>
-      </div>
+      <div class="bg-black/20 rounded-xl p-4 border border-white/10"><p class="text-xs opacity-60">Total Products</p><p class="text-2xl font-bold" id="adminTotalProducts">0</p></div>
+      <div class="bg-black/20 rounded-xl p-4 border border-white/10"><p class="text-xs opacity-60">Pending Approval</p><p class="text-2xl font-bold text-yellow-400" id="adminPendingProducts">0</p></div>
+      <div class="bg-black/20 rounded-xl p-4 border border-white/10"><p class="text-xs opacity-60">Active Listings</p><p class="text-2xl font-bold text-green-400" id="adminActiveProducts">0</p></div>
     </div>
-
     <h2 class="text-xl font-bold mb-4"><i class="fas fa-clock" style="color: var(--accent);"></i> Pending Approvals</h2>
     <div id="adminPendingList"></div>
-
     <h2 class="text-xl font-bold mt-8 mb-4"><i class="fas fa-check-circle" style="color: var(--accent);"></i> Active Listings</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="adminActiveList"></div>
   </div>
 </div>
 
 <div id="app" class="max-w-7xl mx-auto px-4 py-5">
-  <!-- ===== HEADER ===== -->
   <header class="flex flex-wrap items-center justify-between gap-3 mb-5">
     <div class="flex items-center gap-3 cursor-pointer select-none" id="brandLogo" title="Double-click for admin access">
       <i class="fas fa-code-branch text-3xl" style="color: var(--accent);"></i>
@@ -358,13 +345,10 @@
     </div>
     <div class="flex items-center gap-3">
       <input type="text" placeholder="search products..." class="search-bar text-sm" id="globalSearch" oninput="filterProducts(this.value)">
-      <button id="themeToggleBtn" class="text-xl px-2 py-1 rounded-full hover:bg-white/10 transition" title="toggle themes">
-        <i class="fas fa-bars"></i>
-      </button>
+      <button id="themeToggleBtn" class="text-xl px-2 py-1 rounded-full hover:bg-white/10 transition" title="toggle themes"><i class="fas fa-bars"></i></button>
     </div>
   </header>
 
-  <!-- ===== THEME PANEL ===== -->
   <div id="themePanel" class="theme-panel mb-5 flex flex-wrap items-center gap-2 p-3 rounded-2xl" style="background: var(--bg-secondary); border:1px solid var(--border-color);">
     <span class="text-xs opacity-70 mr-1"><i class="fas fa-palette"></i> themes:</span>
     <button class="theme-switcher-btn" data-theme="hydra-yellow">⚡Hydra</button>
@@ -379,26 +363,15 @@
     <button class="theme-switcher-btn" data-theme="dracula-dark">🧛Dracula</button>
   </div>
 
-  <!-- ===== HERO ===== -->
   <div class="hero-card mb-8 text-center">
     <div class="hero-glow"></div>
     <div class="relative z-10">
-      <div class="inline-block px-4 py-1 rounded-full text-xs font-bold tracking-wider mb-3" style="background: var(--accent); color:#0B0C10;">
-        <i class="fas fa-bolt"></i> KIRINYAGA UNIVERSITY · KUTUS
-      </div>
-      <h1 class="text-4xl md:text-6xl font-black leading-tight tracking-tight">
-        <span style="color: var(--accent);">Hydra</span> marketplace
-      </h1>
-      <p class="text-lg md:text-xl opacity-70 max-w-2xl mx-auto mt-2">
-        peer-to-peer · darknet vibes · campus economy
-      </p>
+      <div class="inline-block px-4 py-1 rounded-full text-xs font-bold tracking-wider mb-3" style="background: var(--accent); color:#0B0C10;"><i class="fas fa-bolt"></i> KIRINYAGA UNIVERSITY · KUTUS</div>
+      <h1 class="text-4xl md:text-6xl font-black leading-tight tracking-tight"><span style="color: var(--accent);">Hydra</span> marketplace</h1>
+      <p class="text-lg md:text-xl opacity-70 max-w-2xl mx-auto mt-2">peer-to-peer · darknet vibes · campus economy</p>
       <div class="flex flex-wrap justify-center gap-4 mt-5">
-        <button class="btn-primary" onclick="document.getElementById('feedSection').scrollIntoView({behavior:'smooth'})">
-          <i class="fas fa-store"></i> explore feed
-        </button>
-        <button class="btn-outline" onclick="alert('🔥 welcome to KYU Hydra – dark P2P campus trading')">
-          <i class="fas fa-skull"></i> enter hydra
-        </button>
+        <button class="btn-primary" onclick="document.getElementById('feedSection').scrollIntoView({behavior:'smooth'})"><i class="fas fa-store"></i> explore feed</button>
+        <button class="btn-outline" onclick="alert('🔥 welcome to KYU Hydra – dark P2P campus trading')"><i class="fas fa-skull"></i> enter hydra</button>
       </div>
       <div class="flex flex-wrap justify-center gap-4 mt-4 text-xs opacity-50">
         <span><i class="fas fa-shield-alt" style="color:var(--accent);"></i> 256-bit encrypted</span>
@@ -408,31 +381,20 @@
     </div>
   </div>
 
-  <!-- ===== MAIN: feed ===== -->
   <div id="feedSection" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
     <div class="lg:col-span-3">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-store"></i> campus feed</h2>
-        <div class="flex gap-2 text-xs">
-          <span class="bg-black/30 px-3 py-1 rounded-full"><i class="fas fa-map-pin"></i> Gate A · Kutus</span>
-          <span class="bg-black/30 px-3 py-1 rounded-full"><i class="fas fa-tag"></i> 6 categories</span>
-        </div>
+        <div class="flex gap-2 text-xs"><span class="bg-black/30 px-3 py-1 rounded-full"><i class="fas fa-map-pin"></i> Gate A · Kutus</span><span class="bg-black/30 px-3 py-1 rounded-full"><i class="fas fa-tag"></i> 6 categories</span></div>
       </div>
-
       <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="text-center opacity-50 col-span-2 py-10"><i class="fas fa-circle-notch fa-spin"></i> Loading products...</div>
       </div>
 
-      <!-- listing creation / fee with product search -->
       <div class="mt-6 p-4 rounded-2xl" style="background: var(--bg-secondary); border:1px solid var(--border-color);">
         <div class="flex flex-wrap items-center gap-4">
           <span class="font-bold text-sm"><i class="fas fa-plus-circle" style="color:var(--accent);"></i> list new item</span>
-          
-          <div class="product-search-container">
-            <input type="text" id="productSearchInput" placeholder="search 100+ products..." autocomplete="off">
-            <div id="productSuggestions" class="product-suggestions"></div>
-          </div>
-          
+          <div class="product-search-container"><input type="text" id="productSearchInput" placeholder="search 100+ products..." autocomplete="off"><div id="productSuggestions" class="product-suggestions"></div></div>
           <select class="bg-black/30 text-sm px-3 py-1.5 rounded-full border border-white/10" id="feeSelect">
             <option>Micro (KSh 0–1,000) · fee 50</option>
             <option>Mid-range (1,001–5,000) · fee 150</option>
@@ -441,7 +403,6 @@
           <button class="text-xs px-4 py-1.5 rounded-full" style="background:var(--accent); color:#0B0C10; font-weight:700;" onclick="openListingModal()">submit for approval</button>
           <span class="text-xs opacity-50"><i class="fas fa-credit-card"></i> M-Pesa Till: 123456</span>
         </div>
-        
         <div class="mt-3">
           <div id="dropZone" class="drop-zone" onclick="document.getElementById('fileInput').click()">
             <i class="fas fa-cloud-upload-alt" style="color: var(--accent);"></i>
@@ -453,21 +414,12 @@
       </div>
     </div>
 
-    <!-- RIGHT: vendor profile -->
     <div class="lg:col-span-1">
       <div class="p-4 rounded-2xl" style="background: var(--bg-secondary); border:1px solid var(--border-color);">
         <p class="text-xs font-bold"><i class="fas fa-id-badge"></i> vendor snapshot</p>
-        <div class="flex items-center gap-2 mt-1">
-          <span class="vendor-handle text-sm">@HydraPlug01</span>
-          <span class="badge-trust"><i class="fas fa-check-circle"></i> verified</span>
-        </div>
-        <div class="flex gap-3 text-xs mt-1 flex-wrap">
-          <span><i class="fas fa-star text-yellow-400"></i> 4.8 (23)</span>
-          <span><i class="fas fa-clock"></i> ~2h response</span>
-          <span><i class="fas fa-trophy"></i> top trader</span>
-        </div>
+        <div class="flex items-center gap-2 mt-1"><span class="vendor-handle text-sm">@HydraPlug01</span><span class="badge-trust"><i class="fas fa-check-circle"></i> verified</span></div>
+        <div class="flex gap-3 text-xs mt-1 flex-wrap"><span><i class="fas fa-star text-yellow-400"></i> 4.8 (23)</span><span><i class="fas fa-clock"></i> ~2h response</span><span><i class="fas fa-trophy"></i> top trader</span></div>
       </div>
-      
       <div class="mt-4 p-4 rounded-2xl" style="background: var(--bg-secondary); border:1px solid var(--border-color);">
         <p class="text-xs font-bold"><i class="fas fa-store"></i> quick stats</p>
         <div class="mt-2 space-y-1 text-xs">
@@ -478,119 +430,34 @@
       </div>
     </div>
   </div>
-
-  <!-- footer -->
-  <div class="mt-8 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between text-xs">
-    <div class="flex flex-wrap gap-2">
-      <span class="opacity-50"><i class="fas fa-map-marker-alt"></i> zones:</span>
-      <span class="bg-black/30 px-3 py-1 rounded-full">Gate A</span>
-      <span class="bg-black/30 px-3 py-1 rounded-full">Gate B</span>
-      <span class="bg-black/30 px-3 py-1 rounded-full">Admin Block</span>
-      <span class="bg-black/30 px-3 py-1 rounded-full">Kutus Town</span>
-      <span class="bg-black/30 px-3 py-1 rounded-full">Mess/Cafeteria</span>
-      <span class="bg-black/30 px-3 py-1 rounded-full">Non-Res Hostels</span>
-    </div>
-    <div class="opacity-40">© KYU Hydra · darknet P2P</div>
-  </div>
 </div>
 
-<!-- ===== LISTING MODAL ===== -->
+<!-- MODAL -->
 <div class="modal-overlay" id="listingModal">
   <div class="modal-content">
     <h2 class="text-xl font-bold mb-4"><i class="fas fa-plus-circle" style="color:var(--accent);"></i> Product Details</h2>
-    
-    <label class="text-xs opacity-70">Product Name</label>
-    <input type="text" id="modalName" placeholder="e.g., Dell XPS 13" readonly>
-
-    <label class="text-xs opacity-70">Price (KSh)</label>
-    <input type="number" id="modalPrice" placeholder="e.g., 45000" required>
-
-    <label class="text-xs opacity-70">Your Phone Number</label>
-    <input type="text" id="modalPhone" placeholder="e.g., 0712345678" required>
-
-    <label class="text-xs opacity-70">Location (Zone)</label>
-    <input type="text" id="modalLocation" placeholder="e.g., Gate A, Kutus Town" required>
-
-    <label class="text-xs opacity-70">Accept Bargain?</label>
-    <select id="modalBargain" class="w-full bg-black/30 text-sm px-3 py-1.5 rounded-full border border-white/10 mb-4">
-      <option value="true">Yes</option>
-      <option value="false">No</option>
-    </select>
-
-    <label class="text-xs opacity-70">Additional Info</label>
-    <textarea id="modalExtraInfo" rows="3" placeholder="Condition, reason for selling, delivery options..."></textarea>
-
-    <div class="flex gap-2">
-      <button class="btn-primary w-full" onclick="submitListingData()">Submit to Admin</button>
-      <button class="btn-outline w-full" onclick="closeListingModal()">Cancel</button>
-    </div>
+    <label class="text-xs opacity-70">Product Name</label><input type="text" id="modalName" placeholder="e.g., Dell XPS 13" readonly>
+    <label class="text-xs opacity-70">Price (KSh)</label><input type="number" id="modalPrice" placeholder="e.g., 45000" required>
+    <label class="text-xs opacity-70">Your Phone Number</label><input type="text" id="modalPhone" placeholder="e.g., 0712345678" required>
+    <label class="text-xs opacity-70">Location (Zone)</label><input type="text" id="modalLocation" placeholder="e.g., Gate A, Kutus Town" required>
+    <label class="text-xs opacity-70">Accept Bargain?</label><select id="modalBargain" class="w-full bg-black/30 text-sm px-3 py-1.5 rounded-full border border-white/10 mb-4"><option value="true">Yes</option><option value="false">No</option></select>
+    <label class="text-xs opacity-70">Additional Info</label><textarea id="modalExtraInfo" rows="3" placeholder="Condition, reason for selling, delivery options..."></textarea>
+    <div class="flex gap-2"><button class="btn-primary w-full" onclick="submitListingData()">Submit to Admin</button><button class="btn-outline w-full" onclick="closeListingModal()">Cancel</button></div>
   </div>
 </div>
 
-<!-- ===== JAVASCRIPT ===== -->
+<!-- JAVASCRIPT -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Add a global error handler to prevent white screens
-  window.onerror = function(message, source, lineno, colno, error) {
-    document.body.style.backgroundColor = '#0B0C10';
-    document.body.style.color = '#FFD700';
-    document.body.innerHTML = '<div style="padding: 2rem; font-family: monospace;"><h1>Oops! An error occurred.</h1><p style="color: red;">' + message + '</p><p>Check your browser console (F12) for more details.</p></div>';
-    return false;
-  };
-
   // ===== SUPABASE CONFIGURATION =====
   const SUPABASE_URL = 'https://dwonfvnxdojvgfdbrrbi.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_qeRWQSDy8mRIMU-TfSyPXQ_jz_FUx8C';
   const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // ===== ALL 100 PRODUCTS =====
   const allProducts = [
-    "HP EliteBook / ProBook (Refurbished)", "Dell Latitude Laptops", "Used MacBook Air (Early Models)",
-    "Subwoofers / Sound Systems (Sayona, Vitron, Ampex)", "32-inch Smart TVs / Monitors",
-    "Android Phones (Tecno, Infinix, Samsung A-Series)", "iPhones (Used iPhone 11, 12, 13)",
-    "Bluetooth Speakers (JBL replicas, Oraimo)", "Wireless Earbuds & Airpods",
-    "Gaming Consoles (PS4 Slim, Xbox One)", "Extra Game Controllers (DualShock 4 / Xbox)",
-    "External Hard Drives (1TB / 2TB WD, Seagate)", "USB Flash Drives (32GB / 64GB / 128GB)",
-    "Wi-Fi Routers / Portable MiFi (Safaricom, Faiba, TP-Link)", "Laptop Chargers (Type-C, Pin, HP, Dell)",
-    "Power Banks (10,000mAh – 30,000mAh)", "Ring Lights & Tripods", "Extension Cables & Multi-Sockets",
-    "HDMI Cables & Adapters", "OTG Flash Drives & Card Readers",
-    "Mini Fridges (Ramtons, Hisense, Mika)", "Single / Double Burner Gas Cookers",
-    "6kg / 13kg Gas Cylinders (Full/Empty)", "Electric Kettles (Ailyons, Hotpoint)",
-    "Microwaves", "Hotplates / Coils", "Water Dispensers", "Blenders & Food Processors",
-    "Sandwich Makers / Toasters", "Irons (Dry & Steam)", "Stand Fans / Desk Fans",
-    "Plastic Chairs / Desk Chairs", "Wooden / Metal Study Tables", "3x6 / 4x6 Foam Mattresses",
-    "Bed Frames (Wooden & Metallic)", "Wardrobes / Canvas Clothes Cabinets",
-    "Shoe Racks (Plastic / Wooden)", "Full-Length Standing Mirrors", "Floor Rugs / Carpets",
-    "Blackout Curtains",
-    "Oversized Hoodies & Sweatshirts", "Vintage Denim Jackets", "Sweatpants & Cargo Pants",
-    "Cargo Shorts", "Graphic Tees & Band Shirts", "Leather Jackets",
-    "Sneakers (Nike Air Force, Jordan 4, Dunks)", "Running Shoes (Adidas, New Balance)",
-    "Crocs & Slides", "Official Suit Jackets / Blazers", "Official Trousers / Pencil Skirts",
-    "Handbags & Tote Bags", "Backpacks / Laptop Bags", "Caps & Beanies", "Sunglasses",
-    "Wristwatches (Casio, Fossil, Smartwatches)", "Gold/Silver Plated Chains & Rings",
-    "Oil-Based Refill Perfumes (50ml / 100ml)", "Dreads / Braids Extensions", "Gym Wear & Compression Gear",
-    "Department CAT Past Papers (Soft / Printed Copies)", "Exam Revision Guides & Summary Notes",
-    "Complete Senior Project Documentation / Source Code", "Engineering Drawing Boards & Sets",
-    "Scientific Calculators (Casio FX-991EX / MS)", "Lab Coats (Science & Health Units)",
-    "Safety Boots & Overalls", "Architectural Cutting Mats & Models", "Printed Textbooks & Modules",
-    "Novel / Fiction Books", "Flashcards & Formula Sheets", "Blank A4 Rim Papers / Notebook Bundles",
-    "Assignment Printing & Binding Services", "Final Year CV & Cover Letter Templates",
-    "Attachment Application Email Databases",
-    "Hair Braiding & Dreadlocks Maintenance", "Barber Services (In-room cuts)",
-    "Nail Art & Acrylics", "Shoe Cleaning & Restoration", "Laundry & Ironing Services",
-    "Event & Portrait Photography", "Video Editing & Reels Creation",
-    "Audio Mixing / Beat Production", "Graphic Design (Posters, Logos, Flyers)",
-    "Laptop Software Flashing & OS Installation", "Phone Screen Replacement & Hardware Fixes",
-    "Private Tutoring (Math, Coding, Physics)", "Room Moving & Luggage Hauling",
-    "Errand & Grocery Running (Kutus Market Drops)", "Custom Cake & Birthday Pastry Baking",
-    "Night-Time Hostel Smokies & Boiled Eggs", "Homemade Chapatis & Mandazi (Bulk Orders)",
-    "Fresh Juices & Smoothies (500ml Bottles)", "Homemade Cookies & Doughnuts",
-    "Cold Brews & Soft Drinks", "Peanut Butter (Homemade Jars)",
-    "Fast Food Combos (Fries + Chicken Drops)", "Gas Refill Delivery Drops",
-    "Water Container Refills (20L Jerrycans)", "Midnight Snack & Noodle Packs"
+    "HP EliteBook / ProBook (Refurbished)", "Dell Latitude Laptops", "Used MacBook Air (Early Models)", "Subwoofers / Sound Systems", "32-inch Smart TVs / Monitors", "Android Phones", "iPhones (Used)", "Bluetooth Speakers", "Wireless Earbuds", "Gaming Consoles", "External Hard Drives", "USB Flash Drives", "Wi-Fi Routers", "Laptop Chargers", "Power Banks", "Ring Lights", "Extension Cables", "HDMI Cables", "Mini Fridges", "Single / Double Burner Gas Cookers", "Gas Cylinders", "Electric Kettles", "Microwaves", "Hotplates", "Water Dispensers", "Blenders", "Sandwich Makers", "Irons", "Stand Fans", "Plastic Chairs", "Wooden Study Tables", "Foam Mattresses", "Bed Frames", "Wardrobes", "Shoe Racks", "Full-Length Mirrors", "Floor Rugs", "Blackout Curtains", "Oversized Hoodies", "Vintage Denim Jackets", "Sweatpants", "Cargo Shorts", "Graphic Tees", "Leather Jackets", "Sneakers", "Running Shoes", "Crocs", "Suit Jackets", "Official Trousers", "Handbags", "Backpacks", "Caps", "Sunglasses", "Wristwatches", "Jewelry", "Perfumes", "Dreads Extensions", "Gym Wear", "Department CAT Past Papers", "Exam Revision Guides", "Senior Project Documentation", "Engineering Drawing Boards", "Scientific Calculators", "Lab Coats", "Safety Boots", "Architectural Models", "Printed Textbooks", "Novel / Fiction Books", "Flashcards", "A4 Rim Papers", "Assignment Printing", "CV Templates", "Attachment Email Databases", "Hair Braiding", "Barber Services", "Nail Art", "Shoe Cleaning", "Laundry Services", "Event Photography", "Video Editing", "Audio Mixing", "Graphic Design", "OS Installation", "Phone Repair", "Private Tutoring", "Room Moving", "Errand Running", "Custom Cakes", "Night-Time Smokies", "Homemade Chapati", "Fresh Juices", "Homemade Cookies", "Cold Brews", "Peanut Butter", "Fast Food Combos", "Gas Refill Delivery", "Water Refills", "Midnight Snacks"
   ];
 
-  // ===== SECURE ADMIN GATEWAY =====
   const ADMIN_PASSWORD = "Razorblade@016";
   let adminUnlocked = false;
 
@@ -601,9 +468,7 @@
         adminUnlocked = true;
         document.getElementById('adminFullPage').classList.add('active');
         loadAdminData();
-      } else if (passwordInput !== null) {
-        alert('✕ Access Denied');
-      }
+      } else if (passwordInput !== null) { alert('✕ Access Denied'); }
     } else {
       document.getElementById('adminFullPage').classList.add('active');
       loadAdminData();
@@ -611,107 +476,54 @@
   }
 
   document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
-      e.preventDefault();
-      triggerAdminAccess();
-    }
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') { e.preventDefault(); triggerAdminAccess(); }
   });
+  document.getElementById('brandLogo').addEventListener('dblclick', function() { triggerAdminAccess(); });
+  function closeAdminPanel() { document.getElementById('adminFullPage').classList.remove('active'); }
 
-  document.getElementById('brandLogo').addEventListener('dblclick', function() {
-    triggerAdminAccess();
-  });
-
-  function closeAdminPanel() {
-    document.getElementById('adminFullPage').classList.remove('active');
-  }
-
-  // ===== PRODUCT SEARCH =====
   const productSearchInput = document.getElementById('productSearchInput');
   const productSuggestions = document.getElementById('productSuggestions');
-
   productSearchInput.addEventListener('input', function() {
     const query = this.value.toLowerCase().trim();
-    if (query.length === 0) {
-      productSuggestions.classList.remove('active');
-      return;
-    }
+    if (query.length === 0) { productSuggestions.classList.remove('active'); return; }
     const matches = allProducts.filter(p => p.toLowerCase().includes(query));
-    if (matches.length === 0) {
-      productSuggestions.innerHTML = '<div class="suggestion-item" style="opacity:0.6;">No matches found</div>';
-      productSuggestions.classList.add('active');
-      return;
-    }
-    productSuggestions.innerHTML = matches.map(p => 
-      `<div class="suggestion-item" onclick="selectProduct('${p.replace(/'/g, "\\'")}')">${p}</div>`
-    ).join('');
+    productSuggestions.innerHTML = matches.map(p => `<div class="suggestion-item" onclick="selectProduct('${p.replace(/'/g, "\\'")}')">${p}</div>`).join('');
     productSuggestions.classList.add('active');
   });
 
   document.addEventListener('click', function(e) {
-    if (!productSearchInput.contains(e.target) && !productSuggestions.contains(e.target)) {
-      productSuggestions.classList.remove('active');
-    }
+    if (!productSearchInput.contains(e.target) && !productSuggestions.contains(e.target)) { productSuggestions.classList.remove('active'); }
   });
 
-  function selectProduct(name) {
-    productSearchInput.value = name;
-    productSuggestions.classList.remove('active');
-  }
+  function selectProduct(name) { productSearchInput.value = name; productSuggestions.classList.remove('active'); }
 
-  // ===== DRAG & DROP =====
   const dropZone = document.getElementById('dropZone');
   const fileInput = document.getElementById('fileInput');
   const fileList = document.getElementById('fileList');
   let uploadedFiles = [];
 
-  dropZone.addEventListener('dragover', function(e) {
-    e.preventDefault();
-    this.classList.add('dragover');
-  });
-
-  dropZone.addEventListener('dragleave', function(e) {
-    e.preventDefault();
-    this.classList.remove('dragover');
-  });
-
+  dropZone.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', function(e) { e.preventDefault(); this.classList.remove('dragover'); });
   dropZone.addEventListener('drop', function(e) {
-    e.preventDefault();
-    this.classList.remove('dragover');
-    const files = e.dataTransfer.files;
-    handleFiles(files);
+    e.preventDefault(); this.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
   });
-
-  fileInput.addEventListener('change', function(e) {
-    handleFiles(this.files);
-    this.value = '';
-  });
+  fileInput.addEventListener('change', function(e) { handleFiles(this.files); this.value = ''; });
 
   function handleFiles(files) {
     for (let file of files) {
       if (file.type.startsWith('image/')) {
-        if (uploadedFiles.length >= 10) {
-          alert("Maximum 10 images allowed!");
-          break;
-        }
+        if (uploadedFiles.length >= 10) { alert("Maximum 10 images allowed!"); break; }
         uploadedFiles.push(file);
         const fileItem = document.createElement('div');
         fileItem.className = 'file-item';
-        fileItem.innerHTML = `
-          <i class="fas fa-image" style="color:var(--accent);"></i>
-          <span>${file.name} (${(file.size/1024).toFixed(0)}KB)</span>
-          <span class="remove-file" onclick="removeFile(this, '${file.name}')">✕</span>
-        `;
+        fileItem.innerHTML = `<i class="fas fa-image" style="color:var(--accent);"></i><span>${file.name} (${(file.size/1024).toFixed(0)}KB)</span><span class="remove-file" onclick="removeFile(this, '${file.name}')">✕</span>`;
         fileList.appendChild(fileItem);
       }
     }
   }
+  function removeFile(el, fileName) { uploadedFiles = uploadedFiles.filter(f => f.name !== fileName); el.closest('.file-item').remove(); }
 
-  function removeFile(el, fileName) {
-    uploadedFiles = uploadedFiles.filter(f => f.name !== fileName);
-    el.closest('.file-item').remove();
-  }
-
-  // ===== THEME ENGINE =====
   (function() {
     const themes = {
       'hydra-yellow': { '--bg-primary': '#0B0C10', '--bg-secondary': '#121212', '--text-primary': '#f0f0f0', '--accent': '#FFD700', '--border-color': '#2a2a2a' },
@@ -726,60 +538,35 @@
       'dracula-dark': { '--bg-primary': '#14101a', '--bg-secondary': '#1e1828', '--text-primary': '#f0e0f0', '--accent': '#ff6b9d', '--border-color': '#3a2a40' }
     };
     function applyTheme(name) {
-      const t = themes[name];
-      if (!t) return;
+      const t = themes[name]; if (!t) return;
       const root = document.documentElement;
       Object.keys(t).forEach(p => root.style.setProperty(p, t[p]));
       localStorage.setItem('kyu-hydra-theme', name);
     }
-    const saved = localStorage.getItem('kyu-hydra-theme') || 'hydra-yellow';
-    applyTheme(saved);
-    document.querySelectorAll('.theme-switcher-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const name = this.dataset.theme;
-        if (name) applyTheme(name);
-      });
-    });
+    applyTheme(localStorage.getItem('kyu-hydra-theme') || 'hydra-yellow');
+    document.querySelectorAll('.theme-switcher-btn').forEach(btn => { btn.addEventListener('click', function() { applyTheme(this.dataset.theme); }); });
   })();
 
-  // ===== THEME PANEL TOGGLE =====
   const panel = document.getElementById('themePanel');
   const toggleBtn = document.getElementById('themeToggleBtn');
-  toggleBtn.addEventListener('click', function() {
-    panel.classList.toggle('open');
-  });
-
-  // ===== SEARCH / FILTER =====
+  toggleBtn.addEventListener('click', function() { panel.classList.toggle('open'); });
   function filterProducts(query) {
     const q = query.toLowerCase().trim();
-    const cards = document.querySelectorAll('.product-card');
-    cards.forEach(card => {
-      const name = card.dataset.name || '';
-      const text = card.textContent.toLowerCase();
-      const match = name.includes(q) || text.includes(q);
+    document.querySelectorAll('.product-card').forEach(card => {
+      const match = (card.dataset.name || '').includes(q) || card.textContent.toLowerCase().includes(q);
       card.style.display = match ? '' : 'none';
     });
   }
   window.filterProducts = filterProducts;
 
-  // ===== NEW MODAL LOGIC =====
   function openListingModal() {
     const product = productSearchInput.value.trim();
-    if (!product) {
-      alert('Please select or type a product name first.');
-      return;
-    }
-    if (uploadedFiles.length === 0) {
-      alert('Please add at least 1 image (max 10).');
-      return;
-    }
+    if (!product) { alert('Please select or type a product name first.'); return; }
+    if (uploadedFiles.length === 0) { alert('Please add at least 1 image (max 10).'); return; }
     document.getElementById('modalName').value = product;
     document.getElementById('listingModal').classList.add('active');
   }
-
-  function closeListingModal() {
-    document.getElementById('listingModal').classList.remove('active');
-  }
+  function closeListingModal() { document.getElementById('listingModal').classList.remove('active'); }
 
   async function submitListingData() {
     const product = document.getElementById('modalName').value;
@@ -788,18 +575,9 @@
     const location = document.getElementById('modalLocation').value;
     const bargain = document.getElementById('modalBargain').value;
     const extraInfo = document.getElementById('modalExtraInfo').value;
-
-    if (!price || !phone || !location) {
-      alert("Please fill out Price, Phone, and Location.");
-      return;
-    }
-
-    const submitBtn = document.querySelector('.modal-content .btn-primary');
-    submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Uploading...';
-    submitBtn.disabled = true;
-
+    if (!price || !phone || !location) { alert("Please fill out Price, Phone, and Location."); return; }
+    const submitBtn = document.querySelector('.modal-content .btn-primary'); submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Uploading...'; submitBtn.disabled = true;
     try {
-      // 1. Upload Images
       const imageUrls = [];
       for (const file of uploadedFiles) {
         const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
@@ -808,214 +586,92 @@
         const { data: publicURL } = supabase.storage.from('product-images').getPublicUrl(fileName);
         imageUrls.push(publicURL.publicUrl);
       }
-
-      // 2. Insert into database with all new details
-      const { error: dbError } = await supabase
-        .from('products')
-        .insert([
-          { 
-            name: product, 
-            price: parseFloat(price), 
-            phone: phone,
-            location: location,
-            extra_info: extraInfo,
-            accepts_bargain: bargain === 'true',
-            image_urls: imageUrls,
-            status: 'pending', 
-            vendor: 'Anonymous'
-          }
-        ]);
-
+      const { error: dbError } = await supabase.from('products').insert([{ 
+        name: product, price: parseFloat(price), phone: phone, location: location,
+        extra_info: extraInfo, accepts_bargain: bargain === 'true', image_urls: imageUrls,
+        status: 'pending', vendor: 'Anonymous'
+      }]);
       if (dbError) throw dbError;
-
-      alert(`✅ "${product}" submitted for approval!\nAdmin will review it shortly.`);
-      
-      // Reset Form
-      productSearchInput.value = '';
-      document.getElementById('fileList').innerHTML = '';
-      uploadedFiles = [];
-      document.getElementById('modalPrice').value = '';
-      document.getElementById('modalPhone').value = '';
-      document.getElementById('modalLocation').value = '';
-      document.getElementById('modalExtraInfo').value = '';
-      closeListingModal();
-      loadProducts();
-
-    } catch (error) {
-      console.error("Error submitting:", error);
-      alert("Failed to submit: " + error.message);
-    } finally {
-      submitBtn.innerHTML = 'Submit to Admin';
-      submitBtn.disabled = false;
-    }
+      alert(`✅ "${product}" submitted for approval!`);
+      productSearchInput.value = ''; document.getElementById('fileList').innerHTML = ''; uploadedFiles = [];
+      closeListingModal(); loadProducts();
+    } catch (error) { console.error("Error submitting:", error); alert("Failed to submit: " + error.message); }
+    finally { submitBtn.innerHTML = 'Submit to Admin'; submitBtn.disabled = false; }
   }
 
-  // ===== LOAD PRODUCTS =====
   async function loadProducts() {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error loading products:', error.message);
-      return;
-    }
-    
-    renderProducts(data);
-    updateQuickStats(data);
+    const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+    if (error) { console.error('Error loading products:', error.message); return; }
+    renderProducts(data); updateQuickStats(data);
   }
 
   function renderProducts(products) {
-    const grid = document.getElementById('productGrid');
-    grid.innerHTML = ''; 
-    
-    // Only show active products on the public home page
+    const grid = document.getElementById('productGrid'); grid.innerHTML = '';
     const activeProducts = products.filter(p => p.status === 'active');
-
-    if (activeProducts.length === 0) {
-      grid.innerHTML = '<div class="text-center opacity-50 col-span-2 py-10">No active listings yet. Check back soon!</div>';
-      return;
-    }
-
+    if (activeProducts.length === 0) { grid.innerHTML = '<div class="text-center opacity-50 col-span-2 py-10">No active listings yet. Check back soon!</div>'; return; }
     activeProducts.forEach(product => {
-      // Generate gallery images (up to 10)
-      let galleryHTML = '';
-      const imgs = product.image_urls || [];
+      let galleryHTML = ''; const imgs = product.image_urls || [];
       for (let i = 0; i < 10; i++) {
-        if (imgs[i]) {
-          galleryHTML += `<img src="${imgs[i]}" alt="img" onclick="window.open('${imgs[i]}', '_blank')" style="cursor:pointer;" title="Click to enlarge">`;
-        } else {
-          galleryHTML += `<div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>`;
-        }
+        if (imgs[i]) { galleryHTML += `<img src="${imgs[i]}" alt="img" onclick="window.open('${imgs[i]}', '_blank')" style="cursor:pointer;" title="Click to enlarge">`; }
+        else { galleryHTML += `<div class="bg-gray-700/40 rounded flex items-center justify-center"><i class="fas fa-image opacity-30"></i></div>`; }
       }
-
       const card = `
         <div class="product-card" data-name="${product.name.toLowerCase()}">
           <div class="flex items-start justify-between">
-            <div>
-              <span class="vendor-handle text-sm">@${product.vendor || 'Unknown'}</span>
-              <div class="flex items-center gap-2 mt-0.5">
-                <span class="text-xs"><i class="fas fa-star text-yellow-400"></i> ${product.rating || 'New'}</span>
-                <span class="text-xs opacity-60">· ${product.trades || 0} trades</span>
-                <span class="badge-trust"><i class="fas fa-shield-alt"></i> verified</span>
-              </div>
-            </div>
+            <div><span class="vendor-handle text-sm">@${product.vendor || 'Unknown'}</span>
+            <div class="flex items-center gap-2 mt-0.5"><span class="text-xs"><i class="fas fa-star text-yellow-400"></i> ${product.rating || 'New'}</span><span class="text-xs opacity-60">· ${product.trades || 0} trades</span><span class="badge-trust"><i class="fas fa-shield-alt"></i> verified</span></div></div>
             <span class="text-xs bg-black/30 px-2 py-0.5 rounded-full">${product.category || 'General'}</span>
           </div>
           <h3 class="font-bold text-base mt-2">${product.name}</h3>
-          <p class="text-sm opacity-70">KSh ${product.price} 
-            ${product.accepts_bargain ? '<span class="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full ml-2">bargain accepted</span>' : ''}
-          </p>
-          <div class="gallery-grid mt-2">
-            ${galleryHTML}
-          </div>
+          <p class="text-sm opacity-70">KSh ${product.price} ${product.accepts_bargain ? '<span class="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full ml-2">bargain accepted</span>' : ''}</p>
+          <div class="gallery-grid mt-2">${galleryHTML}</div>
           <div class="mt-2 text-xs opacity-80 space-y-1">
             <p><i class="fas fa-phone-alt" style="color:var(--accent);"></i> <a href="tel:${product.phone}" style="color:var(--text-primary); text-decoration:underline;">${product.phone || 'N/A'}</a></p>
             <p><i class="fas fa-map-marker-alt" style="color:var(--accent);"></i> ${product.location || 'N/A'}</p>
             ${product.extra_info ? `<p class="opacity-60"><i class="fas fa-info-circle" style="color:var(--accent);"></i> ${product.extra_info}</p>` : ''}
           </div>
-          <div class="flex items-center justify-between mt-2 text-xs">
-            <span><i class="far fa-clock"></i> ${new Date(product.created_at).toLocaleString()}</span>
-          </div>
-        </div>
-      `;
+          <div class="flex items-center justify-between mt-2 text-xs"><span><i class="far fa-clock"></i> ${new Date(product.created_at).toLocaleString()}</span></div>
+        </div>`;
       grid.innerHTML += card;
     });
   }
 
   function updateQuickStats(data) {
-    const total = data.length;
-    const pending = data.filter(p => p.status === 'pending').length;
-    const active = data.filter(p => p.status === 'active').length;
-
-    document.getElementById('quickStatsTotal').innerText = total;
-    document.getElementById('quickStatsPending').innerText = pending;
-    document.getElementById('quickStatsActive').innerText = active;
+    document.getElementById('quickStatsTotal').innerText = data.length;
+    document.getElementById('quickStatsPending').innerText = data.filter(p => p.status === 'pending').length;
+    document.getElementById('quickStatsActive').innerText = data.filter(p => p.status === 'active').length;
   }
 
-  // ===== ADMIN DASHBOARD LOGIC =====
   async function loadAdminData() {
     const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
     if (error) return;
-
-    const total = data.length;
-    const pending = data.filter(p => p.status === 'pending');
-    const active = data.filter(p => p.status === 'active');
-
+    const total = data.length; const pending = data.filter(p => p.status === 'pending'); const active = data.filter(p => p.status === 'active');
     document.getElementById('adminTotalProducts').innerText = total;
     document.getElementById('adminPendingProducts').innerText = pending.length;
     document.getElementById('adminActiveProducts').innerText = active.length;
-
-    // Render Pending
-    const pendingList = document.getElementById('adminPendingList');
-    pendingList.innerHTML = '';
+    const pendingList = document.getElementById('adminPendingList'); pendingList.innerHTML = '';
     pending.forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'bg-black/20 rounded-xl p-4 mb-3 border-l-4';
-      div.style.borderLeftColor = 'var(--accent)';
-      div.innerHTML = `
-        <div class="flex flex-wrap justify-between items-start">
-          <div>
-            <span class="vendor-handle text-sm">@${p.vendor || 'Anonymous'}</span>
-            <p class="text-sm font-medium mt-1">${p.name}</p>
-            <p class="text-xs opacity-60">KSh ${p.price} · ${p.image_urls.length} images</p>
-            <p class="text-xs opacity-60 mt-1"><i class="fas fa-phone"></i> ${p.phone || 'N/A'} · <i class="fas fa-map-pin"></i> ${p.location || 'N/A'}</p>
-            <p class="text-xs opacity-60">Bargain: ${p.accepts_bargain ? 'Yes' : 'No'} · ${p.extra_info || 'No extra info'}</p>
-          </div>
-          <div class="flex gap-2 mt-2 md:mt-0">
-            <button class="text-xs px-4 py-1.5 rounded-full bg-green-600/30 text-green-300 hover:bg-green-600/50" onclick="handleApproveFull('${p.id}')">✓ Approve</button>
-            <button class="text-xs px-4 py-1.5 rounded-full bg-red-600/30 text-red-300 hover:bg-red-600/50" onclick="handleRejectFull('${p.id}')">✕ Reject</button>
-          </div>
-        </div>
-      `;
+      const div = document.createElement('div'); div.className = 'bg-black/20 rounded-xl p-4 mb-3 border-l-4'; div.style.borderLeftColor = 'var(--accent)';
+      div.innerHTML = `<div class="flex flex-wrap justify-between items-start"><div><span class="vendor-handle text-sm">@${p.vendor || 'Anonymous'}</span><p class="text-sm font-medium mt-1">${p.name}</p><p class="text-xs opacity-60">KSh ${p.price} · ${p.image_urls.length} images</p><p class="text-xs opacity-60 mt-1"><i class="fas fa-phone"></i> ${p.phone || 'N/A'} · <i class="fas fa-map-pin"></i> ${p.location || 'N/A'}</p><p class="text-xs opacity-60">Bargain: ${p.accepts_bargain ? 'Yes' : 'No'} · ${p.extra_info || 'No extra info'}</p></div><div class="flex gap-2 mt-2 md:mt-0"><button class="text-xs px-4 py-1.5 rounded-full bg-green-600/30 text-green-300 hover:bg-green-600/50" onclick="handleApproveFull('${p.id}')">✓ Approve</button><button class="text-xs px-4 py-1.5 rounded-full bg-red-600/30 text-red-300 hover:bg-red-600/50" onclick="handleRejectFull('${p.id}')">✕ Reject</button></div></div>`;
       pendingList.appendChild(div);
     });
-
-    // Render Active
-    const activeList = document.getElementById('adminActiveList');
-    activeList.innerHTML = '';
-    active.forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'bg-black/20 rounded-xl p-3 border border-white/10';
-      div.innerHTML = `
-        <p class="font-medium">${p.name}</p>
-        <p class="text-xs opacity-60">@${p.vendor || 'Anonymous'} · KSh ${p.price} · ${p.location}</p>
-      `;
-      activeList.appendChild(div);
-    });
+    const activeList = document.getElementById('adminActiveList'); activeList.innerHTML = '';
+    active.forEach(p => { const div = document.createElement('div'); div.className = 'bg-black/20 rounded-xl p-3 border border-white/10'; div.innerHTML = `<p class="font-medium">${p.name}</p><p class="text-xs opacity-60">@${p.vendor || 'Anonymous'} · KSh ${p.price} · ${p.location}</p>`; activeList.appendChild(div); });
   }
 
   async function handleApproveFull(id) {
     const { error } = await supabase.from('products').update({ status: 'active' }).eq('id', id);
-    if (!error) {
-      alert('✅ Product approved & activated');
-      loadAdminData();
-      loadProducts();
-    }
+    if (!error) { alert('✅ Product approved & activated'); loadAdminData(); loadProducts(); }
   }
-
   async function handleRejectFull(id) {
     const { error } = await supabase.from('products').update({ status: 'rejected' }).eq('id', id);
-    if (!error) {
-      alert('✕ Product rejected');
-      loadAdminData();
-    }
+    if (!error) { alert('✕ Product rejected'); loadAdminData(); }
   }
 
-  // Expose functions to window for inline onclick
-  window.selectProduct = selectProduct;
-  window.openListingModal = openListingModal;
-  window.closeListingModal = closeListingModal;
-  window.submitListingData = submitListingData;
-  window.removeFile = removeFile;
-  window.closeAdminPanel = closeAdminPanel;
-  window.handleApproveFull = handleApproveFull;
-  window.handleRejectFull = handleRejectFull;
-
-  // Initial Load
+  window.selectProduct = selectProduct; window.openListingModal = openListingModal; window.closeListingModal = closeListingModal;
+  window.submitListingData = submitListingData; window.removeFile = removeFile; window.closeAdminPanel = closeAdminPanel;
+  window.handleApproveFull = handleApproveFull; window.handleRejectFull = handleRejectFull;
   loadProducts();
 </script>
-
 </body>
 </html>
