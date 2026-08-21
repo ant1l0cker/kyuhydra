@@ -19,6 +19,8 @@
       --vendor-color: #38bdf8;
       --whatsapp-green: #25D366;
       --whatsapp-hover: #20bd5a;
+      --ticket-neon: #ff0055;
+      --ticket-neon-hover: #d60047;
       --border-color: rgba(255, 255, 255, 0.1);
       --status-active: #4ade80;
       --status-pending: #facc15;
@@ -113,9 +115,40 @@
       border-radius: 9999px;
     }
 
+    /* High Visibility Pulsing Ticket Button in Header */
+    .btn-header-ticket {
+      background: linear-gradient(135deg, var(--ticket-neon), #ff5500);
+      color: #ffffff !important;
+      font-weight: 900;
+      padding: 0.55rem 1.1rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.6);
+      animation: ticketPulse 2s infinite;
+      transition: all 0.2s ease;
+    }
+
+    .btn-header-ticket:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 0, 85, 0.9);
+    }
+
+    @keyframes ticketPulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 0, 85, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
+    }
+
     .search-box {
       flex: 1;
-      max-width: 450px;
+      max-width: 350px;
       display: flex;
       gap: 0.5rem;
     }
@@ -138,7 +171,7 @@
     .nav-menu {
       display: flex;
       align-items: center;
-      gap: 1.25rem;
+      gap: 1rem;
       list-style: none;
     }
 
@@ -852,6 +885,72 @@
       padding: 2rem 0;
       font-size: 0.9rem;
     }
+
+    /* Fashion Gala Custom Pop-Up Styles */
+    .fashion-gala-card {
+      border: 2px solid #ff007f !important;
+      box-shadow: 0 0 25px rgba(255, 0, 127, 0.4) !important;
+    }
+
+    .fashion-gala-title {
+      background: linear-gradient(135deg, #ff007f, #FFD700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Toggle Switch Component */
+    .toggle-switch-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #333;
+      transition: .3s;
+      border-radius: 34px;
+      border: 1px solid var(--border-color);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #ff007f;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
   </style>
 </head>
 <body>
@@ -866,6 +965,11 @@
         <span class="logo-title">KYU Hydra</span>
         <span class="logo-badge">Marketplace</span>
       </div>
+
+      <!-- High Visibility Event Ticket Purchasing Action -->
+      <button type="button" class="btn-header-ticket" id="btnHeaderTicket">
+        🎟️ <span id="headerTicketBtnText">GET TICKETS</span>
+      </button>
 
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="Search products or categories..." oninput="filterProducts()">
@@ -904,6 +1008,63 @@
         <div class="empty-msg">Loading active listings...</div>
       </div>
     </section>
+  </div>
+
+  <!-- Dynamic Header Show Ticket Purchase Modal -->
+  <div class="modal-overlay" id="ticketModal">
+    <div class="modal">
+      <button class="modal-close-btn" id="btnCloseTicketModal">&times;</button>
+      <div class="modal-header">
+        <h3 class="modal-title" id="ticketModalHeaderTitle">🎟️ Event Ticket & Show Booking</h3>
+      </div>
+      <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5;" id="ticketModalInfo">
+        Loading event passes, dates, and vendor details...
+      </div>
+      <div class="payment-box">
+        <div class="payment-box-title">Direct Vendor Booking Process</div>
+        <div class="payment-details">
+          1. Check event details above.<br>
+          2. Enter the quantity/details you need below.<br>
+          3. Click button to place direct WhatsApp order to event vendor.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="ticketQuantity">Number of Tickets Required</label>
+        <input type="number" id="ticketQuantity" min="1" value="1">
+      </div>
+      <div class="form-group">
+        <label for="ticketNotes">Special Requests / VIP Gate Notes</label>
+        <textarea id="ticketNotes" rows="2" placeholder="e.g., VIP Table section, group passes..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btnCancelTicket">Close</button>
+        <button type="button" class="btn" style="background: var(--whatsapp-green); color:#fff;" onclick="orderShowTickets()">💬 Order Tickets on WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fashion Gala Standalone Automated Pop-Up Modal -->
+  <div class="modal-overlay" id="fashionGalaModal">
+    <div class="modal fashion-gala-card" style="max-width: 480px; text-align: center;">
+      <button class="modal-close-btn" onclick="closeFashionGalaModal()">&times;</button>
+      <div style="font-size: 0.8rem; font-weight: 800; color: #ff007f; letter-spacing: 0.08em; margin-bottom: 0.4rem; text-transform: uppercase;">
+        ✨ SPECIAL FEATURED EVENT
+      </div>
+      <h2 class="fashion-gala-title" id="galaDisplayTitle" style="font-size: 1.6rem; margin-bottom: 0.6rem;">Fashion Gala 2026</h2>
+      
+      <div id="galaImgContainer" style="width: 100%; height: 220px; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1rem; background: #000; border: 1px solid var(--border-color); display: none;">
+        <img id="galaDisplayImg" src="" alt="Fashion Gala Poster" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+
+      <p id="galaDisplayDetails" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.5; white-space: pre-line;">
+        Loading Fashion Gala Event Information...
+      </p>
+
+      <a id="galaWhatsAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" style="padding: 0.8rem; font-size: 0.95rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--whatsapp-green), #1eb050);">
+        💬 Contact via WhatsApp
+      </a>
+      <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 0.4rem;" onclick="closeFashionGalaModal()">Close Notice</button>
+    </div>
   </div>
 
   <!-- Multi-Popup Stack Shell Container (Up to 5 Popups simultaneously) -->
@@ -1062,7 +1223,7 @@
       <div class="admin-header">
         <div>
           <h1 class="section-title" style="font-size: 1.75rem;">Admin Moderation & Dashboard Controls</h1>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Manage listings, verify payments, news announcements, and up to 5 featured popups</p>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Manage listings, event show tickets, payments, news announcements, and popups</p>
         </div>
         <button type="button" class="btn btn-secondary" id="btnCloseAdmin">Exit Dashboard</button>
       </div>
@@ -1080,6 +1241,59 @@
           <div class="stat-card-title">ACTIVE LISTINGS</div>
           <div class="stat-card-value" id="statActive" style="color: var(--status-active);">0</div>
         </div>
+      </div>
+
+      <!-- Control 0: Header Event Ticket Button Editor -->
+      <div class="admin-card-section" style="border: 1px solid var(--ticket-neon);">
+        <h2 class="section-title" style="color: var(--ticket-neon);">0. Configure Header Show Ticket Button & Event Info</h2>
+        <div class="form-group">
+          <label for="adminEventTitleInput">Header Button Name (Name of the Event)</label>
+          <input type="text" id="adminEventTitleInput" placeholder="e.g., HYDRA FESTIVAL TICKETS / NIGHT SHOW">
+        </div>
+        <div class="form-group">
+          <label for="adminEventDetailsInput">Event Info, Pricing & Vendor Contact Numbers</label>
+          <textarea id="adminEventDetailsInput" rows="3" placeholder="e.g., Gate Pass: KSh 500 | VIP: KSh 1500. Vendor Contact: 0110493736. Location: Main Stage."></textarea>
+        </div>
+        <button type="button" class="btn" style="background: var(--ticket-neon); color: #fff;" onclick="updateHeaderEventDetails()">Save Event Ticket Settings</button>
+      </div>
+
+      <!-- Control 3: Fashion Gala Auto Pop-Up Control & Settings -->
+      <div class="admin-card-section" style="border: 1px solid #ff007f;">
+        <h2 class="section-title" style="color: #ff007f;">👗 Fashion Gala Auto Launch Pop-Up Config</h2>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Enable or disable the automatic Fashion Gala popup every time users open the site, set custom details, image, and WhatsApp contact.
+        </p>
+
+        <div class="toggle-switch-container">
+          <label class="switch">
+            <input type="checkbox" id="adminGalaActiveToggle">
+            <span class="slider"></span>
+          </label>
+          <span style="font-weight: 700; font-size: 0.95rem;" id="galaToggleLabel">Pop-Up Status: INACTIVE</span>
+        </div>
+
+        <div class="form-group">
+          <label for="adminGalaTitleInput">Fashion Gala Title</label>
+          <input type="text" id="adminGalaTitleInput" placeholder="e.g., KYU Fashion Gala 2026">
+        </div>
+
+        <div class="form-group">
+          <label for="adminGalaPhoneInput">WhatsApp Contact Number</label>
+          <input type="text" id="adminGalaPhoneInput" placeholder="e.g., 0110493736 or 254110493736">
+        </div>
+
+        <div class="form-group">
+          <label for="adminGalaDetailsInput">Event Announcement Details / Description</label>
+          <textarea id="adminGalaDetailsInput" rows="3" placeholder="Write details about tickets, VIP access, models, dates, and event venue..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Fashion Gala Image / Banner (Upload File or Enter URL)</label>
+          <input type="file" id="adminGalaImageFile" accept="image/*" style="margin-bottom: 0.5rem;">
+          <input type="text" id="adminGalaImageUrlInput" placeholder="OR paste external Image URL (e.g., https://...)">
+        </div>
+
+        <button type="button" class="btn" style="background: #ff007f; color: #fff;" onclick="saveFashionGalaConfig()">Save Fashion Gala Settings</button>
       </div>
 
       <!-- Dashboard Control 1: Recurring News Ticker -->
@@ -1153,6 +1367,19 @@
     let fetchedProducts = [];
     let activePopupsList = [];
 
+    let currentEventData = {
+      title: '🎟️ GET SHOW TICKETS',
+      details: 'Gate Pass: KSh 500 | VIP: KSh 1500. Contact vendor 0110493736 for details.'
+    };
+
+    let fashionGalaData = {
+      is_active: false,
+      title: 'Fashion Gala 2026',
+      description: 'Exclusive Fashion Showcase & VIP Pass Access.',
+      whatsapp_number: '0110493736',
+      image_url: ''
+    };
+
     let detailImages = [];
     let detailImageIdx = 0;
 
@@ -1166,6 +1393,14 @@
     const detailModal = document.getElementById('detailModal');
     const postForm = document.getElementById('postForm');
     
+    const btnHeaderTicket = document.getElementById('btnHeaderTicket');
+    const ticketModal = document.getElementById('ticketModal');
+    const btnCloseTicketModal = document.getElementById('btnCloseTicketModal');
+    const btnCancelTicket = document.getElementById('btnCancelTicket');
+    const headerTicketBtnText = document.getElementById('headerTicketBtnText');
+    const ticketModalHeaderTitle = document.getElementById('ticketModalHeaderTitle');
+    const ticketModalInfo = document.getElementById('ticketModalInfo');
+
     const modalPrice = document.getElementById('modalPrice');
     const calculatedFeeDisplay = document.getElementById('calculatedFeeDisplay');
 
@@ -1189,6 +1424,8 @@
       if (window.supabase) {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         fetchActiveProducts();
+        fetchEventTicketConfig();
+        fetchFashionGalaConfig();
       } else {
         activeFeed.innerHTML = `
           <div class="empty-msg" style="color: var(--status-rejected);">
@@ -1222,6 +1459,13 @@
     function setupEventListeners() {
       logoTrigger.addEventListener('dblclick', handleAdminAccess);
 
+      btnHeaderTicket.addEventListener('click', () => {
+        ticketModal.classList.add('active');
+      });
+
+      btnCloseTicketModal.addEventListener('click', () => ticketModal.classList.remove('active'));
+      btnCancelTicket.addEventListener('click', () => ticketModal.classList.remove('active'));
+
       modalPrice.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         const fee = calculateListingFee(val);
@@ -1245,10 +1489,27 @@
         if (e.target === postModal) postModal.classList.remove('active');
       });
 
+      ticketModal.addEventListener('click', (e) => {
+        if (e.target === ticketModal) ticketModal.classList.remove('active');
+      });
+
+      const galaModal = document.getElementById('fashionGalaModal');
+      galaModal.addEventListener('click', (e) => {
+        if (e.target === galaModal) closeFashionGalaModal();
+      });
+
+      const galaToggle = document.getElementById('adminGalaActiveToggle');
+      galaToggle.addEventListener('change', (e) => {
+        const label = document.getElementById('galaToggleLabel');
+        label.innerText = `Pop-Up Status: ${e.target.checked ? 'ACTIVE' : 'INACTIVE'}`;
+      });
+
       document.addEventListener('keyup', (e) => {
         if (e.key === 'Escape') {
           closeDetailModal();
           postModal.classList.remove('active');
+          ticketModal.classList.remove('active');
+          closeFashionGalaModal();
           closeAllPopups();
         }
       });
@@ -1285,6 +1546,189 @@
         adminPanel.classList.remove('active');
         if (supabaseClient) fetchActiveProducts();
       });
+    }
+
+    /* Fashion Gala Pop-Up Config & Storage Functions */
+    async function fetchFashionGalaConfig() {
+      // Local fallback
+      const savedGala = localStorage.getItem('kyu_fashion_gala_config');
+      if (savedGala) {
+        try {
+          fashionGalaData = JSON.parse(savedGala);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (supabaseClient) {
+        const { data, error } = await supabaseClient
+          .from('fashion_gala_config')
+          .select('*')
+          .eq('id', 1)
+          .single();
+
+        if (!error && data) {
+          fashionGalaData = data;
+          localStorage.setItem('kyu_fashion_gala_config', JSON.stringify(data));
+        }
+      }
+
+      updateFashionGalaUI();
+
+      if (fashionGalaData.is_active) {
+        showFashionGalaModal();
+      }
+    }
+
+    function updateFashionGalaUI() {
+      document.getElementById('galaDisplayTitle').innerText = fashionGalaData.title || 'Fashion Gala 2026';
+      document.getElementById('galaDisplayDetails').innerText = fashionGalaData.description || '';
+
+      const imgContainer = document.getElementById('galaImgContainer');
+      const imgElem = document.getElementById('galaDisplayImg');
+      if (fashionGalaData.image_url) {
+        imgElem.src = fashionGalaData.image_url;
+        imgContainer.style.display = 'block';
+      } else {
+        imgContainer.style.display = 'none';
+      }
+
+      let cleanNum = String(fashionGalaData.whatsapp_number || '0110493736').replace(/\D/g, '');
+      if (cleanNum.startsWith('07')) cleanNum = '2547' + cleanNum.substring(2);
+      if (cleanNum.startsWith('01')) cleanNum = '2541' + cleanNum.substring(2);
+
+      const galaMsg = `Hello! I want to inquire about '${fashionGalaData.title || 'Fashion Gala'}'.`;
+      document.getElementById('galaWhatsAppBtn').href = `https://wa.me/${cleanNum}?text=${encodeURIComponent(galaMsg)}`;
+
+      // Update admin form inputs
+      const toggle = document.getElementById('adminGalaActiveToggle');
+      toggle.checked = !!fashionGalaData.is_active;
+      document.getElementById('galaToggleLabel').innerText = `Pop-Up Status: ${fashionGalaData.is_active ? 'ACTIVE' : 'INACTIVE'}`;
+      document.getElementById('adminGalaTitleInput').value = fashionGalaData.title || '';
+      document.getElementById('adminGalaPhoneInput').value = fashionGalaData.whatsapp_number || '';
+      document.getElementById('adminGalaDetailsInput').value = fashionGalaData.description || '';
+      document.getElementById('adminGalaImageUrlInput').value = fashionGalaData.image_url || '';
+    }
+
+    async function saveFashionGalaConfig() {
+      const is_active = document.getElementById('adminGalaActiveToggle').checked;
+      const title = document.getElementById('adminGalaTitleInput').value.trim() || 'Fashion Gala 2026';
+      const whatsapp_number = document.getElementById('adminGalaPhoneInput').value.trim();
+      const description = document.getElementById('adminGalaDetailsInput').value.trim();
+      let image_url = document.getElementById('adminGalaImageUrlInput').value.trim();
+
+      const imageFile = document.getElementById('adminGalaImageFile').files[0];
+
+      if (imageFile && supabaseClient) {
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `fashion_gala_${Date.now()}.${fileExt}`;
+        const { data, error } = await supabaseClient.storage
+          .from('static-assets')
+          .upload(fileName, imageFile, { upsert: true });
+
+        if (!error) {
+          const { data: publicUrlData } = supabaseClient.storage
+            .from('static-assets')
+            .getPublicUrl(fileName);
+          if (publicUrlData) image_url = publicUrlData.publicUrl;
+        } else {
+          console.error('Gala Image Upload Error:', error);
+        }
+      }
+
+      fashionGalaData = { id: 1, is_active, title, description, whatsapp_number, image_url };
+      localStorage.setItem('kyu_fashion_gala_config', JSON.stringify(fashionGalaData));
+
+      if (supabaseClient) {
+        await supabaseClient.from('fashion_gala_config').upsert(fashionGalaData);
+      }
+
+      updateFashionGalaUI();
+      alert('Fashion Gala pop-up config updated successfully!');
+    }
+
+    function showFashionGalaModal() {
+      document.getElementById('fashionGalaModal').classList.add('active');
+    }
+
+    function closeFashionGalaModal() {
+      document.getElementById('fashionGalaModal').classList.remove('active');
+    }
+
+    /* Event Show Tickets System Integration */
+    async function fetchEventTicketConfig() {
+      // Load local cache fallback
+      const savedTitle = localStorage.getItem('kyu_event_title');
+      const savedDetails = localStorage.getItem('kyu_event_details');
+      if (savedTitle) currentEventData.title = savedTitle;
+      if (savedDetails) currentEventData.details = savedDetails;
+
+      if (supabaseClient) {
+        const { data, error } = await supabaseClient
+          .from('events')
+          .select('*')
+          .order('id', { ascending: false })
+          .limit(1);
+
+        if (!error && data && data.length > 0) {
+          currentEventData.title = data[0].title || currentEventData.title;
+          currentEventData.details = data[0].details || currentEventData.details;
+        }
+      }
+
+      updateEventTicketUI();
+    }
+
+    function updateEventTicketUI() {
+      headerTicketBtnText.innerText = currentEventData.title;
+      ticketModalHeaderTitle.innerText = `🎟️ ${currentEventData.title}`;
+      ticketModalInfo.innerHTML = escapeHtml(currentEventData.details).replace(/\n/g, '<br>');
+
+      document.getElementById('adminEventTitleInput').value = currentEventData.title;
+      document.getElementById('adminEventDetailsInput').value = currentEventData.details;
+    }
+
+    async function updateHeaderEventDetails() {
+      const title = document.getElementById('adminEventTitleInput').value.trim();
+      const details = document.getElementById('adminEventDetailsInput').value.trim();
+
+      if (!title) {
+        alert('Please enter an event button name.');
+        return;
+      }
+
+      currentEventData.title = title;
+      currentEventData.details = details;
+
+      localStorage.setItem('kyu_event_title', title);
+      localStorage.setItem('kyu_event_details', details);
+
+      if (supabaseClient) {
+        await supabaseClient.from('events').insert([{ title, details }]);
+      }
+
+      updateEventTicketUI();
+      alert('Show ticket button title & details updated live!');
+    }
+
+    function orderShowTickets() {
+      const qty = document.getElementById('ticketQuantity').value || 1;
+      const notes = document.getElementById('ticketNotes').value.trim();
+
+      // Extract seller contact number from event description if present, else fallback
+      let vendorNum = '0110493736';
+      const extractedMatch = currentEventData.details.match(/(?:01|07|254)\d{8}/);
+      if (extractedMatch) vendorNum = extractedMatch[0];
+
+      let cleanNum = vendorNum.replace(/\D/g, '');
+      if (cleanNum.startsWith('07')) cleanNum = '2547' + cleanNum.substring(2);
+      if (cleanNum.startsWith('01')) cleanNum = '2541' + cleanNum.substring(2);
+
+      const msg = `Hello Vendor! I want to purchase ${qty} ticket(s) for '${currentEventData.title}'. Notes: ${notes || 'None'}`;
+      const waUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(msg)}`;
+
+      window.open(waUrl, '_blank');
+      ticketModal.classList.remove('active');
     }
 
     function addFiles(files) {
