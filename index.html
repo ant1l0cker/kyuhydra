@@ -17,6 +17,8 @@
       --accent: #FFD700;
       --accent-hover: #e6c200;
       --vendor-color: #38bdf8;
+      --whatsapp-green: #25D366;
+      --whatsapp-hover: #20bd5a;
       --border-color: rgba(255, 255, 255, 0.1);
       --status-active: #4ade80;
       --status-pending: #facc15;
@@ -377,10 +379,35 @@
       cursor: pointer;
       font-size: 0.9rem;
       transition: all 0.2s;
+      text-decoration: none;
     }
 
     .btn:hover {
       background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-whatsapp {
+      background: var(--whatsapp-green);
+      color: #ffffff;
+      font-weight: 700;
+      padding: 0.6rem 1rem;
+      border-radius: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      border: none;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    .btn-whatsapp:hover {
+      background: var(--whatsapp-hover);
+      color: #ffffff;
       transform: translateY(-1px);
     }
 
@@ -977,8 +1004,8 @@
         </div>
 
         <div class="form-group">
-          <label for="modalPhone">Contact Phone Number</label>
-          <input type="text" id="modalPhone" required placeholder="e.g., 0712345678">
+          <label for="modalPhone">Contact WhatsApp Number</label>
+          <input type="text" id="modalPhone" required placeholder="e.g., 0712345678 or 254712345678">
         </div>
 
         <div class="form-group">
@@ -1182,6 +1209,16 @@
       return 100;
     }
 
+    function formatWhatsAppLink(phoneNum, productName) {
+      if (!phoneNum) return '#';
+      let cleanNum = String(phoneNum).replace(/\D/g, '');
+      if (cleanNum.startsWith('07')) cleanNum = '2547' + cleanNum.substring(2);
+      if (cleanNum.startsWith('01')) cleanNum = '2541' + cleanNum.substring(2);
+      
+      const customMessage = `I saw '${productName}' on kyu hydra, is it still there, i wanna purchase it`;
+      return `https://wa.me/${cleanNum}?text=${encodeURIComponent(customMessage)}`;
+    }
+
     function setupEventListeners() {
       logoTrigger.addEventListener('dblclick', handleAdminAccess);
 
@@ -1347,6 +1384,7 @@
       const bargainText = product.accepts_bargain ? 'Yes' : 'No';
       const vendorName = product.vendor_name ? product.vendor_name : 'Anonymous';
       const categoryName = product.category ? product.category : 'General (Default)';
+      const waLink = formatWhatsAppLink(product.phone, product.name);
 
       card.innerHTML = `
         <div class="product-header">
@@ -1360,7 +1398,6 @@
           <div class="product-price">KSh ${Number(product.price || 0).toLocaleString()}</div>
         </div>
         <div class="product-meta">
-          <div><strong>Phone:</strong> ${escapeHtml(product.phone)}</div>
           <div><strong>Location:</strong> ${escapeHtml(product.location)}</div>
           <div><strong>Negotiable:</strong> ${bargainText}</div>
           ${product.extra_info ? `<div><strong>Details:</strong> ${escapeHtml(product.extra_info)}</div>` : ''}
@@ -1402,6 +1439,15 @@
 
         card.appendChild(imageContainer);
       }
+
+      const waBtn = document.createElement('a');
+      waBtn.className = 'btn-whatsapp';
+      waBtn.href = waLink;
+      waBtn.target = '_blank';
+      waBtn.rel = 'noopener noreferrer';
+      waBtn.innerHTML = `💬 Chat Vendor on WhatsApp`;
+      waBtn.addEventListener('click', (e) => e.stopPropagation());
+      card.appendChild(waBtn);
 
       card.addEventListener('click', () => openDetailModal(product));
 
@@ -1480,6 +1526,7 @@
         card.style.zIndex = 1500 + index;
 
         const imgUrl = images.length > 0 ? images[0] : 'https://via.placeholder.com/500x300?text=Featured+Item';
+        const waLink = formatWhatsAppLink(item.phone, item.name);
 
         card.innerHTML = `
           <button class="modal-close-btn" onclick="dismissSinglePopup(${index})">&times;</button>
@@ -1489,9 +1536,10 @@
           <img src="${imgUrl}" alt="${escapeHtml(item.name)}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 0.75rem; border: 1px solid var(--border-color);">
           <h2 style="font-size: 1.25rem; margin-bottom: 0.3rem;">${escapeHtml(item.name)}</h2>
           <div style="font-size: 1.2rem; font-weight: 800; color: var(--accent); margin-bottom: 0.4rem;">KSh ${Number(item.price || 0).toLocaleString()}</div>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; max-height: 40px; overflow: hidden; text-overflow: ellipsis;">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; max-height: 40px; overflow: hidden; text-overflow: ellipsis;">
             ${escapeHtml(item.extra_info || 'Exclusive deal verified on KYU Hydra Marketplace.')}
           </p>
+          <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" style="margin-bottom: 0.75rem;">💬 Chat Vendor on WhatsApp</a>
           <div style="display: flex; gap: 0.5rem; justify-content: center;">
             <button type="button" class="btn" onclick="dismissSinglePopup(${index})">Next / Close</button>
             ${maxCount > 1 ? `<button type="button" class="btn btn-secondary" onclick="closeAllPopups()">Dismiss All (${maxCount})</button>` : ''}
@@ -1535,6 +1583,7 @@
       const bargainText = product.accepts_bargain ? 'Yes' : 'No';
       const vendorName = product.vendor_name ? product.vendor_name : 'Anonymous';
       const categoryName = product.category ? product.category : 'General (Default)';
+      const waLink = formatWhatsAppLink(product.phone, product.name);
 
       document.getElementById('detailModalBody').innerHTML = `
         <h2 style="color: var(--accent); font-size: 1.4rem; margin-bottom: 0.2rem;">${escapeHtml(product.name)}</h2>
@@ -1542,11 +1591,13 @@
         <div class="product-meta" style="font-size: 0.9rem; gap: 0.4rem;">
           <div><strong style="color: var(--vendor-color);">Vendor:</strong> ${escapeHtml(vendorName)}</div>
           <div><strong style="color: var(--accent);">Category:</strong> ${escapeHtml(categoryName)}</div>
-          <div><strong>Phone:</strong> ${escapeHtml(product.phone)}</div>
           <div><strong>Location:</strong> ${escapeHtml(product.location)}</div>
           <div><strong>Negotiable:</strong> ${bargainText}</div>
           ${product.extra_info ? `<div style="margin-top:0.5rem; border-top: 1px solid var(--border-color); padding-top:0.5rem;"><strong>Details:</strong><br>${escapeHtml(product.extra_info)}</div>` : ''}
         </div>
+        <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" style="margin-top: 1rem; padding: 0.75rem;">
+          💬 Chat Vendor on WhatsApp
+        </a>
       `;
 
       document.getElementById('detailModal').classList.add('active');
@@ -1756,7 +1807,7 @@
           <strong>Paid By:</strong> ${escapeHtml(senderName)} | <strong>Fee Due:</strong> KSh ${requiredFee}
         </div>
         <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
-          Phone: ${escapeHtml(item.phone)} | Location: ${escapeHtml(item.location)} | Negotiable: ${bargainText}
+          WhatsApp: ${escapeHtml(item.phone)} | Location: ${escapeHtml(item.location)} | Negotiable: ${bargainText}
         </div>
       `;
 
