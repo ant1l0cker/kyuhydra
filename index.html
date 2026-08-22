@@ -19,12 +19,16 @@
       --vendor-color: #38bdf8;
       --whatsapp-green: #25D366;
       --whatsapp-hover: #20bd5a;
+      --telegram-blue: #0088cc;
+      --telegram-hover: #0077b5;
       --ticket-neon: #ff0055;
       --ticket-neon-hover: #d60047;
       --border-color: rgba(255, 255, 255, 0.1);
       --status-active: #4ade80;
       --status-pending: #facc15;
       --status-rejected: #f87171;
+      --star-active: #FFD700;
+      --star-inactive: #444444;
     }
 
     * {
@@ -312,6 +316,55 @@
       border-color: var(--accent);
     }
 
+    /* Star Rating Component Styles */
+    .star-rating-display {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 1rem;
+    }
+    
+    .star-rating-display .star {
+      color: var(--star-inactive);
+    }
+    
+    .star-rating-display .star.filled {
+      color: var(--star-active);
+      text-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+    }
+
+    .admin-rating-picker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.4rem;
+      width: fit-content;
+    }
+
+    .admin-rating-picker select {
+      width: auto;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .btn-save-stars {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-save-stars:hover {
+      background: var(--accent-hover);
+    }
+
     /* Fee Box */
     .payment-box {
       background: rgba(20, 24, 16, 0.9);
@@ -420,9 +473,7 @@
       transform: translateY(-1px);
     }
 
-    .btn-whatsapp {
-      background: var(--whatsapp-green);
-      color: #ffffff;
+    .btn-contact {
       font-weight: 700;
       padding: 0.6rem 1rem;
       border-radius: 0.5rem;
@@ -436,12 +487,26 @@
       border: none;
       width: 100%;
       margin-top: 0.5rem;
+      color: #ffffff !important;
     }
 
+    .btn-contact:hover {
+      transform: translateY(-1px);
+      color: #ffffff !important;
+    }
+
+    .btn-whatsapp {
+      background: var(--whatsapp-green);
+    }
     .btn-whatsapp:hover {
       background: var(--whatsapp-hover);
-      color: #ffffff;
-      transform: translateY(-1px);
+    }
+
+    .btn-telegram {
+      background: var(--telegram-blue);
+    }
+    .btn-telegram:hover {
+      background: var(--telegram-hover);
     }
 
     .btn-secondary {
@@ -565,7 +630,8 @@
       color: var(--vendor-color);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.4rem;
       margin-bottom: 0.2rem;
     }
 
@@ -886,21 +952,6 @@
       font-size: 0.9rem;
     }
 
-    /* Fashion Gala Custom Pop-Up Styles */
-    .fashion-gala-card {
-      border: 2px solid #ff007f !important;
-      box-shadow: 0 0 25px rgba(255, 0, 127, 0.4) !important;
-    }
-
-    .fashion-gala-title {
-      background: linear-gradient(135deg, #ff007f, #FFD700);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
     /* Toggle Switch Component */
     .toggle-switch-container {
       display: flex;
@@ -1060,19 +1111,19 @@
         Loading Fashion Gala Event Information...
       </p>
 
-      <a id="galaWhatsAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" style="padding: 0.8rem; font-size: 0.95rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--whatsapp-green), #1eb050);">
+      <a id="galaWhatsAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn-contact btn-whatsapp" style="padding: 0.8rem; font-size: 0.95rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--whatsapp-green), #1eb050);">
         💬 Contact via WhatsApp
       </a>
       <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 0.4rem;" onclick="closeFashionGalaModal()">Close Notice</button>
     </div>
   </div>
 
-  <!-- Multi-Popup Stack Shell Container (Up to 5 Popups simultaneously) -->
+  <!-- Multi-Popup Stack Shell Container -->
   <div class="popup-stack-container" id="popupStackContainer">
     <div id="popupCardStack" style="position: relative; width: 100%; max-width: 480px; height: 500px; display: flex; align-items: center; justify-content: center;"></div>
   </div>
 
-  <!-- Single Combined Post Item Modal with 50 Categories + Default -->
+  <!-- Single Combined Post Item Modal -->
   <div class="modal-overlay" id="postModal">
     <div class="modal">
       <button class="modal-close-btn" id="btnClosePostModal">&times;</button>
@@ -1146,6 +1197,18 @@
           </select>
         </div>
 
+        <!-- Initial Star Rating Select Option -->
+        <div class="form-group">
+          <label for="initialStarRating">Vendor Initial Rating (Stars)</label>
+          <select id="initialStarRating">
+            <option value="5" selected>5 Stars (★★★★★)</option>
+            <option value="4">4 Stars (★★★★☆)</option>
+            <option value="3">3 Stars (★★★☆☆)</option>
+            <option value="2">2 Stars (★★☆☆☆)</option>
+            <option value="1">1 Star (★☆☆☆☆)</option>
+          </select>
+        </div>
+
         <div class="form-group">
           <label for="modalPrice">Price (KSh)</label>
           <input type="number" id="modalPrice" required min="0" placeholder="e.g., 2500">
@@ -1165,7 +1228,16 @@
         </div>
 
         <div class="form-group">
-          <label for="modalPhone">Contact WhatsApp Number</label>
+          <label for="contactPlatform">Preferred Reach/Contact Platform *</label>
+          <select id="contactPlatform" required onchange="updateContactLabel()">
+            <option value="whatsapp" selected>WhatsApp</option>
+            <option value="telegram">Telegram DM (Username/Phone)</option>
+            <option value="telegram_group">Telegram Group / Channel Link</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="modalPhone" id="modalPhoneLabel">Contact WhatsApp Number</label>
           <input type="text" id="modalPhone" required placeholder="e.g., 0712345678 or 254712345678">
         </div>
 
@@ -1223,7 +1295,7 @@
       <div class="admin-header">
         <div>
           <h1 class="section-title" style="font-size: 1.75rem;">Admin Moderation & Dashboard Controls</h1>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Manage listings, event show tickets, payments, news announcements, and popups</p>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Manage listings, event show tickets, payments, news announcements, vendor ratings, and popups</p>
         </div>
         <button type="button" class="btn btn-secondary" id="btnCloseAdmin">Exit Dashboard</button>
       </div>
@@ -1352,7 +1424,7 @@
         <div class="empty-msg">No pending approvals found.</div>
       </div>
 
-      <h2 class="section-title" style="margin-top: 2rem;">Active Market Products (Delete / Manage)</h2>
+      <h2 class="section-title" style="margin-top: 2rem;">Active Market Products & Vendor Ratings (Admin Controls)</h2>
       <div id="allActiveContainer">
         <div class="empty-msg">No active products found.</div>
       </div>
@@ -1441,6 +1513,21 @@
       checkAndShowFeaturedPopups();
     });
 
+    /* Render Stars Helper */
+    function renderStarRatingHTML(ratingCount) {
+      const rating = parseInt(ratingCount) || 5;
+      let starsHTML = '<div class="star-rating-display" title="Vendor Rating: ' + rating + ' of 5 Stars">';
+      for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+          starsHTML += '<span class="star filled">★</span>';
+        } else {
+          starsHTML += '<span class="star">★</span>';
+        }
+      }
+      starsHTML += '</div>';
+      return starsHTML;
+    }
+
     function calculateListingFee(price) {
       if (isNaN(price) || price <= 0) return 0;
       if (price <= 1000) return 50;
@@ -1450,14 +1537,67 @@
       return 100;
     }
 
-    function formatWhatsAppLink(phoneNum, productName) {
-      if (!phoneNum) return '#';
-      let cleanNum = String(phoneNum).replace(/\D/g, '');
-      if (cleanNum.startsWith('07')) cleanNum = '2547' + cleanNum.substring(2);
-      if (cleanNum.startsWith('01')) cleanNum = '2541' + cleanNum.substring(2);
-      
+    function updateContactLabel() {
+      const platform = document.getElementById('contactPlatform').value;
+      const label = document.getElementById('modalPhoneLabel');
+      const input = document.getElementById('modalPhone');
+
+      if (platform === 'telegram_group') {
+        label.innerText = 'Telegram Group / Channel Full Link';
+        input.placeholder = 'e.g., https://t.me/yourgroupname or https://t.me/+joinchat...';
+      } else if (platform === 'telegram') {
+        label.innerText = 'Contact Telegram Username or Number';
+        input.placeholder = 'e.g., @vendor_handle or 0712345678';
+      } else {
+        label.innerText = 'Contact WhatsApp Number';
+        input.placeholder = 'e.g., 0712345678 or 254712345678';
+      }
+    }
+
+    function formatContactLink(phoneOrHandle, productName, platform = 'whatsapp') {
+      if (!phoneOrHandle) return { link: '#', text: 'Contact Vendor', cssClass: 'btn-whatsapp' };
+
       const customMessage = `I saw '${productName}' on kyu hydra, is it still there, i wanna purchase it`;
-      return `https://wa.me/${cleanNum}?text=${encodeURIComponent(customMessage)}`;
+      
+      if (platform === 'telegram_group') {
+        let link = String(phoneOrHandle).trim();
+        if (!link.startsWith('http://') && !link.startsWith('https://')) {
+          link = 'https://' + link;
+        }
+        return {
+          link: link,
+          text: `👥 Join Telegram Group`,
+          cssClass: `btn-telegram`
+        };
+      } else if (platform === 'telegram') {
+        let handle = String(phoneOrHandle).trim();
+        if (handle.startsWith('@')) {
+          handle = handle.substring(1);
+          return {
+            link: `https://t.me/${handle}`,
+            text: `✈️ Chat Vendor on Telegram`,
+            cssClass: `btn-telegram`
+          };
+        } else {
+          let cleanNum = handle.replace(/\D/g, '');
+          if (cleanNum.startsWith('07')) cleanNum = '2547' + cleanNum.substring(2);
+          if (cleanNum.startsWith('01')) cleanNum = '2541' + cleanNum.substring(2);
+          return {
+            link: `https://t.me/+${cleanNum}`,
+            text: `✈️ Chat Vendor on Telegram`,
+            cssClass: `btn-telegram`
+          };
+        }
+      } else {
+        let cleanNum = String(phoneOrHandle).replace(/\D/g, '');
+        if (cleanNum.startsWith('07')) cleanNum = '2547' + cleanNum.substring(2);
+        if (cleanNum.startsWith('01')) cleanNum = '2541' + cleanNum.substring(2);
+        return {
+          link: `https://wa.me/${cleanNum}?text=${encodeURIComponent(customMessage)}`,
+          text: `💬 Chat Vendor on WhatsApp`,
+          cssClass: `btn-whatsapp`
+        };
+      }
     }
 
     function setupEventListeners() {
@@ -1552,7 +1692,6 @@
       });
     }
 
-    /* Fashion Gala Pop-Up Config & Storage Functions */
     async function fetchFashionGalaConfig() {
       const savedGala = localStorage.getItem('kyu_fashion_gala_config');
       if (savedGala) {
@@ -1601,14 +1740,10 @@
         imgContainer.style.display = 'none';
       }
 
-      let cleanNum = String(fashionGalaData.whatsapp_number || '0110493736').replace(/\D/g, '');
-      if (cleanNum.startsWith('07')) cleanNum = '2547' + cleanNum.substring(2);
-      if (cleanNum.startsWith('01')) cleanNum = '2541' + cleanNum.substring(2);
+      const contactObj = formatContactLink(fashionGalaData.whatsapp_number || '0110493736', fashionGalaData.title || 'Fashion Gala', 'whatsapp');
+      const galaBtn = document.getElementById('galaWhatsAppBtn');
+      galaBtn.href = contactObj.link;
 
-      const galaMsg = `Hello! I want to inquire about '${fashionGalaData.title || 'Fashion Gala'}'.`;
-      document.getElementById('galaWhatsAppBtn').href = `https://wa.me/${cleanNum}?text=${encodeURIComponent(galaMsg)}`;
-
-      // Update admin form inputs
       const toggle = document.getElementById('adminGalaActiveToggle');
       toggle.checked = !!fashionGalaData.is_active;
       document.getElementById('galaToggleLabel').innerText = `Pop-Up Status: ${fashionGalaData.is_active ? 'ACTIVE' : 'INACTIVE'}`;
@@ -1684,7 +1819,6 @@
       document.getElementById('fashionGalaModal').classList.remove('active');
     }
 
-    /* Event Show Tickets System Integration */
     async function fetchEventTicketConfig() {
       const savedTitle = localStorage.getItem('kyu_event_title');
       const savedDetails = localStorage.getItem('kyu_event_details');
@@ -1855,13 +1989,15 @@
       const bargainText = product.accepts_bargain ? 'Yes' : 'No';
       const vendorName = product.vendor_name ? product.vendor_name : 'Anonymous';
       const categoryName = product.category ? product.category : 'General (Default)';
-      const waLink = formatWhatsAppLink(product.phone, product.name);
+      const contactObj = formatContactLink(product.phone, product.name, product.contact_platform || 'whatsapp');
+      const ratingStars = renderStarRatingHTML(product.vendor_rating || 5);
 
       card.innerHTML = `
         <div class="product-header">
           <div>
             <div class="product-vendor">
               ⚡ ${escapeHtml(vendorName)}
+              ${ratingStars}
               <span class="product-category-tag">${escapeHtml(categoryName)}</span>
             </div>
             <div class="product-title">${escapeHtml(product.name)}</div>
@@ -1911,21 +2047,20 @@
         card.appendChild(imageContainer);
       }
 
-      const waBtn = document.createElement('a');
-      waBtn.className = 'btn-whatsapp';
-      waBtn.href = waLink;
-      waBtn.target = '_blank';
-      waBtn.rel = 'noopener noreferrer';
-      waBtn.innerHTML = `💬 Chat Vendor on WhatsApp`;
-      waBtn.addEventListener('click', (e) => e.stopPropagation());
-      card.appendChild(waBtn);
+      const contactBtn = document.createElement('a');
+      contactBtn.className = `btn-contact ${contactObj.cssClass}`;
+      contactBtn.href = contactObj.link;
+      contactBtn.target = '_blank';
+      contactBtn.rel = 'noopener noreferrer';
+      contactBtn.innerHTML = contactObj.text;
+      contactBtn.addEventListener('click', (e) => e.stopPropagation());
+      card.appendChild(contactBtn);
 
       card.addEventListener('click', () => openDetailModal(product));
 
       return card;
     }
 
-    /* Continuously Recurring Ticker Operations */
     function updateNewsTicker() {
       const text = document.getElementById('adminNewsInput').value.trim();
       if (!text) {
@@ -1938,7 +2073,6 @@
       alert('Live news ticker updated!');
     }
 
-    /* Multi-Popup Manager (Up to 5 Popups simultaneously) */
     function saveMultiplePopups() {
       const selectedPopups = [];
       for (let i = 1; i <= 5; i++) {
@@ -1997,20 +2131,24 @@
         card.style.zIndex = 1500 + index;
 
         const imgUrl = images.length > 0 ? images[0] : 'https://via.placeholder.com/500x300?text=Featured+Item';
-        const waLink = formatWhatsAppLink(item.phone, item.name);
+        const contactObj = formatContactLink(item.phone, item.name, item.contact_platform || 'whatsapp');
+        const ratingStars = renderStarRatingHTML(item.vendor_rating || 5);
 
         card.innerHTML = `
           <button class="modal-close-btn" onclick="dismissSinglePopup(${index})">&times;</button>
           <div style="font-size: 0.8rem; font-weight: 800; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 0.4rem; text-transform: uppercase;">
             🔥 Featured Listing (${index + 1} of ${maxCount})
           </div>
-          <img src="${imgUrl}" alt="${escapeHtml(item.name)}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 0.75rem; border: 1px solid var(--border-color);">
+          <img src="${imgUrl}" alt="${escapeHtml(item.name)}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 0.5rem; border: 1px solid var(--border-color);">
+          <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem; margin-bottom:0.2rem;">
+            ${ratingStars}
+          </div>
           <h2 style="font-size: 1.25rem; margin-bottom: 0.3rem;">${escapeHtml(item.name)}</h2>
           <div style="font-size: 1.2rem; font-weight: 800; color: var(--accent); margin-bottom: 0.4rem;">KSh ${Number(item.price || 0).toLocaleString()}</div>
           <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; max-height: 40px; overflow: hidden; text-overflow: ellipsis;">
             ${escapeHtml(item.extra_info || 'Exclusive deal verified on KYU Hydra Marketplace.')}
           </p>
-          <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" style="margin-bottom: 0.75rem;">💬 Chat Vendor on WhatsApp</a>
+          <a href="${contactObj.link}" target="_blank" rel="noopener noreferrer" class="btn-contact ${contactObj.cssClass}" style="margin-bottom: 0.75rem;">${contactObj.text}</a>
           <div style="display: flex; gap: 0.5rem; justify-content: center;">
             <button type="button" class="btn" onclick="dismissSinglePopup(${index})">Next / Close</button>
             ${maxCount > 1 ? `<button type="button" class="btn btn-secondary" onclick="closeAllPopups()">Dismiss All (${maxCount})</button>` : ''}
@@ -2042,7 +2180,6 @@
       document.getElementById('popupStackContainer').classList.remove('active');
     }
 
-    /* Modal Details & Lightbox Operations */
     function openDetailModal(product) {
       detailImages = extractImages(product);
       if (detailImages.length === 0) {
@@ -2054,20 +2191,21 @@
       const bargainText = product.accepts_bargain ? 'Yes' : 'No';
       const vendorName = product.vendor_name ? product.vendor_name : 'Anonymous';
       const categoryName = product.category ? product.category : 'General (Default)';
-      const waLink = formatWhatsAppLink(product.phone, product.name);
+      const contactObj = formatContactLink(product.phone, product.name, product.contact_platform || 'whatsapp');
+      const ratingStars = renderStarRatingHTML(product.vendor_rating || 5);
 
       document.getElementById('detailModalBody').innerHTML = `
         <h2 style="color: var(--accent); font-size: 1.4rem; margin-bottom: 0.2rem;">${escapeHtml(product.name)}</h2>
         <div style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem;">KSh ${Number(product.price || 0).toLocaleString()}</div>
         <div class="product-meta" style="font-size: 0.9rem; gap: 0.4rem;">
-          <div><strong style="color: var(--vendor-color);">Vendor:</strong> ${escapeHtml(vendorName)}</div>
+          <div style="display:flex; align-items:center; gap: 0.5rem;"><strong style="color: var(--vendor-color);">Vendor:</strong> ${escapeHtml(vendorName)} ${ratingStars}</div>
           <div><strong style="color: var(--accent);">Category:</strong> ${escapeHtml(categoryName)}</div>
           <div><strong>Location:</strong> ${escapeHtml(product.location)}</div>
           <div><strong>Negotiable:</strong> ${bargainText}</div>
           ${product.extra_info ? `<div style="margin-top:0.5rem; border-top: 1px solid var(--border-color); padding-top:0.5rem;"><strong>Details:</strong><br>${escapeHtml(product.extra_info)}</div>` : ''}
         </div>
-        <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" style="margin-top: 1rem; padding: 0.75rem;">
-          💬 Chat Vendor on WhatsApp
+        <a href="${contactObj.link}" target="_blank" rel="noopener noreferrer" class="btn-contact ${contactObj.cssClass}" style="margin-top: 1rem; padding: 0.75rem;">
+          ${contactObj.text}
         </a>
       `;
 
@@ -2109,8 +2247,10 @@
       const vendor_name = document.getElementById('vendorName').value.trim();
       const name = document.getElementById('itemTitle').value.trim();
       const category = document.getElementById('itemCategory').value;
+      const initial_rating = parseInt(document.getElementById('initialStarRating').value) || 5;
       const price = parseFloat(document.getElementById('modalPrice').value);
       const payment_sender_name = document.getElementById('paymentSenderName').value.trim();
+      const contact_platform = document.getElementById('contactPlatform').value;
       const phone = document.getElementById('modalPhone').value.trim();
       const location = document.getElementById('modalLocation').value.trim();
       const accepts_bargain = document.getElementById('modalBargain').value === 'true';
@@ -2150,12 +2290,14 @@
           price,
           listing_fee,
           payment_sender_name,
+          contact_platform,
           phone,
           location,
           accepts_bargain,
           extra_info,
           image_urls: imageUrls,
-          status: 'pending'
+          status: 'pending',
+          vendor_rating: initial_rating
         }]);
 
       btnSubmit.disabled = false;
@@ -2171,6 +2313,7 @@
       selectedFiles = [];
       renderFilePreviews();
       postForm.reset();
+      updateContactLabel();
       calculatedFeeDisplay.innerText = 'KSh 0';
       postModal.classList.remove('active');
     }
@@ -2219,7 +2362,6 @@
       statPending.innerText = pending.length;
       statActive.innerText = active.length;
 
-      // Populate 5 Pop-Up Slots
       for (let i = 1; i <= 5; i++) {
         const popupSelect = document.getElementById(`adminPopupSelect${i}`);
         popupSelect.innerHTML = '<option value="">-- None --</option>';
@@ -2258,7 +2400,9 @@
       const vendorName = item.vendor_name ? item.vendor_name : 'Anonymous';
       const categoryName = item.category ? item.category : 'General (Default)';
       const senderName = item.payment_sender_name ? item.payment_sender_name : 'Not Specified';
+      const platformName = item.contact_platform ? item.contact_platform.toUpperCase() : 'WHATSAPP';
       const requiredFee = item.listing_fee || calculateListingFee(item.price);
+      const currentRating = parseInt(item.vendor_rating) || 5;
 
       const leftDiv = document.createElement('div');
       leftDiv.className = 'admin-item-left';
@@ -2270,7 +2414,7 @@
 
       const infoDiv = document.createElement('div');
       infoDiv.innerHTML = `
-        <div style="font-weight: 700; font-size: 1rem;">
+        <div style="font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
           <span style="color: var(--vendor-color);">[Vendor: ${escapeHtml(vendorName)}]</span> ${escapeHtml(item.name)} 
           <span style="font-size: 0.75rem; color: var(--accent);">(${escapeHtml(categoryName)})</span> - KSh ${Number(item.price || 0).toLocaleString()}
         </div>
@@ -2278,7 +2422,18 @@
           <strong>Paid By:</strong> ${escapeHtml(senderName)} | <strong>Fee Due:</strong> KSh ${requiredFee}
         </div>
         <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
-          WhatsApp: ${escapeHtml(item.phone)} | Location: ${escapeHtml(item.location)} | Negotiable: ${bargainText}
+          Contact (${platformName}): ${escapeHtml(item.phone)} | Location: ${escapeHtml(item.location)} | Negotiable: ${bargainText}
+        </div>
+        <div class="admin-rating-picker">
+          <label style="margin: 0; font-weight: bold; color: var(--accent); font-size: 0.8rem;">Stars:</label>
+          <select id="rating-select-${item.id}">
+            <option value="5" ${currentRating === 5 ? 'selected' : ''}>5 Stars (★★★★★)</option>
+            <option value="4" ${currentRating === 4 ? 'selected' : ''}>4 Stars (★★★★☆)</option>
+            <option value="3" ${currentRating === 3 ? 'selected' : ''}>3 Stars (★★★☆☆)</option>
+            <option value="2" ${currentRating === 2 ? 'selected' : ''}>2 Stars (★★☆☆☆)</option>
+            <option value="1" ${currentRating === 1 ? 'selected' : ''}>1 Star  (★☆☆☆☆)</option>
+          </select>
+          <button type="button" class="btn-save-stars" onclick="updateVendorRating('${item.id}')">Save Stars</button>
         </div>
       `;
 
@@ -2312,6 +2467,27 @@
       card.appendChild(leftDiv);
       card.appendChild(actionsDiv);
       return card;
+    }
+
+    async function updateVendorRating(productId) {
+      const selectElem = document.getElementById(`rating-select-${productId}`);
+      if (!selectElem) return;
+      
+      const rating = parseInt(selectElem.value);
+      const { error } = await supabaseClient
+        .from('products')
+        .update({ vendor_rating: rating })
+        .eq('id', productId);
+
+      if (error) {
+        alert('Failed to update vendor rating: ' + error.message);
+        console.error('Rating Update Error:', error);
+        return;
+      }
+
+      alert('Vendor rating saved to ' + rating + ' Stars!');
+      await fetchAdminData();
+      await fetchActiveProducts();
     }
 
     function toggleSelectAllAdmin(master) {
