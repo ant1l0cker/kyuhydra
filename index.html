@@ -1,2572 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KYU Hydra · Premium Marketplace</title>
-  <!-- Supabase JS Client Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <style>
-    /* Global Reset & Theme Variables */
-    :root {
-      --bg-primary: #0a0a0a;
-      --bg-secondary: rgba(18, 18, 18, 0.85);
-      --bg-card: rgba(24, 24, 24, 0.85);
-      --text-primary: #f0f0f0;
-      --text-muted: #a0a0a0;
-      --accent: #FFD700;
-      --accent-hover: #e6c200;
-      --vendor-color: #38bdf8;
-      --whatsapp-green: #25D366;
-      --whatsapp-hover: #20bd5a;
-      --telegram-blue: #0088cc;
-      --telegram-hover: #0077b5;
-      --ticket-neon: #ff0055;
-      --ticket-neon-hover: #d60047;
-      --border-color: rgba(255, 255, 255, 0.1);
-      --status-active: #4ade80;
-      --status-pending: #facc15;
-      --status-rejected: #f87171;
-      --star-active: #FFD700;
-      --star-inactive: #444444;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      min-height: 100vh;
-      line-height: 1.5;
-      position: relative;
-    }
-
-    /* Background Container */
-    .bg-slideshow {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      animation: multiProductFade 120s infinite ease-in-out;
-    }
-
-    @keyframes multiProductFade {
-      0%, 100% {
-        background-image: linear-gradient(180deg, rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.98)),
-          radial-gradient(circle at 50% 20%, rgba(255, 215, 0, 0.15), transparent 70%),
-          url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1920&auto=format&fit=crop');
-      }
-      50% {
-        background-image: linear-gradient(180deg, rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.98)),
-          radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.18), transparent 70%),
-          url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1920&auto=format&fit=crop');
-      }
-    }
-
-    /* Top Sticky Header, Menu & Search Bar */
-    .top-header {
-      position: sticky;
-      top: 0;
-      z-index: 900;
-      background: rgba(10, 10, 10, 0.95);
-      border-bottom: 1px solid var(--border-color);
-      backdrop-filter: blur(12px);
-      padding: 0.75rem 1rem;
-    }
-
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .logo-title {
-      font-size: 1.4rem;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      color: var(--accent);
-      text-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
-    }
-
-    .logo-badge {
-      font-size: 0.7rem;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-      padding: 0.2rem 0.5rem;
-      border-radius: 9999px;
-    }
-
-    /* High Visibility Pulsing Ticket Button in Header */
-    .btn-header-ticket {
-      background: linear-gradient(135deg, var(--ticket-neon), #ff5500);
-      color: #ffffff !important;
-      font-weight: 900;
-      padding: 0.55rem 1.1rem;
-      border-radius: 9999px;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      box-shadow: 0 0 15px rgba(255, 0, 85, 0.6);
-      animation: ticketPulse 2s infinite;
-      transition: all 0.2s ease;
-    }
-
-    .btn-header-ticket:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(255, 0, 85, 0.9);
-    }
-
-    @keyframes ticketPulse {
-      0% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(255, 0, 85, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
-    }
-
-    .search-box {
-      flex: 1;
-      max-width: 350px;
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .search-box input {
-      flex: 1;
-      padding: 0.5rem 0.85rem;
-      border-radius: 9999px;
-      background: rgba(20, 20, 20, 0.9);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      outline: none;
-      font-size: 0.875rem;
-    }
-
-    .search-box input:focus {
-      border-color: var(--accent);
-    }
-
-    .nav-menu {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      list-style: none;
-    }
-
-    .nav-menu a {
-      color: var(--text-primary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-
-    .nav-menu a:hover {
-      color: var(--accent);
-    }
-
-    /* Continuously Recurring News Ticker Bar */
-    .news-ticker-container {
-      background: rgba(18, 18, 18, 0.95);
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      white-space: nowrap;
-      height: 38px;
-      font-size: 0.85rem;
-    }
-
-    .news-label {
-      background: var(--accent);
-      color: #000;
-      padding: 0 1rem;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      z-index: 5;
-    }
-
-    .news-scroll-wrapper {
-      width: 100%;
-      overflow: hidden;
-      display: flex;
-    }
-
-    .news-scroll-track {
-      display: flex;
-      width: max-content;
-      animation: marqueeContinuous 18s linear infinite;
-    }
-
-    .news-scroll-text {
-      padding-right: 3rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    @keyframes marqueeContinuous {
-      0% { transform: translateX(0%); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* Container Structure */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1.5rem 1rem;
-    }
-
-    /* Hero Section */
-    .hero-section {
-      position: relative;
-      background-image: 
-        linear-gradient(180deg, rgba(10, 10, 10, 0.6) 0%, rgba(10, 10, 10, 0.92) 100%),
-        radial-gradient(circle at center, rgba(255, 215, 0, 0.12) 0%, transparent 70%),
-        url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1200&auto=format&fit=crop');
-      background-size: cover;
-      background-position: center;
-      background-blend-mode: multiply, normal, normal;
-      border: 1px solid var(--border-color);
-      border-radius: 1.25rem;
-      padding: 3rem 2rem;
-      margin-bottom: 2.5rem;
-      text-align: center;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(8px);
-    }
-
-    .hero-title {
-      font-size: 2.25rem;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.75rem;
-      background: linear-gradient(180deg, #ffffff 0%, #d0d0d0 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-subtitle {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 1.5rem auto;
-    }
-
-    /* Form Controls */
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    label {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 0.4rem;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select,
-    textarea {
-      width: 100%;
-      background: rgba(10, 10, 10, 0.8);
-      border: 1px solid var(--border-color);
-      border-radius: 0.5rem;
-      padding: 0.75rem 1rem;
-      color: var(--text-primary);
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--accent);
-    }
-
-    /* Star Rating Component Styles */
-    .star-rating-display {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      font-size: 1rem;
-    }
-    
-    .star-rating-display .star {
-      color: var(--star-inactive);
-    }
-    
-    .star-rating-display .star.filled {
-      color: var(--star-active);
-      text-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
-    }
-
-    .admin-rating-picker {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 0.5rem;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.4rem 0.6rem;
-      border-radius: 0.4rem;
-      width: fit-content;
-    }
-
-    .admin-rating-picker select {
-      width: auto;
-      padding: 0.2rem 0.5rem;
-      font-size: 0.8rem;
-    }
-
-    .btn-save-stars {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      padding: 0.25rem 0.6rem;
-      border-radius: 0.3rem;
-      font-size: 0.75rem;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .btn-save-stars:hover {
-      background: var(--accent-hover);
-    }
-
-    /* Fee Box */
-    .payment-box {
-      background: rgba(20, 24, 16, 0.9);
-      border: 1px solid #224c1e;
-      border-radius: 0.75rem;
-      padding: 1rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .payment-box-title {
-      color: var(--status-active);
-      font-weight: 700;
-      font-size: 0.9rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .payment-details {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .payment-details strong {
-      color: var(--accent);
-    }
-
-    /* Drag and Drop Zone */
-    .drop-zone {
-      border: 2px dashed var(--border-color);
-      border-radius: 0.75rem;
-      padding: 1.5rem 1rem;
-      text-align: center;
-      background: rgba(10, 10, 10, 0.6);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .drop-zone.dragover {
-      border-color: var(--accent);
-      background: var(--bg-secondary);
-    }
-
-    .drop-zone p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .file-preview-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-    }
-
-    .file-preview-item {
-      position: relative;
-      aspect-ratio: 1/1;
-      border-radius: 0.4rem;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-    }
-
-    .file-preview-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .file-preview-remove {
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      background: rgba(0, 0, 0, 0.75);
-      color: var(--status-rejected);
-      border: none;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      font-size: 10px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      background: var(--accent);
-      color: #000;
-      font-weight: 700;
-      padding: 0.65rem 1.25rem;
-      border-radius: 9999px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-      text-decoration: none;
-    }
-
-    .btn:hover {
-      background: var(--accent-hover);
-      transform: translateY(-1px);
-    }
-
-    .btn-contact {
-      font-weight: 700;
-      padding: 0.6rem 1rem;
-      border-radius: 0.5rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: all 0.2s ease;
-      border: none;
-      width: 100%;
-      margin-top: 0.5rem;
-      color: #ffffff !important;
-    }
-
-    .btn-contact:hover {
-      transform: translateY(-1px);
-      color: #ffffff !important;
-    }
-
-    .btn-whatsapp {
-      background: var(--whatsapp-green);
-    }
-    .btn-whatsapp:hover {
-      background: var(--whatsapp-hover);
-    }
-
-    .btn-telegram {
-      background: var(--telegram-blue);
-    }
-    .btn-telegram:hover {
-      background: var(--telegram-hover);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: none;
-    }
-
-    .btn-approve {
-      background: rgba(74, 222, 128, 0.15);
-      color: var(--status-active);
-      border: 1px solid var(--status-active);
-      padding: 0.4rem 0.8rem;
-      border-radius: 0.4rem;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-
-    .btn-approve:hover {
-      background: var(--status-active);
-      color: #000;
-    }
-
-    .btn-reject {
-      background: rgba(250, 204, 21, 0.15);
-      color: var(--status-pending);
-      border: 1px solid var(--status-pending);
-      padding: 0.4rem 0.8rem;
-      border-radius: 0.4rem;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-
-    .btn-reject:hover {
-      background: var(--status-pending);
-      color: #000;
-    }
-
-    .btn-delete {
-      background: rgba(248, 113, 113, 0.15);
-      color: var(--status-rejected);
-      border: 1px solid var(--status-rejected);
-      padding: 0.4rem 0.8rem;
-      border-radius: 0.4rem;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-
-    .btn-delete:hover {
-      background: var(--status-rejected);
-      color: #000;
-    }
-
-    /* Section Styling */
-    .section-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 1.25rem;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    /* Product Grid & Cards */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .product-card {
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--border-color);
-      border-radius: 1rem;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      transition: all 0.25s ease;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    }
-
-    .product-card:hover {
-      border-color: rgba(255, 215, 0, 0.4);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-    }
-
-    .product-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .product-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      line-height: 1.3;
-    }
-
-    .product-price {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--accent);
-      white-space: nowrap;
-    }
-
-    .product-vendor {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--vendor-color);
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 0.2rem;
-    }
-
-    .product-category-tag {
-      font-size: 0.7rem;
-      background: rgba(255, 215, 0, 0.1);
-      color: var(--accent);
-      padding: 0.1rem 0.4rem;
-      border-radius: 0.25rem;
-      border: 1px solid rgba(255, 215, 0, 0.2);
-    }
-
-    .product-meta {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-
-    .product-image-container {
-      margin-top: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .product-main-image {
-      width: 100%;
-      height: 220px;
-      border-radius: 0.5rem;
-      overflow: hidden;
-      background: #000;
-      border: 1px solid var(--border-color);
-    }
-
-    .product-main-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .product-thumbnails-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
-      gap: 0.4rem;
-    }
-
-    .product-thumb {
-      aspect-ratio: 1/1;
-      border-radius: 0.3rem;
-      overflow: hidden;
-      background: #000;
-      border: 1px solid var(--border-color);
-      opacity: 0.8;
-    }
-
-    .product-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* Modals & Popups System */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(6px);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal {
-      background: var(--bg-secondary);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border-color);
-      border-radius: 1rem;
-      width: 100%;
-      max-width: 520px;
-      padding: 1.5rem;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-    }
-
-    /* Multi-Popup Stack Overlay Engine */
-    .popup-stack-container {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 1500;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .popup-stack-container.active {
-      display: flex;
-    }
-
-    .popup-card-item {
-      position: absolute;
-      width: 90%;
-      max-width: 460px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--accent);
-      border-radius: 1rem;
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-    }
-
-    .modal-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.75rem;
-      margin-top: 1.5rem;
-    }
-
-    .modal-close-btn {
-      position: absolute;
-      top: 0.75rem;
-      right: 0.75rem;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--border-color);
-      color: #fff;
-      font-size: 1.25rem;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1100;
-      transition: all 0.2s ease;
-    }
-
-    .modal-close-btn:hover {
-      background: var(--status-rejected);
-      color: #fff;
-    }
-
-    /* Lightbox & Carousel Styles */
-    .carousel-view {
-      position: relative;
-      width: 100%;
-      height: 300px;
-      background: #000;
-      border-radius: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-      border: 1px solid var(--border-color);
-    }
-
-    .carousel-view img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
-
-    .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      border: 1px solid var(--border-color);
-      padding: 0.5rem 0.8rem;
-      font-size: 1.2rem;
-      cursor: pointer;
-      border-radius: 0.25rem;
-    }
-    .carousel-prev { left: 8px; }
-    .carousel-next { right: 8px; }
-
-    /* Admin Panel Overlay */
-    .admin-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--bg-primary);
-      z-index: 2000;
-      overflow-y: auto;
-      padding: 2rem 1rem;
-    }
-
-    .admin-overlay.active {
-      display: block;
-    }
-
-    .admin-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    .admin-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .stat-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      padding: 1rem;
-      border-radius: 0.75rem;
-    }
-
-    .stat-card-title {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .stat-card-value {
-      font-size: 1.75rem;
-      font-weight: 800;
-      margin-top: 0.25rem;
-    }
-
-    .admin-card-section {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 0.75rem;
-      padding: 1.25rem;
-      margin-bottom: 2rem;
-    }
-
-    .admin-popup-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .admin-batch-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      padding: 0.75rem 1rem;
-      border-radius: 0.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .admin-item-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 0.75rem;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .admin-item-left {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex: 1;
-    }
-
-    .admin-checkbox {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: var(--accent);
-    }
-
-    .empty-msg {
-      text-align: center;
-      color: var(--text-muted);
-      padding: 2rem 0;
-      font-size: 0.9rem;
-    }
-
-    /* Toggle Switch Component */
-    .toggle-switch-container {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 26px;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #333;
-      transition: .3s;
-      border-radius: 34px;
-      border: 1px solid var(--border-color);
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .3s;
-      border-radius: 50%;
-    }
-
-    input:checked + .slider {
-      background-color: #ff007f;
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(24px);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SynapseAI — AI Hiring Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+a{text-decoration:none;color:inherit}ul{list-style:none}button,input,select{font-family:inherit}
+:root{--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--fm:'Inter',sans-serif;--cut:14px;--t:220ms cubic-bezier(.4,0,.2,1);
+--bg:#0b0a09;--bg2:#121010;--sf:#181513;--bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.17);
+--tx:#f5f2ee;--mu:#9a918a;--fa:#645d56;--ac:#ff7a1a;--acd:#d9600a;--acs:rgba(255,122,26,.11);--ok:#4ade80}
+body{background:var(--bg);color:var(--tx);font-family:var(--fb);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:env(safe-area-inset-top,0px)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+h1,h2,h3{font-family:var(--fd);font-weight:700;line-height:1.12;letter-spacing:-.02em}
+.pad{padding:96px 0}
+.eyebrow{font-family:var(--fm);font-size:11.5px;letter-spacing:.14em;font-weight:600;text-transform:uppercase;color:var(--ac);display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:7px;height:7px;background:var(--ac);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+h2{font-size:clamp(27px,3.2vw,38px);margin-top:14px}
+.btn{font-family:var(--fd);font-weight:600;font-size:15px;letter-spacing:0;padding:14px 28px;border:1.5px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;
+clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,var(--cut) 100%,0 calc(100% - var(--cut)));transition:var(--t)}
+.btn-p{background:var(--ac);color:#0b0a09}.btn-p:hover{background:var(--acd)}
+.btn-g{background:transparent;border-color:var(--bd2);color:var(--tx)}.btn-g:hover{border-color:var(--ac);color:var(--ac)}
+.btn-sm{padding:10px 20px;font-size:12.5px;--cut:9px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,.drop:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+header{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:var(--t);border-bottom:1px solid transparent}
+header.s{background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom-color:var(--bd)}
+nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+.logo{font-family:var(--fd);font-weight:800;font-size:24px;letter-spacing:-.02em;display:flex;align-items:center}
+.logo b{color:var(--ac);font-weight:700}
+.links{display:flex;gap:34px}
+.links a{font-family:var(--fd);font-weight:600;font-size:14.5px;letter-spacing:0;color:var(--mu);transition:color var(--t)}
+.links a:hover{color:var(--tx)}
+.nr{display:flex;gap:12px;align-items:center}
+.burger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;background:none;border:1px solid var(--bd2);cursor:pointer;transition:var(--t)}
+.burger:hover{border-color:var(--ac)}.burger span{width:20px;height:2px;background:var(--tx)}
+@media(max-width:800px){.burger{display:flex}.links{display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--bd);flex-direction:column;gap:0}.links.open{display:flex}.links a{display:block;padding:16px 28px;border-top:1px solid var(--bd)}}
+.hero{padding:170px 0 100px;position:relative;overflow:hidden;background:radial-gradient(ellipse 70% 50% at 80% 0%,var(--acs),transparent 60%),var(--bg)}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:linear-gradient(to bottom,transparent,#000b 30%,transparent 90%)}
+.glow{position:absolute;width:56vw;height:56vw;max-width:680px;max-height:680px;border-radius:50%;top:-22%;right:-12%;background:radial-gradient(circle,rgba(255,122,26,.34),transparent 70%);filter:blur(50px);animation:gp 7s ease-in-out infinite}
+@keyframes gp{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.85;transform:scale(1.1)}}
+.hero .in{position:relative;max-width:760px}
+.hero h1{font-size:clamp(38px,5.4vw,64px);margin:18px 0 20px}.hero h1 span{color:var(--ac)}
+.lead{font-size:17px;color:var(--mu);max-width:540px;margin-bottom:32px}
+.acts{display:flex;gap:14px;flex-wrap:wrap}
+.stats{display:flex;gap:44px;flex-wrap:wrap;margin-top:44px}
+.stats .n{font-family:var(--fm);font-size:28px;color:var(--ac)}.stats .l{font-size:12px;color:var(--fa);text-transform:uppercase;letter-spacing:.05em}
+.alt{background:var(--bg2);border-block:1px solid var(--bd)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);margin-top:48px;position:relative}
+.steps::before{content:"";position:absolute;top:22px;left:0;right:0;height:1px;background:var(--bd2)}
+.step{padding-right:22px;position:relative}
+.step .ix{font-family:var(--fm);font-size:14px;color:var(--ac);width:44px;height:44px;border:1.5px solid var(--ac);background:var(--bg2);display:flex;align-items:center;justify-content:center;margin-bottom:22px;position:relative}
+.step h3{font-size:17px;margin-bottom:8px}.step p{font-size:13.5px;color:var(--mu)}
+@media(max-width:860px){.steps{grid-template-columns:1fr;gap:30px}.steps::before{display:none}}
+.bar{display:flex;gap:12px;flex-wrap:wrap;margin:36px 0 10px}
+.bar input,.bar select{background:var(--sf);border:1px solid var(--bd2);color:var(--tx);padding:12px 14px;font-size:14px;min-width:0}
+.bar input{flex:1 1 240px}.bar select{flex:0 1 190px}
+.count{font-family:var(--fm);font-size:12px;color:var(--fa);margin-bottom:18px}
+.jobs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd)}
+@media(max-width:1000px){.jobs{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.jobs{grid-template-columns:1fr}}
+.job{background:var(--bg);padding:26px 24px;display:flex;flex-direction:column;transition:background var(--t)}
+.job:hover{background:var(--sf)}
+.job .cat{font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ac);margin-bottom:8px}
+.job h3{font-size:19px;margin-bottom:4px}.job .co{font-size:13px;color:var(--mu);margin-bottom:14px}
+.job .meta{font-size:12.5px;color:var(--fa);margin-bottom:16px;flex:1}
+.job .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.rate{font-family:var(--fm);font-size:21px}.rate small{font-size:11.5px;color:var(--fa)}
+.job .btn.done{background:transparent;border-color:var(--ok);color:var(--ok);cursor:default}
+.empty{padding:40px;text-align:center;color:var(--mu);background:var(--bg)}
+.vgrid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
+@media(max-width:860px){.vgrid{grid-template-columns:1fr;gap:30px}}
+.vgrid p.t{color:var(--mu);margin-top:16px;max-width:430px}
+.vlist{margin-top:22px}.vlist li{font-size:13.5px;color:var(--mu);padding:9px 0;border-top:1px solid var(--bd);display:flex;gap:10px}
+.vlist li::before{content:"";width:7px;height:7px;margin-top:8px;background:var(--ac);flex-shrink:0;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.card{background:linear-gradient(180deg,var(--acs),transparent 40%),var(--sf);border:1px solid var(--ac);padding:30px 28px}
+.card label.f{display:block;font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin:0 0 8px}
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px}
+.types label{cursor:pointer}.types input{position:absolute;opacity:0}
+.types span{display:block;text-align:center;padding:12px 6px;border:1.5px solid var(--bd2);font-family:var(--fd);font-weight:600;font-size:14px;color:var(--mu);transition:var(--t)}
+.types input:checked+span{border-color:var(--ac);color:var(--ac);background:var(--acs)}
+.types input:focus-visible+span{outline:2px solid var(--ac);outline-offset:2px}
+.drop{border:1.5px dashed var(--bd2);padding:30px 16px;text-align:center;cursor:pointer;transition:var(--t);margin-bottom:18px;color:var(--mu);font-size:14px}
+.drop:hover,.drop.over{border-color:var(--ac);background:var(--acs)}
+.drop img{max-height:170px;max-width:100%;margin:0 auto 10px;display:block}
+.drop small{display:block;color:var(--fa);font-size:12px;margin-top:4px}
+.card input[type=text],.card input[type=email],.card input[type=tel],.card input[type=date],.card select,.card textarea{font-family:inherit;width:100%;background:var(--bg);border:1px solid var(--bd2);color:var(--tx);padding:12px 14px;font-size:14px;margin-bottom:18px}
+.msg{font-size:13px;min-height:20px;margin-top:14px;color:var(--mu)}.msg.err{color:#ff6b5b}.msg.ok{color:var(--ok)}
+.card .btn{width:100%}
+.badge{font-family:var(--fm);font-size:11.5px;padding:8px 14px;border:1px solid var(--bd2);color:var(--mu)}
+.badge.v{border-color:var(--ok);color:var(--ok)}
+footer{padding:50px 0 28px;background:var(--bg2);border-top:1px solid var(--bd)}
+.ft{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--fm);font-size:11.5px;color:var(--fa);margin-top:22px}
+footer p{font-size:13.5px;color:var(--mu);max-width:340px;margin-top:10px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ac);color:#0b0a09;font-family:var(--fd);font-weight:600;padding:13px 22px;opacity:0;pointer-events:none;transition:var(--t);z-index:99;max-width:92vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+[hidden]{display:none!important}
+.btn:active,.burger:active,.x:active{transform:scale(.96)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
+.mbg{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
+.mbox{position:relative;width:100%;max-width:640px;max-height:92vh;overflow-y:auto;background-color:var(--sf)}
+.x{position:absolute;top:10px;right:10px;width:44px;height:44px;background:none;border:1px solid var(--bd2);color:var(--tx);font-size:24px;line-height:1;cursor:pointer;transition:var(--t)}
+.x:hover{border-color:var(--ac);color:var(--ac)}.x:focus-visible,.burger:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.drop{padding:22px 16px}.drop img{max-height:120px}
+@media(pointer:coarse){.btn-sm{min-height:44px}}
+@media(max-width:480px){.types{grid-template-columns:1fr}.card{padding:24px 18px}.btn{padding:14px 22px}}
+.stepbar{display:flex;gap:8px;margin-bottom:22px}
+.stepbar span{flex:1;padding:0 0 8px;border-bottom:2px solid var(--bd2);font-size:12.5px;font-weight:600;color:var(--fa);transition:var(--t)}
+.stepbar span.on{border-color:var(--ac);color:var(--ac)}
+.two{display:flex;gap:10px}.two .btn{flex:1;width:auto}.two .btn-g{flex:0 0 32%}
+.card{color-scheme:dark}.card textarea{resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.grid2>div{min-width:0}.grid2 .full{grid-column:1/-1}
+.stepbar span{font-size:11.5px}.stepbar span.done{border-color:var(--acd);color:var(--mu)}
+.q{margin-bottom:20px}.q p{font-weight:600;font-size:14.5px;margin-bottom:10px}
+.opt{display:block;cursor:pointer;margin-bottom:8px}.opt input{position:absolute;opacity:0}
+.opt span{display:block;padding:11px 14px;border:1.5px solid var(--bd2);font-size:13.5px;color:var(--mu);transition:var(--t)}
+.opt:hover span{border-color:var(--ac)}.opt input:checked+span{border-color:var(--ac);color:var(--tx);background:var(--acs)}
+.opt input:focus-visible+span{outline:2px solid var(--ac);outline-offset:2px}
+.score{font-family:var(--fd);font-size:60px;font-weight:800;color:var(--ac);line-height:1}
+.score.bad{color:#ff6b5b}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-
-  <!-- Dynamic Faded Multi-Product Background Container -->
-  <div class="bg-slideshow"></div>
-
-  <!-- Sticky Top Search Bar Header & Nav Menu -->
-  <header class="top-header">
-    <div class="header-content">
-      <div class="logo-container" id="logoTrigger">
-        <span class="logo-title">KYU Hydra</span>
-        <span class="logo-badge">Marketplace</span>
-      </div>
-
-      <!-- High Visibility Event Ticket Purchasing Action -->
-      <button type="button" class="btn-header-ticket" id="btnHeaderTicket">
-        🎟️ <span id="headerTicketBtnText">GET TICKETS</span>
-      </button>
-
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search products or categories..." oninput="filterProducts()">
-      </div>
-
-      <ul class="nav-menu">
-        <li><a href="#activeFeed">Products</a></li>
-        <li><a href="#" id="navSellItem">+ Sell Item</a></li>
-      </ul>
-    </div>
-  </header>
-
-  <!-- Dynamic Left-to-Right Recurring News Ticker -->
-  <div class="news-ticker-container">
-    <div class="news-label">NEWS</div>
-    <div class="news-scroll-wrapper">
-      <div class="news-scroll-track" id="newsTickerTrack">
-        <div class="news-scroll-text" id="newsTickerText1">Welcome to KYU Hydra Marketplace! Post your listings directly from your mobile or laptop today.</div>
-        <div class="news-scroll-text" id="newsTickerText2">Welcome to KYU Hydra Marketplace! Post your listings directly from your mobile or laptop today.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <h1 class="hero-title">Exclusive Peer-to-Peer Marketplace</h1>
-      <p class="hero-subtitle">Discover high-end listings directly from verified vendors in your zone. Fast, direct, and verified trading.</p>
-      <button type="button" class="btn" id="btnHeroPost">+ Start Selling Item</button>
-    </section>
-
-    <!-- Active Products Feed -->
-    <section>
-      <h2 class="section-title">Active Market Feed</h2>
-      <div class="product-grid" id="activeFeed">
-        <div class="empty-msg">Loading active listings...</div>
-      </div>
-    </section>
-  </div>
-
-  <!-- Dynamic Header Show Ticket Purchase Modal -->
-  <div class="modal-overlay" id="ticketModal">
-    <div class="modal">
-      <button class="modal-close-btn" id="btnCloseTicketModal">&times;</button>
-      <div class="modal-header">
-        <h3 class="modal-title" id="ticketModalHeaderTitle">🎟️ Event Ticket & Show Booking</h3>
-      </div>
-      <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5;" id="ticketModalInfo">
-        Loading event passes, dates, and vendor details...
-      </div>
-      <div class="payment-box">
-        <div class="payment-box-title">Direct Vendor Booking Process</div>
-        <div class="payment-details">
-          1. Check event details above.<br>
-          2. Enter the quantity/details you need below.<br>
-          3. Click button to place direct WhatsApp order to event vendor.
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="ticketQuantity">Number of Tickets Required</label>
-        <input type="number" id="ticketQuantity" min="1" value="1">
-      </div>
-      <div class="form-group">
-        <label for="ticketNotes">Special Requests / VIP Gate Notes</label>
-        <textarea id="ticketNotes" rows="2" placeholder="e.g., VIP Table section, group passes..."></textarea>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="btnCancelTicket">Close</button>
-        <button type="button" class="btn" style="background: var(--whatsapp-green); color:#fff;" onclick="orderShowTickets()">💬 Order Tickets on WhatsApp</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Fashion Gala Standalone Automated Pop-Up Modal -->
-  <div class="modal-overlay" id="fashionGalaModal">
-    <div class="modal fashion-gala-card" style="max-width: 480px; text-align: center;">
-      <button class="modal-close-btn" onclick="closeFashionGalaModal()">&times;</button>
-      <div style="font-size: 0.8rem; font-weight: 800; color: #ff007f; letter-spacing: 0.08em; margin-bottom: 0.4rem; text-transform: uppercase;">
-        ✨ SPECIAL FEATURED EVENT
-      </div>
-      <h2 class="fashion-gala-title" id="galaDisplayTitle" style="font-size: 1.6rem; margin-bottom: 0.6rem;">Fashion Gala 2026</h2>
-      
-      <div id="galaImgContainer" style="width: 100%; height: 220px; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1rem; background: #000; border: 1px solid var(--border-color); display: none;">
-        <img id="galaDisplayImg" src="" alt="Fashion Gala Poster" style="width: 100%; height: 100%; object-fit: cover; display: block;">
-      </div>
-
-      <p id="galaDisplayDetails" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.5; white-space: pre-line;">
-        Loading Fashion Gala Event Information...
-      </p>
-
-      <a id="galaWhatsAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn-contact btn-whatsapp" style="padding: 0.8rem; font-size: 0.95rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--whatsapp-green), #1eb050);">
-        💬 Contact via WhatsApp
-      </a>
-      <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 0.4rem;" onclick="closeFashionGalaModal()">Close Notice</button>
-    </div>
-  </div>
-
-  <!-- Multi-Popup Stack Shell Container -->
-  <div class="popup-stack-container" id="popupStackContainer">
-    <div id="popupCardStack" style="position: relative; width: 100%; max-width: 480px; height: 500px; display: flex; align-items: center; justify-content: center;"></div>
-  </div>
-
-  <!-- Single Combined Post Item Modal -->
-  <div class="modal-overlay" id="postModal">
-    <div class="modal">
-      <button class="modal-close-btn" id="btnClosePostModal">&times;</button>
-      <div class="modal-header">
-        <h3 class="modal-title">List New Item</h3>
-      </div>
-      <form id="postForm">
-        <div class="form-group">
-          <label for="vendorName">Vendor / Seller Name</label>
-          <input type="text" id="vendorName" required placeholder="e.g., Lehmann, CyberStore, Alex">
-        </div>
-
-        <div class="form-group">
-          <label for="itemTitle">Item Name</label>
-          <input type="text" id="itemTitle" required placeholder="e.g., Dell XPS 13, Vintage Jacket...">
-        </div>
-
-        <div class="form-group">
-          <label for="itemCategory">Product Category *</label>
-          <select id="itemCategory" required>
-            <option value="General (Default)" selected>General (Default)</option>
-            <option value="Antiques & Collectibles">Antiques & Collectibles</option>
-            <option value="Art & Craft Supplies">Art & Craft Supplies</option>
-            <option value="Audio & Sound Systems">Audio & Sound Systems</option>
-            <option value="Baby & Kids Products">Baby & Kids Products</option>
-            <option value="Beauty & Personal Care">Beauty & Personal Care</option>
-            <option value="Bicycles & Cycling Gear">Bicycles & Cycling Gear</option>
-            <option value="Books & Magazines">Books & Magazines</option>
-            <option value="Building Materials">Building Materials</option>
-            <option value="Business & Industrial">Business & Industrial</option>
-            <option value="Cameras & Photography">Cameras & Photography</option>
-            <option value="Car Parts & Accessories">Car Parts & Accessories</option>
-            <option value="Cell Phones & Accessories">Cell Phones & Accessories</option>
-            <option value="Clothing - Men">Clothing - Men</option>
-            <option value="Clothing - Women">Clothing - Women</option>
-            <option value="Computers & Laptops">Computers & Laptops</option>
-            <option value="Costumes & Accessories">Costumes & Accessories</option>
-            <option value="Desktops & Servers">Desktops & Servers</option>
-            <option value="Drone & Aerial Gear">Drone & Aerial Gear</option>
-            <option value="DVDs & Movies">DVDs & Movies</option>
-            <option value="Electronics Accessories">Electronics Accessories</option>
-            <option value="Event Supplies & Tickets">Event Supplies & Tickets</option>
-            <option value="Farm & Agriculture">Farm & Agriculture</option>
-            <option value="Fitness & Gym Equipment">Fitness & Gym Equipment</option>
-            <option value="Furniture">Furniture</option>
-            <option value="Gaming Consoles & Games">Gaming Consoles & Games</option>
-            <option value="Garden & Outdoor Living">Garden & Outdoor Living</option>
-            <option value="Health & Wellness">Health & Wellness</option>
-            <option value="Heating & Cooling">Heating & Cooling</option>
-            <option value="Hobbies & Models">Hobbies & Models</option>
-            <option value="Home Appliances">Home Appliances</option>
-            <option value="Home Decor">Home Decor</option>
-            <option value="Jewelry & Watches">Jewelry & Watches</option>
-            <option value="Kitchen & Dining">Kitchen & Dining</option>
-            <option value="Luggage & Travel Gear">Luggage & Travel Gear</option>
-            <option value="Musical Instruments">Musical Instruments</option>
-            <option value="Office Supplies">Office Supplies</option>
-            <option value="Pet Supplies">Pet Supplies</option>
-            <option value="Plumbing & Electrical">Plumbing & Electrical</option>
-            <option value="Real Estate & Property">Real Estate & Property</option>
-            <option value="Services & Freelancing">Services & Freelancing</option>
-            <option value="Shoes - Men">Shoes - Men</option>
-            <option value="Shoes - Women">Shoes - Women</option>
-            <option value="Software & Digital Goods">Software & Digital Goods</option>
-            <option value="Solar & Renewable Energy">Solar & Renewable Energy</option>
-            <option value="Sporting Goods">Sporting Goods</option>
-            <option value="Tools & Hardware">Tools & Hardware</option>
-            <option value="Toys & Games">Toys & Games</option>
-            <option value="Vehicles & Motorcycles">Vehicles & Motorcycles</option>
-            <option value="Video Games & VR">Video Games & VR</option>
-          </select>
-        </div>
-
-        <!-- Initial Star Rating Select Option -->
-        <div class="form-group">
-          <label for="initialStarRating">Vendor Initial Rating (Stars)</label>
-          <select id="initialStarRating">
-            <option value="5" selected>5 Stars (★★★★★)</option>
-            <option value="4">4 Stars (★★★★☆)</option>
-            <option value="3">3 Stars (★★★☆☆)</option>
-            <option value="2">2 Stars (★★☆☆☆)</option>
-            <option value="1">1 Star (★☆☆☆☆)</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="modalPrice">Price (KSh)</label>
-          <input type="number" id="modalPrice" required min="0" placeholder="e.g., 2500">
-        </div>
-
-        <div class="payment-box">
-          <div class="payment-box-title">Listing Fee Payment Instructions</div>
-          <div class="payment-details">
-            Send calculated fee: <strong id="calculatedFeeDisplay">KSh 0</strong><br>
-            M-Pesa Number: <strong>0110493736</strong> (Name: <strong>juliaz</strong>)
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="paymentSenderName">M-Pesa Sender Name (Who paid?)</label>
-          <input type="text" id="paymentSenderName" required placeholder="e.g., John Doe / 0712345678">
-        </div>
-
-        <div class="form-group">
-          <label for="contactPlatform">Preferred Reach/Contact Platform *</label>
-          <select id="contactPlatform" required onchange="updateContactLabel()">
-            <option value="whatsapp" selected>WhatsApp</option>
-            <option value="telegram">Telegram DM (Username/Phone)</option>
-            <option value="telegram_group">Telegram Group / Channel Link</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="modalPhone" id="modalPhoneLabel">Contact WhatsApp Number</label>
-          <input type="text" id="modalPhone" required placeholder="e.g., 0712345678 or 254712345678">
-        </div>
-
-        <div class="form-group">
-          <label for="modalLocation">Location / Zone</label>
-          <input type="text" id="modalLocation" required placeholder="e.g., Gate A, Kutus">
-        </div>
-
-        <div class="form-group">
-          <label for="modalBargain">Accept Bargain / Price Negotiation?</label>
-          <select id="modalBargain" required>
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="modalInfo">Additional Details / Item Condition</label>
-          <textarea id="modalInfo" rows="2" placeholder="Specify condition, specs, or delivery terms..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Upload Images (Up to 10)</label>
-          <div class="drop-zone" id="dropZone">
-            <p>Drag & drop images here, or click to select</p>
-            <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
-          </div>
-          <div class="file-preview-grid" id="previewGrid"></div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="btnCancelPost">Cancel</button>
-          <button type="submit" class="btn" id="btnSubmitFinal">Submit Item</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Detailed View & Carousel Modal -->
-  <div class="modal-overlay" id="detailModal">
-    <div class="modal">
-      <button class="modal-close-btn" onclick="closeDetailModal()">&times;</button>
-      <div class="carousel-view">
-        <button class="carousel-btn carousel-prev" onclick="prevDetailImage()">&#10094;</button>
-        <img id="detailModalImg" src="" alt="Listing Photo">
-        <button class="carousel-btn carousel-next" onclick="nextDetailImage()">&#10095;</button>
-      </div>
-      <div id="detailModalBody"></div>
-    </div>
-  </div>
-
-  <!-- Admin Dashboard Overlay -->
-  <div class="admin-overlay" id="adminPanel">
-    <div class="container">
-      <div class="admin-header">
-        <div>
-          <h1 class="section-title" style="font-size: 1.75rem;">Admin Moderation & Dashboard Controls</h1>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Manage listings, event show tickets, payments, news announcements, vendor ratings, and popups</p>
-        </div>
-        <button type="button" class="btn btn-secondary" id="btnCloseAdmin">Exit Dashboard</button>
-      </div>
-
-      <div class="admin-stats">
-        <div class="stat-card">
-          <div class="stat-card-title">TOTAL PRODUCTS</div>
-          <div class="stat-card-value" id="statTotal">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-title">PENDING APPROVAL</div>
-          <div class="stat-card-value" id="statPending" style="color: var(--status-pending);">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-title">ACTIVE LISTINGS</div>
-          <div class="stat-card-value" id="statActive" style="color: var(--status-active);">0</div>
-        </div>
-      </div>
-
-      <!-- Control 0: Header Event Ticket Button Editor -->
-      <div class="admin-card-section" style="border: 1px solid var(--ticket-neon);">
-        <h2 class="section-title" style="color: var(--ticket-neon);">0. Configure Header Show Ticket Button & Event Info</h2>
-        <div class="form-group">
-          <label for="adminEventTitleInput">Header Button Name (Name of the Event)</label>
-          <input type="text" id="adminEventTitleInput" placeholder="e.g., HYDRA FESTIVAL TICKETS / NIGHT SHOW">
-        </div>
-        <div class="form-group">
-          <label for="adminEventDetailsInput">Event Info, Pricing & Vendor Contact Numbers</label>
-          <textarea id="adminEventDetailsInput" rows="3" placeholder="e.g., Gate Pass: KSh 500 | VIP: KSh 1500. Vendor Contact: 0110493736. Location: Main Stage."></textarea>
-        </div>
-        <button type="button" class="btn" style="background: var(--ticket-neon); color: #fff;" onclick="updateHeaderEventDetails()">Save Event Ticket Settings</button>
-      </div>
-
-      <!-- Control 3: Fashion Gala Auto Pop-Up Control & Settings -->
-      <div class="admin-card-section" style="border: 1px solid #ff007f;">
-        <h2 class="section-title" style="color: #ff007f;">👗 Fashion Gala Auto Launch Pop-Up Config</h2>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
-          Enable or disable the automatic Fashion Gala popup every time users open the site, set custom details, image, and WhatsApp contact.
-        </p>
-
-        <div class="toggle-switch-container">
-          <label class="switch">
-            <input type="checkbox" id="adminGalaActiveToggle">
-            <span class="slider"></span>
-          </label>
-          <span style="font-weight: 700; font-size: 0.95rem;" id="galaToggleLabel">Pop-Up Status: INACTIVE</span>
-        </div>
-
-        <div class="form-group">
-          <label for="adminGalaTitleInput">Fashion Gala Title</label>
-          <input type="text" id="adminGalaTitleInput" placeholder="e.g., KYU Fashion Gala 2026">
-        </div>
-
-        <div class="form-group">
-          <label for="adminGalaPhoneInput">WhatsApp Contact Number</label>
-          <input type="text" id="adminGalaPhoneInput" placeholder="e.g., 0110493736 or 254110493736">
-        </div>
-
-        <div class="form-group">
-          <label for="adminGalaDetailsInput">Event Announcement Details / Description</label>
-          <textarea id="adminGalaDetailsInput" rows="3" placeholder="Write details about tickets, VIP access, models, dates, and event venue..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Fashion Gala Image / Banner (Upload File or Enter URL)</label>
-          <input type="file" id="adminGalaImageFile" accept="image/*" style="margin-bottom: 0.5rem;">
-          <input type="text" id="adminGalaImageUrlInput" placeholder="OR paste external Image URL (e.g., https://...)">
-        </div>
-
-        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-          <button type="button" class="btn" style="background: #ff007f; color: #fff;" onclick="saveFashionGalaConfig()">Save Fashion Gala Settings</button>
-          <button type="button" class="btn btn-secondary" onclick="openFashionGalaModal()">Preview Pop-Up</button>
-        </div>
-      </div>
-
-      <!-- Dashboard Control 1: Recurring News Ticker -->
-      <div class="admin-card-section">
-        <h2 class="section-title">1. Dashboard News Ticker Control (Continuous Scroll)</h2>
-        <div class="form-group">
-          <label for="adminNewsInput">Set Scrolling Banner Announcement Text</label>
-          <input type="text" id="adminNewsInput" placeholder="Type custom announcement news to scroll continuously across the header...">
-        </div>
-        <button type="button" class="btn" onclick="updateNewsTicker()">Update Live News Ticker</button>
-      </div>
-
-      <!-- Dashboard Control 2: Configure Up to 5 Pop-Ups simultaneously -->
-      <div class="admin-card-section">
-        <h2 class="section-title">2. Configure Pop-Up Featured Announcements (Up to 5 at once)</h2>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
-          Select up to 5 active market listings to pop up on user screen simultaneously when opening the page.
-        </p>
-        <div class="admin-popup-grid">
-          <div class="form-group">
-            <label>Pop-Up Slot 1</label>
-            <select id="adminPopupSelect1" class="admin-popup-select"><option value="">-- None --</option></select>
-          </div>
-          <div class="form-group">
-            <label>Pop-Up Slot 2</label>
-            <select id="adminPopupSelect2" class="admin-popup-select"><option value="">-- None --</option></select>
-          </div>
-          <div class="form-group">
-            <label>Pop-Up Slot 3</label>
-            <select id="adminPopupSelect3" class="admin-popup-select"><option value="">-- None --</option></select>
-          </div>
-          <div class="form-group">
-            <label>Pop-Up Slot 4</label>
-            <select id="adminPopupSelect4" class="admin-popup-select"><option value="">-- None --</option></select>
-          </div>
-          <div class="form-group">
-            <label>Pop-Up Slot 5</label>
-            <select id="adminPopupSelect5" class="admin-popup-select"><option value="">-- None --</option></select>
-          </div>
-        </div>
-        <button type="button" class="btn" onclick="saveMultiplePopups()">Save Pop-Up Preference Stack</button>
-      </div>
-
-      <div class="admin-batch-bar">
-        <label style="margin: 0; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-weight: bold;">
-          <input type="checkbox" id="selectAllAdmin" class="admin-checkbox" onclick="toggleSelectAllAdmin(this)"> Select All Dashboard Items
-        </label>
-        <button type="button" class="btn-delete" style="padding: 0.5rem 1rem;" onclick="deleteSelectedAdminListings()">Delete Selected Items</button>
-      </div>
-
-      <h2 class="section-title">Pending Payment Moderation Queue</h2>
-      <div id="pendingContainer">
-        <div class="empty-msg">No pending approvals found.</div>
-      </div>
-
-      <h2 class="section-title" style="margin-top: 2rem;">Active Market Products & Vendor Ratings (Admin Controls)</h2>
-      <div id="allActiveContainer">
-        <div class="empty-msg">No active products found.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- JavaScript Implementation -->
-  <script>
-    const SUPABASE_URL = 'https://dwonfvnxdojvgfdbrrbi.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_qeRWQSDy8mRIMU-TfSyPXQ_jz_FUx8C';
-
-    let supabaseClient = null;
-    let selectedFiles = [];
-    let isAdminUnlocked = false;
-    let fetchedProducts = [];
-    let activePopupsList = [];
-
-    let currentEventData = {
-      title: '🎟️ GET SHOW TICKETS',
-      details: 'Gate Pass: KSh 500 | VIP: KSh 1500. Contact vendor 0110493736 for details.'
-    };
-
-    let fashionGalaData = {
-      is_active: false,
-      title: 'Fashion Gala 2026',
-      description: 'Exclusive Fashion Showcase & VIP Pass Access.',
-      whatsapp_number: '0110493736',
-      image_url: ''
-    };
-
-    let detailImages = [];
-    let detailImageIdx = 0;
-
-    // DOM Elements
-    const logoTrigger = document.getElementById('logoTrigger');
-    const navSellItem = document.getElementById('navSellItem');
-    const btnHeroPost = document.getElementById('btnHeroPost');
-    const btnClosePostModal = document.getElementById('btnClosePostModal');
-    const btnCancelPost = document.getElementById('btnCancelPost');
-    const postModal = document.getElementById('postModal');
-    const detailModal = document.getElementById('detailModal');
-    const postForm = document.getElementById('postForm');
-    
-    const btnHeaderTicket = document.getElementById('btnHeaderTicket');
-    const ticketModal = document.getElementById('ticketModal');
-    const btnCloseTicketModal = document.getElementById('btnCloseTicketModal');
-    const btnCancelTicket = document.getElementById('btnCancelTicket');
-    const headerTicketBtnText = document.getElementById('headerTicketBtnText');
-    const ticketModalHeaderTitle = document.getElementById('ticketModalHeaderTitle');
-    const ticketModalInfo = document.getElementById('ticketModalInfo');
-
-    const modalPrice = document.getElementById('modalPrice');
-    const calculatedFeeDisplay = document.getElementById('calculatedFeeDisplay');
-
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('fileInput');
-    const previewGrid = document.getElementById('previewGrid');
-    
-    const activeFeed = document.getElementById('activeFeed');
-    const adminPanel = document.getElementById('adminPanel');
-    const btnCloseAdmin = document.getElementById('btnCloseAdmin');
-    const pendingContainer = document.getElementById('pendingContainer');
-    const allActiveContainer = document.getElementById('allActiveContainer');
-
-    const statTotal = document.getElementById('statTotal');
-    const statPending = document.getElementById('statPending');
-    const statActive = document.getElementById('statActive');
-
-    document.addEventListener('DOMContentLoaded', () => {
-      setupEventListeners();
-      
-      if (window.supabase) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        fetchActiveProducts();
-        fetchEventTicketConfig();
-        fetchFashionGalaConfig();
-      } else {
-        activeFeed.innerHTML = `
-          <div class="empty-msg" style="color: var(--status-rejected);">
-            <strong>Error:</strong> Could not load Supabase SDK.<br>
-            Please run via local server (e.g. <code>python3 -m http.server</code>).
-          </div>`;
-        fetchFashionGalaConfig();
-      }
-
-      checkAndShowFeaturedPopups();
-    });
-
-    /* Render Stars Helper */
-    function renderStarRatingHTML(ratingCount) {
-      const rating = parseInt(ratingCount) || 5;
-      let starsHTML = '<div class="star-rating-display" title="Vendor Rating: ' + rating + ' of 5 Stars">';
-      for (let i = 1; i <= 5; i++) {
-        if (i <= rating) {
-          starsHTML += '<span class="star filled">★</span>';
-        } else {
-          starsHTML += '<span class="star">★</span>';
-        }
-      }
-      starsHTML += '</div>';
-      return starsHTML;
-    }
-
-    function calculateListingFee(price) {
-      if (isNaN(price) || price <= 0) return 0;
-      if (price <= 1000) return 50;
-      if (price >= 1050 && price <= 2000) return 100;
-      if (price >= 2050 && price <= 5000) return 150;
-      if (price > 5000) return 150;
-      return 100;
-    }
-
-    function updateContactLabel() {
-      const platform = document.getElementById('contactPlatform').value;
-      const label = document.getElementById('modalPhoneLabel');
-      const input = document.getElementById('modalPhone');
-
-      if (platform === 'telegram_group') {
-        label.innerText = 'Telegram Group / Channel Full Link';
-        input.placeholder = 'e.g., https://t.me/yourgroupname or https://t.me/+joinchat...';
-      } else if (platform === 'telegram') {
-        label.innerText = 'Contact Telegram Username or Number';
-        input.placeholder = 'e.g., @vendor_handle or 0712345678';
-      } else {
-        label.innerText = 'Contact WhatsApp Number';
-        input.placeholder = 'e.g., 0712345678 or 254712345678';
-      }
-    }
-
-    function formatContactLink(phoneOrHandle, productName, platform = 'whatsapp') {
-      if (!phoneOrHandle) return { link: '#', text: 'Contact Vendor', cssClass: 'btn-whatsapp' };
-
-      const customMessage = `I saw '${productName}' on kyu hydra, is it still there, i wanna purchase it`;
-      
-      if (platform === 'telegram_group') {
-        let link = String(phoneOrHandle).trim();
-        if (!link.startsWith('http://') && !link.startsWith('https://')) {
-          link = 'https://' + link;
-        }
-        return {
-          link: link,
-          text: `👥 Join Telegram Group`,
-          cssClass: `btn-telegram`
-        };
-      } else if (platform === 'telegram') {
-        let handle = String(phoneOrHandle).trim();
-        if (handle.startsWith('@')) {
-          handle = handle.substring(1);
-          return {
-            link: `https://t.me/${handle}`,
-            text: `✈️ Chat Vendor on Telegram`,
-            cssClass: `btn-telegram`
-          };
-        } else {
-          let cleanNum = handle.replace(/\D/g, '');
-          if (cleanNum.startsWith('07')) cleanNum = '2547' + cleanNum.substring(2);
-          if (cleanNum.startsWith('01')) cleanNum = '2541' + cleanNum.substring(2);
-          return {
-            link: `https://t.me/+${cleanNum}`,
-            text: `✈️ Chat Vendor on Telegram`,
-            cssClass: `btn-telegram`
-          };
-        }
-      } else {
-        let cleanNum = String(phoneOrHandle).replace(/\D/g, '');
-        if (cleanNum.startsWith('07')) cleanNum = '2547' + cleanNum.substring(2);
-        if (cleanNum.startsWith('01')) cleanNum = '2541' + cleanNum.substring(2);
-        return {
-          link: `https://wa.me/${cleanNum}?text=${encodeURIComponent(customMessage)}`,
-          text: `💬 Chat Vendor on WhatsApp`,
-          cssClass: `btn-whatsapp`
-        };
-      }
-    }
-
-    function setupEventListeners() {
-      logoTrigger.addEventListener('dblclick', handleAdminAccess);
-
-      btnHeaderTicket.addEventListener('click', () => {
-        ticketModal.classList.add('active');
-      });
-
-      btnCloseTicketModal.addEventListener('click', () => ticketModal.classList.remove('active'));
-      btnCancelTicket.addEventListener('click', () => ticketModal.classList.remove('active'));
-
-      modalPrice.addEventListener('input', (e) => {
-        const val = parseFloat(e.target.value);
-        const fee = calculateListingFee(val);
-        calculatedFeeDisplay.innerText = `KSh ${fee}`;
-      });
-
-      navSellItem.addEventListener('click', (e) => {
-        e.preventDefault();
-        postModal.classList.add('active');
-      });
-
-      btnHeroPost.addEventListener('click', () => postModal.classList.add('active'));
-      btnClosePostModal.addEventListener('click', () => postModal.classList.remove('active'));
-      btnCancelPost.addEventListener('click', () => postModal.classList.remove('active'));
-
-      detailModal.addEventListener('click', (e) => {
-        if (e.target === detailModal) closeDetailModal();
-      });
-
-      postModal.addEventListener('click', (e) => {
-        if (e.target === postModal) postModal.classList.remove('active');
-      });
-
-      ticketModal.addEventListener('click', (e) => {
-        if (e.target === ticketModal) ticketModal.classList.remove('active');
-      });
-
-      const galaModal = document.getElementById('fashionGalaModal');
-      galaModal.addEventListener('click', (e) => {
-        if (e.target === galaModal) closeFashionGalaModal();
-      });
-
-      const galaToggle = document.getElementById('adminGalaActiveToggle');
-      galaToggle.addEventListener('change', (e) => {
-        const label = document.getElementById('galaToggleLabel');
-        label.innerText = `Pop-Up Status: ${e.target.checked ? 'ACTIVE' : 'INACTIVE'}`;
-      });
-
-      document.addEventListener('keyup', (e) => {
-        if (e.key === 'Escape') {
-          closeDetailModal();
-          postModal.classList.remove('active');
-          ticketModal.classList.remove('active');
-          closeFashionGalaModal();
-          closeAllPopups();
-        }
-      });
-
-      dropZone.addEventListener('click', () => fileInput.click());
-      
-      dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('dragover');
-      });
-
-      dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('dragover');
-      });
-
-      dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-        if (e.dataTransfer.files) {
-          addFiles(Array.from(e.dataTransfer.files));
-        }
-      });
-
-      fileInput.addEventListener('change', (e) => {
-        if (e.target.files) {
-          addFiles(Array.from(e.target.files));
-          fileInput.value = '';
-        }
-      });
-
-      postForm.addEventListener('submit', handleFinalSubmit);
-
-      btnCloseAdmin.addEventListener('click', () => {
-        adminPanel.classList.remove('active');
-        if (supabaseClient) fetchActiveProducts();
-      });
-    }
-
-    async function fetchFashionGalaConfig() {
-      const savedGala = localStorage.getItem('kyu_fashion_gala_config');
-      if (savedGala) {
-        try {
-          fashionGalaData = JSON.parse(savedGala);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      if (supabaseClient) {
-        try {
-          const { data, error } = await supabaseClient
-            .from('fashion_gala_config')
-            .select('*')
-            .eq('id', 1)
-            .single();
-
-          if (!error && data) {
-            fashionGalaData = data;
-            localStorage.setItem('kyu_fashion_gala_config', JSON.stringify(data));
-          }
-        } catch(e) {
-          console.log('Supabase Fashion Gala table optional load', e);
-        }
-      }
-
-      updateFashionGalaUI();
-
-      if (fashionGalaData.is_active) {
-        openFashionGalaModal();
-      }
-    }
-
-    function updateFashionGalaUI() {
-      document.getElementById('galaDisplayTitle').innerText = fashionGalaData.title || 'Fashion Gala 2026';
-      document.getElementById('galaDisplayDetails').innerText = fashionGalaData.description || '';
-
-      const imgContainer = document.getElementById('galaImgContainer');
-      const imgElem = document.getElementById('galaDisplayImg');
-      
-      if (fashionGalaData.image_url && fashionGalaData.image_url.trim() !== '') {
-        imgElem.src = fashionGalaData.image_url;
-        imgContainer.style.display = 'block';
-      } else {
-        imgContainer.style.display = 'none';
-      }
-
-      const contactObj = formatContactLink(fashionGalaData.whatsapp_number || '0110493736', fashionGalaData.title || 'Fashion Gala', 'whatsapp');
-      const galaBtn = document.getElementById('galaWhatsAppBtn');
-      galaBtn.href = contactObj.link;
-
-      const toggle = document.getElementById('adminGalaActiveToggle');
-      toggle.checked = !!fashionGalaData.is_active;
-      document.getElementById('galaToggleLabel').innerText = `Pop-Up Status: ${fashionGalaData.is_active ? 'ACTIVE' : 'INACTIVE'}`;
-      document.getElementById('adminGalaTitleInput').value = fashionGalaData.title || '';
-      document.getElementById('adminGalaPhoneInput').value = fashionGalaData.whatsapp_number || '';
-      document.getElementById('adminGalaDetailsInput').value = fashionGalaData.description || '';
-      document.getElementById('adminGalaImageUrlInput').value = fashionGalaData.image_url || '';
-    }
-
-    function fileToDataURL(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = e => resolve(e.target.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    async function saveFashionGalaConfig() {
-      const is_active = document.getElementById('adminGalaActiveToggle').checked;
-      const title = document.getElementById('adminGalaTitleInput').value.trim() || 'Fashion Gala 2026';
-      const whatsapp_number = document.getElementById('adminGalaPhoneInput').value.trim();
-      const description = document.getElementById('adminGalaDetailsInput').value.trim();
-      let image_url = document.getElementById('adminGalaImageUrlInput').value.trim();
-
-      const imageFileInput = document.getElementById('adminGalaImageFile');
-      if (imageFileInput.files && imageFileInput.files[0]) {
-        const imageFile = imageFileInput.files[0];
-        if (supabaseClient) {
-          const fileExt = imageFile.name.split('.').pop();
-          const fileName = `fashion_gala_${Date.now()}.${fileExt}`;
-          const { data, error } = await supabaseClient.storage
-            .from('product-images')
-            .upload(fileName, imageFile, { upsert: true });
-
-          if (!error) {
-            const { data: publicUrlData } = supabaseClient.storage
-              .from('product-images')
-              .getPublicUrl(fileName);
-            if (publicUrlData) image_url = publicUrlData.publicUrl;
-          } else {
-            console.error('Gala Storage Error, using DataURL fallback:', error);
-            image_url = await fileToDataURL(imageFile);
-          }
-        } else {
-          image_url = await fileToDataURL(imageFile);
-        }
-      }
-
-      fashionGalaData = { id: 1, is_active, title, description, whatsapp_number, image_url };
-      localStorage.setItem('kyu_fashion_gala_config', JSON.stringify(fashionGalaData));
-
-      if (supabaseClient) {
-        try {
-          await supabaseClient.from('fashion_gala_config').upsert(fashionGalaData);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      updateFashionGalaUI();
-      alert('Fashion Gala pop-up config updated successfully!');
-      if (is_active) {
-        openFashionGalaModal();
-      }
-    }
-
-    function openFashionGalaModal() {
-      document.getElementById('fashionGalaModal').classList.add('active');
-    }
-
-    function closeFashionGalaModal() {
-      document.getElementById('fashionGalaModal').classList.remove('active');
-    }
-
-    async function fetchEventTicketConfig() {
-      const savedTitle = localStorage.getItem('kyu_event_title');
-      const savedDetails = localStorage.getItem('kyu_event_details');
-      if (savedTitle) currentEventData.title = savedTitle;
-      if (savedDetails) currentEventData.details = savedDetails;
-
-      if (supabaseClient) {
-        const { data, error } = await supabaseClient
-          .from('events')
-          .select('*')
-          .order('id', { ascending: false })
-          .limit(1);
-
-        if (!error && data && data.length > 0) {
-          currentEventData.title = data[0].title || currentEventData.title;
-          currentEventData.details = data[0].details || currentEventData.details;
-        }
-      }
-
-      updateEventTicketUI();
-    }
-
-    function updateEventTicketUI() {
-      headerTicketBtnText.innerText = currentEventData.title;
-      ticketModalHeaderTitle.innerText = `🎟️ ${currentEventData.title}`;
-      ticketModalInfo.innerHTML = escapeHtml(currentEventData.details).replace(/\n/g, '<br>');
-
-      document.getElementById('adminEventTitleInput').value = currentEventData.title;
-      document.getElementById('adminEventDetailsInput').value = currentEventData.details;
-    }
-
-    async function updateHeaderEventDetails() {
-      const title = document.getElementById('adminEventTitleInput').value.trim();
-      const details = document.getElementById('adminEventDetailsInput').value.trim();
-
-      if (!title) {
-        alert('Please enter an event button name.');
-        return;
-      }
-
-      currentEventData.title = title;
-      currentEventData.details = details;
-
-      localStorage.setItem('kyu_event_title', title);
-      localStorage.setItem('kyu_event_details', details);
-
-      if (supabaseClient) {
-        await supabaseClient.from('events').insert([{ title, details }]);
-      }
-
-      updateEventTicketUI();
-      alert('Show ticket button title & details updated live!');
-    }
-
-    function orderShowTickets() {
-      const qty = document.getElementById('ticketQuantity').value || 1;
-      const notes = document.getElementById('ticketNotes').value.trim();
-
-      let vendorNum = '0110493736';
-      const extractedMatch = currentEventData.details.match(/(?:01|07|254)\d{8}/);
-      if (extractedMatch) vendorNum = extractedMatch[0];
-
-      let cleanNum = vendorNum.replace(/\D/g, '');
-      if (cleanNum.startsWith('07')) cleanNum = '2547' + cleanNum.substring(2);
-      if (cleanNum.startsWith('01')) cleanNum = '2541' + cleanNum.substring(2);
-
-      const msg = `Hello Vendor! I want to purchase ${qty} ticket(s) for '${currentEventData.title}'. Notes: ${notes || 'None'}`;
-      const waUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(msg)}`;
-
-      window.open(waUrl, '_blank');
-      ticketModal.classList.remove('active');
-    }
-
-    function addFiles(files) {
-      const remainingSlots = 10 - selectedFiles.length;
-      if (remainingSlots <= 0) {
-        alert('Maximum 10 images allowed per listing.');
-        return;
-      }
-      const validFiles = files.filter(f => f.type.startsWith('image/')).slice(0, remainingSlots);
-      selectedFiles = selectedFiles.concat(validFiles);
-      renderFilePreviews();
-    }
-
-    function renderFilePreviews() {
-      previewGrid.innerHTML = '';
-      selectedFiles.forEach((file, index) => {
-        const item = document.createElement('div');
-        item.className = 'file-preview-item';
-        
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
-        
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'file-preview-remove';
-        removeBtn.innerText = '✕';
-        removeBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          selectedFiles.splice(index, 1);
-          renderFilePreviews();
-        });
-
-        item.appendChild(img);
-        item.appendChild(removeBtn);
-        previewGrid.appendChild(item);
-      });
-    }
-
-    async function fetchActiveProducts() {
-      activeFeed.innerHTML = '<div class="empty-msg">Fetching items...</div>';
-      
-      const { data: products, error } = await supabaseClient
-        .from('products')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        activeFeed.innerHTML = '<div class="empty-msg">Failed to load products.</div>';
-        console.error('Fetch Active Products Error:', error.message);
-        return;
-      }
-
-      fetchedProducts = products || [];
-      renderProductsGrid(fetchedProducts);
-    }
-
-    function renderProductsGrid(products) {
-      if (!products || products.length === 0) {
-        activeFeed.innerHTML = '<div class="empty-msg">No products found matching criteria.</div>';
-        return;
-      }
-
-      activeFeed.innerHTML = '';
-      products.forEach(product => {
-        activeFeed.appendChild(createProductCard(product));
-      });
-    }
-
-    function filterProducts() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = fetchedProducts.filter(item => {
-        const nameMatch = item.name && item.name.toLowerCase().includes(query);
-        const catMatch = item.category && item.category.toLowerCase().includes(query);
-        const vendorMatch = item.vendor_name && item.vendor_name.toLowerCase().includes(query);
-        return nameMatch || catMatch || vendorMatch;
-      });
-      renderProductsGrid(filtered);
-    }
-
-    function extractImages(product) {
-      if (Array.isArray(product.image_urls)) return product.image_urls;
-      if (typeof product.image_urls === 'string' && product.image_urls.trim() !== '') {
-        try {
-          return product.image_urls.startsWith('[') ? JSON.parse(product.image_urls) : [product.image_urls];
-        } catch (err) {
-          return [product.image_urls];
-        }
-      }
-      return [];
-    }
-
-    function createProductCard(product) {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-
-      const images = extractImages(product);
-      const bargainText = product.accepts_bargain ? 'Yes' : 'No';
-      const vendorName = product.vendor_name ? product.vendor_name : 'Anonymous';
-      const categoryName = product.category ? product.category : 'General (Default)';
-      const contactObj = formatContactLink(product.phone, product.name, product.contact_platform || 'whatsapp');
-      const ratingStars = renderStarRatingHTML(product.vendor_rating || 5);
-
-      card.innerHTML = `
-        <div class="product-header">
-          <div>
-            <div class="product-vendor">
-              ⚡ ${escapeHtml(vendorName)}
-              ${ratingStars}
-              <span class="product-category-tag">${escapeHtml(categoryName)}</span>
-            </div>
-            <div class="product-title">${escapeHtml(product.name)}</div>
-          </div>
-          <div class="product-price">KSh ${Number(product.price || 0).toLocaleString()}</div>
-        </div>
-        <div class="product-meta">
-          <div><strong>Location:</strong> ${escapeHtml(product.location)}</div>
-          <div><strong>Negotiable:</strong> ${bargainText}</div>
-          ${product.extra_info ? `<div><strong>Details:</strong> ${escapeHtml(product.extra_info)}</div>` : ''}
-        </div>
-      `;
-
-      if (images.length > 0) {
-        const imageContainer = document.createElement('div');
-        imageContainer.className = 'product-image-container';
-
-        const firstUrl = images[0];
-        if (firstUrl && typeof firstUrl === 'string') {
-          const mainLink = document.createElement('div');
-          mainLink.className = 'product-main-image';
-          const mainImg = document.createElement('img');
-          mainImg.src = firstUrl;
-          mainImg.alt = product.name || 'Featured Product Image';
-          mainLink.appendChild(mainImg);
-          imageContainer.appendChild(mainLink);
-        }
-
-        if (images.length > 1) {
-          const thumbGrid = document.createElement('div');
-          thumbGrid.className = 'product-thumbnails-grid';
-
-          images.slice(1, 10).forEach(url => {
-            if (!url || typeof url !== 'string') return;
-            const thumbLink = document.createElement('div');
-            thumbLink.className = 'product-thumb';
-            const thumbImg = document.createElement('img');
-            thumbImg.src = url;
-            thumbImg.alt = 'Product Thumbnail';
-            thumbLink.appendChild(thumbImg);
-            thumbGrid.appendChild(thumbLink);
-          });
-
-          imageContainer.appendChild(thumbGrid);
-        }
-
-        card.appendChild(imageContainer);
-      }
-
-      const contactBtn = document.createElement('a');
-      contactBtn.className = `btn-contact ${contactObj.cssClass}`;
-      contactBtn.href = contactObj.link;
-      contactBtn.target = '_blank';
-      contactBtn.rel = 'noopener noreferrer';
-      contactBtn.innerHTML = contactObj.text;
-      contactBtn.addEventListener('click', (e) => e.stopPropagation());
-      card.appendChild(contactBtn);
-
-      card.addEventListener('click', () => openDetailModal(product));
-
-      return card;
-    }
-
-    function updateNewsTicker() {
-      const text = document.getElementById('adminNewsInput').value.trim();
-      if (!text) {
-        alert('Please enter announcement text for the ticker.');
-        return;
-      }
-      document.getElementById('newsTickerText1').innerText = text;
-      document.getElementById('newsTickerText2').innerText = text;
-      localStorage.setItem('kyu_news_ticker', text);
-      alert('Live news ticker updated!');
-    }
-
-    function saveMultiplePopups() {
-      const selectedPopups = [];
-      for (let i = 1; i <= 5; i++) {
-        const val = document.getElementById(`adminPopupSelect${i}`).value;
-        if (val) {
-          const target = fetchedProducts.find(p => String(p.id) === String(val));
-          if (target) selectedPopups.push(target);
-        }
-      }
-
-      if (selectedPopups.length === 0) {
-        localStorage.removeItem('kyu_featured_popups_data');
-        alert('All pop-ups cleared.');
-      } else {
-        localStorage.setItem('kyu_featured_popups_data', JSON.stringify(selectedPopups));
-        alert(`Saved ${selectedPopups.length} pop-up items!`);
-      }
-    }
-
-    function checkAndShowFeaturedPopups() {
-      const savedTicker = localStorage.getItem('kyu_news_ticker');
-      if (savedTicker) {
-        document.getElementById('newsTickerText1').innerText = savedTicker;
-        document.getElementById('newsTickerText2').innerText = savedTicker;
-      }
-
-      const savedData = localStorage.getItem('kyu_featured_popups_data');
-      if (savedData) {
-        try {
-          activePopupsList = JSON.parse(savedData);
-          if (Array.isArray(activePopupsList) && activePopupsList.length > 0) {
-            renderStackedPopups(activePopupsList);
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
-
-    function renderStackedPopups(popups) {
-      const stackContainer = document.getElementById('popupStackContainer');
-      const cardStack = document.getElementById('popupCardStack');
-      cardStack.innerHTML = '';
-
-      const maxCount = Math.min(popups.length, 5);
-
-      popups.slice(0, maxCount).forEach((item, index) => {
-        const images = extractImages(item);
-        const card = document.createElement('div');
-        card.className = 'popup-card-item';
-        card.id = `popup-card-${index}`;
-
-        const offset = (maxCount - 1 - index) * 12;
-        const scale = 1 - (maxCount - 1 - index) * 0.04;
-        card.style.transform = `translateY(${offset}px) scale(${scale})`;
-        card.style.zIndex = 1500 + index;
-
-        const imgUrl = images.length > 0 ? images[0] : 'https://via.placeholder.com/500x300?text=Featured+Item';
-        const contactObj = formatContactLink(item.phone, item.name, item.contact_platform || 'whatsapp');
-        const ratingStars = renderStarRatingHTML(item.vendor_rating || 5);
-
-        card.innerHTML = `
-          <button class="modal-close-btn" onclick="dismissSinglePopup(${index})">&times;</button>
-          <div style="font-size: 0.8rem; font-weight: 800; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 0.4rem; text-transform: uppercase;">
-            🔥 Featured Listing (${index + 1} of ${maxCount})
-          </div>
-          <img src="${imgUrl}" alt="${escapeHtml(item.name)}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 0.5rem; border: 1px solid var(--border-color);">
-          <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem; margin-bottom:0.2rem;">
-            ${ratingStars}
-          </div>
-          <h2 style="font-size: 1.25rem; margin-bottom: 0.3rem;">${escapeHtml(item.name)}</h2>
-          <div style="font-size: 1.2rem; font-weight: 800; color: var(--accent); margin-bottom: 0.4rem;">KSh ${Number(item.price || 0).toLocaleString()}</div>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; max-height: 40px; overflow: hidden; text-overflow: ellipsis;">
-            ${escapeHtml(item.extra_info || 'Exclusive deal verified on KYU Hydra Marketplace.')}
-          </p>
-          <a href="${contactObj.link}" target="_blank" rel="noopener noreferrer" class="btn-contact ${contactObj.cssClass}" style="margin-bottom: 0.75rem;">${contactObj.text}</a>
-          <div style="display: flex; gap: 0.5rem; justify-content: center;">
-            <button type="button" class="btn" onclick="dismissSinglePopup(${index})">Next / Close</button>
-            ${maxCount > 1 ? `<button type="button" class="btn btn-secondary" onclick="closeAllPopups()">Dismiss All (${maxCount})</button>` : ''}
-          </div>
-        `;
-
-        cardStack.appendChild(card);
-      });
-
-      stackContainer.classList.add('active');
-    }
-
-    function dismissSinglePopup(index) {
-      const card = document.getElementById(`popup-card-${index}`);
-      if (card) {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(-40px) scale(0.9)';
-        setTimeout(() => {
-          card.remove();
-          const remaining = document.querySelectorAll('.popup-card-item');
-          if (remaining.length === 0) {
-            closeAllPopups();
-          }
-        }, 200);
-      }
-    }
-
-    function closeAllPopups() {
-      document.getElementById('popupStackContainer').classList.remove('active');
-    }
-
-    function openDetailModal(product) {
-      detailImages = extractImages(product);
-      if (detailImages.length === 0) {
-        detailImages = ['https://via.placeholder.com/600x400?text=No+Image+Available'];
-      }
-      detailImageIdx = 0;
-      updateDetailModalImage();
-
-      const bargainText = product.accepts_bargain ? 'Yes' : 'No';
-      const vendorName = product.vendor_name ? product.vendor_name : 'Anonymous';
-      const categoryName = product.category ? product.category : 'General (Default)';
-      const contactObj = formatContactLink(product.phone, product.name, product.contact_platform || 'whatsapp');
-      const ratingStars = renderStarRatingHTML(product.vendor_rating || 5);
-
-      document.getElementById('detailModalBody').innerHTML = `
-        <h2 style="color: var(--accent); font-size: 1.4rem; margin-bottom: 0.2rem;">${escapeHtml(product.name)}</h2>
-        <div style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem;">KSh ${Number(product.price || 0).toLocaleString()}</div>
-        <div class="product-meta" style="font-size: 0.9rem; gap: 0.4rem;">
-          <div style="display:flex; align-items:center; gap: 0.5rem;"><strong style="color: var(--vendor-color);">Vendor:</strong> ${escapeHtml(vendorName)} ${ratingStars}</div>
-          <div><strong style="color: var(--accent);">Category:</strong> ${escapeHtml(categoryName)}</div>
-          <div><strong>Location:</strong> ${escapeHtml(product.location)}</div>
-          <div><strong>Negotiable:</strong> ${bargainText}</div>
-          ${product.extra_info ? `<div style="margin-top:0.5rem; border-top: 1px solid var(--border-color); padding-top:0.5rem;"><strong>Details:</strong><br>${escapeHtml(product.extra_info)}</div>` : ''}
-        </div>
-        <a href="${contactObj.link}" target="_blank" rel="noopener noreferrer" class="btn-contact ${contactObj.cssClass}" style="margin-top: 1rem; padding: 0.75rem;">
-          ${contactObj.text}
-        </a>
-      `;
-
-      document.getElementById('detailModal').classList.add('active');
-    }
-
-    function closeDetailModal() {
-      document.getElementById('detailModal').classList.remove('active');
-    }
-
-    function updateDetailModalImage() {
-      document.getElementById('detailModalImg').src = detailImages[detailImageIdx];
-    }
-
-    function prevDetailImage() {
-      if (detailImages.length <= 1) return;
-      detailImageIdx = (detailImageIdx - 1 + detailImages.length) % detailImages.length;
-      updateDetailModalImage();
-    }
-
-    function nextDetailImage() {
-      if (detailImages.length <= 1) return;
-      detailImageIdx = (detailImageIdx + 1) % detailImages.length;
-      updateDetailModalImage();
-    }
-
-    async function handleFinalSubmit(e) {
-      e.preventDefault();
-
-      if (!supabaseClient) {
-        alert('Supabase client not loaded.');
-        return;
-      }
-
-      const btnSubmit = document.getElementById('btnSubmitFinal');
-      btnSubmit.disabled = true;
-      btnSubmit.innerText = 'Uploading...';
-
-      const vendor_name = document.getElementById('vendorName').value.trim();
-      const name = document.getElementById('itemTitle').value.trim();
-      const category = document.getElementById('itemCategory').value;
-      const initial_rating = parseInt(document.getElementById('initialStarRating').value) || 5;
-      const price = parseFloat(document.getElementById('modalPrice').value);
-      const payment_sender_name = document.getElementById('paymentSenderName').value.trim();
-      const contact_platform = document.getElementById('contactPlatform').value;
-      const phone = document.getElementById('modalPhone').value.trim();
-      const location = document.getElementById('modalLocation').value.trim();
-      const accepts_bargain = document.getElementById('modalBargain').value === 'true';
-      const extra_info = document.getElementById('modalInfo').value.trim();
-      const listing_fee = calculateListingFee(price);
-
-      const imageUrls = [];
-
-      for (const file of selectedFiles) {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-        
-        const { data: uploadData, error: uploadError } = await supabaseClient.storage
-          .from('product-images')
-          .upload(fileName, file);
-
-        if (uploadError) {
-          console.error('Image Upload Error:', uploadError.message);
-          continue;
-        }
-
-        const { data: publicUrlData } = supabaseClient.storage
-          .from('product-images')
-          .getPublicUrl(fileName);
-
-        if (publicUrlData && publicUrlData.publicUrl) {
-          imageUrls.push(publicUrlData.publicUrl);
-        }
-      }
-
-      const { error: insertError } = await supabaseClient
-        .from('products')
-        .insert([{
-          vendor_name,
-          name,
-          category,
-          price,
-          listing_fee,
-          payment_sender_name,
-          contact_platform,
-          phone,
-          location,
-          accepts_bargain,
-          extra_info,
-          image_urls: imageUrls,
-          status: 'pending',
-          vendor_rating: initial_rating
-        }]);
-
-      btnSubmit.disabled = false;
-      btnSubmit.innerText = 'Submit Item';
-
-      if (insertError) {
-        alert('Failed to insert product: ' + insertError.message);
-        return;
-      }
-
-      alert('Listing submitted! Once your payment to juliaz (0110493736) is verified by Admin, your item will go live.');
-      
-      selectedFiles = [];
-      renderFilePreviews();
-      postForm.reset();
-      updateContactLabel();
-      calculatedFeeDisplay.innerText = 'KSh 0';
-      postModal.classList.remove('active');
-    }
-
-    function handleAdminAccess() {
-      if (!isAdminUnlocked) {
-        const pwd = prompt('Enter Admin Password:');
-        if (pwd === 'Razorblade@016') {
-          isAdminUnlocked = true;
-          openAdminDashboard();
-        } else if (pwd !== null) {
-          alert('Access Denied: Incorrect Password.');
-        }
-      } else {
-        openAdminDashboard();
-      }
-    }
-
-    function openAdminDashboard() {
-      adminPanel.classList.add('active');
-      if (supabaseClient) fetchAdminData();
-    }
-
-    async function fetchAdminData() {
-      pendingContainer.innerHTML = '<div class="empty-msg">Fetching moderation items...</div>';
-      allActiveContainer.innerHTML = '<div class="empty-msg">Fetching active items...</div>';
-      document.getElementById('selectAllAdmin').checked = false;
-
-      const { data: allProducts, error } = await supabaseClient
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        pendingContainer.innerHTML = '<div class="empty-msg">Failed to load admin records.</div>';
-        allActiveContainer.innerHTML = '';
-        console.error('Fetch Admin Data Error:', error.message);
-        return;
-      }
-
-      const total = allProducts.length;
-      const pending = allProducts.filter(p => p.status === 'pending');
-      const active = allProducts.filter(p => p.status === 'active');
-
-      statTotal.innerText = total;
-      statPending.innerText = pending.length;
-      statActive.innerText = active.length;
-
-      for (let i = 1; i <= 5; i++) {
-        const popupSelect = document.getElementById(`adminPopupSelect${i}`);
-        popupSelect.innerHTML = '<option value="">-- None --</option>';
-        active.forEach(prod => {
-          const opt = document.createElement('option');
-          opt.value = prod.id;
-          opt.textContent = `${prod.name} (KSh ${prod.price})`;
-          popupSelect.appendChild(opt);
-        });
-      }
-
-      if (pending.length === 0) {
-        pendingContainer.innerHTML = '<div class="empty-msg">No pending products waiting for moderation.</div>';
-      } else {
-        pendingContainer.innerHTML = '';
-        pending.forEach(item => {
-          pendingContainer.appendChild(renderAdminRow(item, true));
-        });
-      }
-
-      if (active.length === 0) {
-        allActiveContainer.innerHTML = '<div class="empty-msg">No active products on the market.</div>';
-      } else {
-        allActiveContainer.innerHTML = '';
-        active.forEach(item => {
-          allActiveContainer.appendChild(renderAdminRow(item, false));
-        });
-      }
-    }
-
-    function renderAdminRow(item, isPending) {
-      const card = document.createElement('div');
-      card.className = 'admin-item-card';
-
-      const bargainText = item.accepts_bargain ? 'Yes' : 'No';
-      const vendorName = item.vendor_name ? item.vendor_name : 'Anonymous';
-      const categoryName = item.category ? item.category : 'General (Default)';
-      const senderName = item.payment_sender_name ? item.payment_sender_name : 'Not Specified';
-      const platformName = item.contact_platform ? item.contact_platform.toUpperCase() : 'WHATSAPP';
-      const requiredFee = item.listing_fee || calculateListingFee(item.price);
-      const currentRating = parseInt(item.vendor_rating) || 5;
-
-      const leftDiv = document.createElement('div');
-      leftDiv.className = 'admin-item-left';
-
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.className = 'admin-checkbox item-select-cb';
-      checkbox.value = item.id;
-
-      const infoDiv = document.createElement('div');
-      infoDiv.innerHTML = `
-        <div style="font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-          <span style="color: var(--vendor-color);">[Vendor: ${escapeHtml(vendorName)}]</span> ${escapeHtml(item.name)} 
-          <span style="font-size: 0.75rem; color: var(--accent);">(${escapeHtml(categoryName)})</span> - KSh ${Number(item.price || 0).toLocaleString()}
-        </div>
-        <div style="font-size: 0.85rem; color: var(--accent); margin-top: 0.2rem;">
-          <strong>Paid By:</strong> ${escapeHtml(senderName)} | <strong>Fee Due:</strong> KSh ${requiredFee}
-        </div>
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
-          Contact (${platformName}): ${escapeHtml(item.phone)} | Location: ${escapeHtml(item.location)} | Negotiable: ${bargainText}
-        </div>
-        <div class="admin-rating-picker">
-          <label style="margin: 0; font-weight: bold; color: var(--accent); font-size: 0.8rem;">Stars:</label>
-          <select id="rating-select-${item.id}">
-            <option value="5" ${currentRating === 5 ? 'selected' : ''}>5 Stars (★★★★★)</option>
-            <option value="4" ${currentRating === 4 ? 'selected' : ''}>4 Stars (★★★★☆)</option>
-            <option value="3" ${currentRating === 3 ? 'selected' : ''}>3 Stars (★★★☆☆)</option>
-            <option value="2" ${currentRating === 2 ? 'selected' : ''}>2 Stars (★★☆☆☆)</option>
-            <option value="1" ${currentRating === 1 ? 'selected' : ''}>1 Star  (★☆☆☆☆)</option>
-          </select>
-          <button type="button" class="btn-save-stars" onclick="updateVendorRating('${item.id}')">Save Stars</button>
-        </div>
-      `;
-
-      leftDiv.appendChild(checkbox);
-      leftDiv.appendChild(infoDiv);
-
-      const actionsDiv = document.createElement('div');
-      actionsDiv.style.display = 'flex';
-      actionsDiv.style.gap = '0.5rem';
-
-      if (isPending) {
-        const btnApprove = document.createElement('button');
-        btnApprove.className = 'btn-approve';
-        btnApprove.innerText = 'Approve Payment';
-        btnApprove.addEventListener('click', () => updateStatus(item.id, 'active'));
-        actionsDiv.appendChild(btnApprove);
-      } else {
-        const btnUnapprove = document.createElement('button');
-        btnUnapprove.className = 'btn-reject';
-        btnUnapprove.innerText = 'Set Pending';
-        btnUnapprove.addEventListener('click', () => updateStatus(item.id, 'pending'));
-        actionsDiv.appendChild(btnUnapprove);
-      }
-
-      const btnDelete = document.createElement('button');
-      btnDelete.className = 'btn-delete';
-      btnDelete.innerText = 'Delete Listing';
-      btnDelete.addEventListener('click', () => deleteProduct(item.id, item.name));
-      actionsDiv.appendChild(btnDelete);
-
-      card.appendChild(leftDiv);
-      card.appendChild(actionsDiv);
-      return card;
-    }
-
-    async function updateVendorRating(productId) {
-      const selectElem = document.getElementById(`rating-select-${productId}`);
-      if (!selectElem) return;
-      
-      const rating = parseInt(selectElem.value);
-      const { error } = await supabaseClient
-        .from('products')
-        .update({ vendor_rating: rating })
-        .eq('id', productId);
-
-      if (error) {
-        alert('Failed to update vendor rating: ' + error.message);
-        console.error('Rating Update Error:', error);
-        return;
-      }
-
-      alert('Vendor rating saved to ' + rating + ' Stars!');
-      await fetchAdminData();
-      await fetchActiveProducts();
-    }
-
-    function toggleSelectAllAdmin(master) {
-      const checkboxes = document.querySelectorAll('.item-select-cb');
-      checkboxes.forEach(cb => cb.checked = master.checked);
-    }
-
-    async function deleteSelectedAdminListings() {
-      const selectedBoxes = document.querySelectorAll('.item-select-cb:checked');
-      const selectedIds = Array.from(selectedBoxes).map(cb => cb.value);
-
-      if (selectedIds.length === 0) {
-        alert('Please select at least one item to delete.');
-        return;
-      }
-
-      if (!confirm(`Are you sure you want to permanently delete ${selectedIds.length} listings?`)) return;
-
-      const { error } = await supabaseClient
-        .from('products')
-        .delete()
-        .in('id', selectedIds);
-
-      if (error) {
-        alert('Failed batch delete: ' + error.message);
-        console.error('Batch Delete Error:', error);
-        return;
-      }
-
-      alert(`${selectedIds.length} listings successfully deleted.`);
-      await fetchAdminData();
-      await fetchActiveProducts();
-    }
-
-    async function updateStatus(id, newStatus) {
-      const { error } = await supabaseClient
-        .from('products')
-        .update({ status: newStatus })
-        .eq('id', id);
-
-      if (error) {
-        alert('Failed to update status: ' + error.message);
-        console.error('Update Error:', error);
-        return;
-      }
-
-      await fetchAdminData();
-      await fetchActiveProducts();
-    }
-
-    async function deleteProduct(id, productName) {
-      const confirmDelete = confirm(`Are you sure you want to permanently delete "${productName}"?`);
-      if (!confirmDelete) return;
-
-      const { error } = await supabaseClient
-        .from('products')
-        .delete()
-        .eq('id', id);
-
-      if (error) {
-        alert('Failed to delete product: ' + error.message);
-        console.error('Delete Error:', error);
-        return;
-      }
-
-      alert(`Product "${productName}" has been deleted.`);
-      await fetchAdminData();
-      await fetchActiveProducts();
-    }
-
-    function escapeHtml(str) {
-      if (!str) return 'N/A';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-  </script>
+<header id="hd"><div class="wrap"><nav>
+<a href="#top" class="logo">Synapse<b>AI</b></a>
+<ul class="links" id="links"><li><a href="#how">How it works</a></li><li><a href="#jobs">Jobs</a></li></ul>
+<div class="nr"><a href="#jobs" class="btn btn-p btn-sm">Find jobs</a><button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+</nav></div></header>
+
+<main id="top">
+<section class="hero"><div class="glow"></div><div class="wrap"><div class="in">
+<span class="eyebrow">AI-matched hiring</span>
+<h1>Get hired by the roles that <span>actually fit</span> you</h1>
+<p class="lead">SynapseAI matches verified candidates to hourly jobs paying $15 to $45 an hour. Upload your ID and CV when you apply, and we handle the rest.</p>
+<div class="acts"><a href="#jobs" class="btn btn-p">Browse 75 jobs</a><a href="#how" class="btn btn-g">How it works</a></div>
+<div class="stats"><div><div class="n">75</div><div class="l">Open roles</div></div><div><div class="n">$15–$45</div><div class="l">Per hour</div></div><div><div class="n">80%</div><div class="l">Remote roles</div></div></div>
+</div></div></section>
+
+<section class="alt pad" id="how"><div class="wrap">
+<span class="eyebrow">How it works</span><h2>From sign-up to applied in four steps.</h2>
+<div class="steps">
+<div class="step"><div class="ix">01</div><h3>Pick a role</h3><p>Search 75 hourly jobs and filter by pay.</p></div>
+<div class="step"><div class="ix">02</div><h3>Profile and verify</h3><p>Add your details, an ID and your CV.</p></div>
+<div class="step"><div class="ix">03</div><h3>Take the assessment</h3><p>Twenty questions score your fit for the role.</p></div>
+<div class="step"><div class="ix">04</div><h3>Start working</h3><p>Pass and get your start details right away.</p></div>
+</div></div></section>
+
+<section class="pad" id="jobs"><div class="wrap">
+<span class="eyebrow">Open roles</span><h2>75 jobs hiring now.</h2>
+<div class="bar">
+<input type="text" id="q" placeholder="Search job title or company" aria-label="Search jobs">
+<select id="cat" aria-label="Category"><option value="">All categories</option></select>
+<select id="sort" aria-label="Sort"><option value="hi">Pay: high to low</option><option value="lo">Pay: low to high</option></select>
+</div>
+<div class="count" id="count"></div>
+<div class="jobs" id="list"></div>
+<div style="text-align:center;margin-top:28px"><button class="btn btn-g" id="more">Show more jobs</button></div>
+</div></section>
+
+</main>
+
+<footer><div class="wrap">
+<a href="#top" class="logo">Synapse<b>AI</b></a>
+<p>AI hiring for hourly roles. Verified candidates, fair pay.</p>
+<div class="ft"><span>&copy; <span id="yr"></span> SynapseAI. All rights reserved.</span><span>SYSTEM STATUS: OPERATIONAL</span></div>
+</div></footer>
+<div class="modal" id="modal" hidden>
+<div class="mbg" data-close></div>
+<div class="card mbox" role="dialog" aria-modal="true" aria-labelledby="mt">
+<button type="button" class="x" data-close aria-label="Close">&times;</button>
+<span class="eyebrow">Apply</span>
+<h3 id="mt" style="font-size:26px;margin-top:10px"></h3>
+<div id="mco" style="font-size:13.5px;color:var(--mu);margin:4px 0 22px"></div>
+<div class="stepbar"><span class="on" id="s1">1 Profile</span><span id="s2">2 Verify</span><span id="s3">3 Assess</span><span id="s4">4 Start</span></div>
+<div id="p1">
+<div class="grid2">
+<div class="full"><label class="f" for="nm">Full name</label><input type="text" id="nm" autocomplete="name" placeholder="Your full name"></div>
+<div><label class="f" for="em">Email</label><input type="email" id="em" autocomplete="email" placeholder="you@example.com"></div>
+<div><label class="f" for="ph">Phone</label><input type="tel" id="ph" autocomplete="tel" placeholder="+1 555 123 4567"></div>
+<div><label class="f" for="dob">Date of birth</label><input type="date" id="dob" autocomplete="bday"></div>
+<div><label class="f" for="lc">City and state</label><input type="text" id="lc" placeholder="e.g. Austin, TX"></div>
+<div><label class="f" for="wa">Work authorization</label><select id="wa"><option value="">Select</option><option>US citizen</option><option>Permanent resident</option><option>Work visa</option></select></div>
+<div><label class="f" for="ed">Education</label><select id="ed"><option value="">Select</option><option>High school or GED</option><option>Some college</option><option>Trade certificate</option><option>Associate degree</option><option>Bachelor's degree</option><option>Master's or higher</option></select></div>
+<div><label class="f" for="ex">Experience</label><select id="ex"><option value="">Select</option><option>None yet</option><option>Under 1 year</option><option>1–3 years</option><option>3–5 years</option><option>5+ years</option></select></div>
+<div><label class="f" for="av">Availability</label><select id="av"><option value="">Select</option><option>Full-time</option><option>Part-time</option><option>Weekends only</option><option>Evenings</option><option>Flexible</option></select></div>
+<div class="full"><label class="f" for="st">Earliest start date</label><input type="date" id="st"></div>
+<div class="full"><label class="f" for="sk">Key skills</label><input type="text" id="sk" placeholder="e.g. customer service, forklift, Excel"></div>
+<div class="full"><label class="f" for="ab">About you (optional)</label><textarea id="ab" rows="3" placeholder="A few lines on your work history and goals"></textarea></div>
+</div>
+<button type="button" class="btn btn-p" id="next">Next</button>
+</div>
+<div id="p2" hidden>
+<label class="f">ID type</label>
+<div class="types">
+<label><input type="radio" name="dt" value="Driver's License" checked><span>Driver's license</span></label>
+<label><input type="radio" name="dt" value="State ID"><span>State ID</span></label>
+<label><input type="radio" name="dt" value="Passport"><span>Passport</span></label>
+</div>
+<label class="f">ID photo</label>
+<div class="drop" id="d-id" tabindex="0" role="button" aria-label="Upload ID"><div id="t-id">Drop your ID here or click to choose<small>The name must match your profile. JPG, PNG or PDF, up to 8 MB</small></div></div>
+<input type="file" id="f-id" accept="image/*,application/pdf" hidden>
+<label class="f">CV</label>
+<div class="drop" id="d-cv" tabindex="0" role="button" aria-label="Upload CV"><div id="t-cv">Drop your CV here or click to choose<small>PDF, DOC or DOCX, up to 8 MB</small></div></div>
+<input type="file" id="f-cv" accept=".pdf,.doc,.docx" hidden>
+<div class="two"><button type="button" class="btn btn-g" id="b2">Back</button><button type="button" class="btn btn-p" id="n2">Next</button></div>
+</div>
+<div id="p3" hidden>
+<p style="font-size:13.5px;color:var(--mu);margin-bottom:20px">Twenty questions. You need 15 correct (75%) to pass.</p>
+<div id="quiz"></div>
+<div class="two"><button type="button" class="btn btn-g" id="b3">Back</button><button type="button" class="btn btn-p" id="n3">Submit assessment</button></div>
+</div>
+<div id="p4" hidden><div id="res"></div></div>
+<div class="msg" id="msg" role="status"></div>
+</div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const X=[
+["Cashier","GreenLeaf Market","Retail",15,"Remote","Part-time"],["Stock Associate","ValueMart","Retail",15,"Remote","Part-time"],["Fast Food Crew Member","Burger Hub","Food Service",15,"Remote","Flexible"],["Janitor / Cleaner","BrightClean","Facilities",15,"Detroit, MI","Full-time"],["Package Handler","ParcelPro","Logistics",16,"Remote","Part-time"],["Server","Table & Vine","Food Service",15,"Remote","Part-time"],["Host","Table & Vine","Food Service",15,"Remote","Part-time"],["Housekeeper","Aster Suites","Hospitality",16,"Miami, FL","Full-time"],["Pet Care Attendant","Happy Paws","Pet Care",16,"Remote","Part-time"],["Lifeguard","City Aquatics","Recreation",16,"Phoenix, AZ","Seasonal"],["Grocery Bagger","GreenLeaf Market","Retail",15,"Remote","Part-time"],["Car Wash Attendant","Sparkle Auto","Automotive",15,"Houston, TX","Part-time"],["Childcare Assistant","Little Oaks","Education",16,"Remote","Part-time"],["Call Center Rep","Brightline Telecom","Support",16,"Remote","Full-time"],["Landscaping Crew","GreenEdge","Skilled Trades",17,"Atlanta, GA","Seasonal"],["Food Delivery Courier","QuickDrop","Logistics",17,"Remote","Flexible"],["Receptionist","Orchard Legal","Admin",17,"Remote","Full-time"],["Mover's Helper","HaulRight","Logistics",17,"Remote","Flexible"],["Cafeteria Worker","Westfield Schools","Food Service",16,"Remote","Part-time"],["Parking Attendant","ParkSmart","Facilities",16,"Remote","Part-time"],["Bartender","Marlow Kitchen","Food Service",17,"Remote","Part-time"],["Teacher's Aide","Westfield Schools","Education",17,"Remote","Part-time"],["Gas Station Attendant","FuelStop","Retail",16,"Remote","Part-time"],["Assembly Line Worker","Forge Industrial","Manufacturing",17,"Remote","Full-time"],["Packaging Operator","Forge Industrial","Manufacturing",18,"Remote","Full-time"],["Inventory Clerk","Cargo Nine","Logistics",18,"Remote","Full-time"],["Virtual Assistant","Ledgerly","Admin",18,"Remote","Part-time"],["Chat Support Agent","Brightline Telecom","Support",18,"Remote","Full-time"],["Online Tutor","BrightPath","Education",18,"Remote","Flexible"],["Personal Care Aide","CareBridge","Healthcare",18,"Remote","Flexible"],["Pharmacy Technician","Valley Clinic","Healthcare",19,"Remote","Full-time"],["Merchandiser","ShelfIQ","Retail",18,"Remote","Part-time"],["Banquet Server","Stagecraft","Hospitality",18,"Remote","Part-time"],["Bakery Assistant","Rye & Rise","Food Service",17,"Remote","Full-time"],["Groundskeeper","GreenEdge","Facilities",18,"Remote","Full-time"],["Shuttle Driver","Aster Suites","Hospitality",19,"Remote","Part-time"],["Sorting Associate","ParcelPro","Logistics",19,"Remote","Full-time"],["Order Picker","Cargo Nine","Logistics",19,"Remote","Full-time"],["Dental Office Assistant","SmileWorks","Healthcare",19,"Remote","Full-time"],["Customer Service Rep","Cobalt Systems","Support",19,"Remote","Full-time"],["Leasing Assistant","Keystone Homes","Admin",19,"Remote","Full-time"],
+["Shift Supervisor","Ember Coffee Co.","Food Service",20,"Remote","Full-time"],["Medical Receptionist","Valley Clinic","Healthcare",20,"Remote","Full-time"],["Welder Helper","Forge Industrial","Manufacturing",21,"Cleveland, OH","Full-time"],["Maintenance Technician","Keystone Homes","Skilled Trades",22,"Remote","Full-time"],["HVAC Helper","BrightWire","Skilled Trades",23,"Remote","Full-time"],["Paralegal Assistant","Orchard Legal","Admin",24,"Remote","Full-time"],["CNC Machine Operator","Forge Industrial","Manufacturing",27,"Remote","Full-time"],["Executive Assistant","Cobalt Systems","Admin",29,"Remote","Full-time"],["Plumber","BrightWire","Skilled Trades",33,"Nashville, TN","Full-time"]];
+const J=[
+["Warehouse Associate","Northline Logistics","Logistics",15,"Remote","Full-time"],
+["Barista","Ember Coffee Co.","Food Service",15,"Remote","Part-time"],
+["Retail Sales Associate","Harbor & Pine","Retail",16,"Remote","Part-time"],
+["Dishwasher / Prep Cook","Marlow Kitchen","Food Service",16,"Remote","Full-time"],
+["Customer Support Agent","Brightline Telecom","Support",17,"Remote","Full-time"],
+["Delivery Driver","QuickDrop","Logistics",18,"Remote","Flexible"],
+["Hotel Front Desk Agent","Aster Suites","Hospitality",18,"Remote","Full-time"],
+["Data Entry Clerk","Ledgerly","Admin",19,"Remote","Part-time"],
+["Security Officer","Sentry Group","Security",20,"Phoenix, AZ","Full-time"],
+["Forklift Operator","Northline Logistics","Logistics",21,"Dallas, TX","Full-time"],
+["Home Health Aide","CareBridge","Healthcare",22,"Columbus, OH","Flexible"],
+["Administrative Assistant","Orchard Legal","Admin",23,"Remote","Full-time"],
+["Line Cook","Marlow Kitchen","Food Service",24,"Remote","Full-time"],
+["Medical Assistant","Valley Clinic","Healthcare",25,"Sacramento, CA","Full-time"],
+["Warehouse Shift Lead","Cargo Nine","Logistics",26,"Remote","Full-time"],
+["Bookkeeper","Tallyworks","Finance",27,"Remote","Part-time"],
+["Event Coordinator","Stagecraft","Hospitality",28,"Remote","Contract"],
+["Licensed Practical Nurse","CareBridge","Healthcare",30,"Tampa, FL","Full-time"],
+["CDL Truck Driver","Ridgeway Freight","Logistics",32,"Kansas City, MO","Full-time"],
+["Social Media Manager","Loop & Co.","Marketing",34,"Remote","Contract"],
+["Electrician","BrightWire","Skilled Trades",36,"Nashville, TN","Full-time"],
+["IT Support Specialist","Cobalt Systems","Tech",38,"Remote","Full-time"],
+["QA Test Analyst","Pixelforge","Tech",40,"Remote","Contract"],
+["Registered Nurse","Valley Clinic","Healthcare",43,"San Diego, CA","Full-time"],
+["Front-End Developer","Synthwave Labs","Tech",45,"Remote","Contract"],
+...X
+].map((a,i)=>({id:i,t:a[0],co:a[1],c:a[2],r:a[3],loc:a[4],ty:a[5]}));
+const $=id=>document.getElementById(id);
+let applied=new Set(),shown=12,cur=null,lastBtn=null,files={id:null,cv:null};
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2800)}
+function msg(t,k){const m=$('msg');m.textContent=t;m.className='msg '+(k||'')}
+[...new Set(J.map(j=>j.c))].sort().forEach(c=>$('cat').add(new Option(c,c)));
+function render(){
+  const q=$('q').value.toLowerCase(),c=$('cat').value,s=$('sort').value;
+  const L=J.filter(j=>(!c||j.c===c)&&(j.t+j.co).toLowerCase().includes(q)).sort((a,b)=>s==='hi'?b.r-a.r:a.r-b.r);
+  const V=L.slice(0,shown);
+  $('count').textContent='Showing '+V.length+' of '+L.length+' roles';
+  $('list').innerHTML=V.length?V.map(j=>`<div class="job"><div class="cat">${j.c}</div><h3>${j.t}</h3><div class="co">${j.co}</div><div class="meta">${j.loc} · ${j.ty}</div><div class="row"><div class="rate">$${j.r}<small>/hr</small></div>${applied.has(j.id)?'<span class="btn btn-sm done">Applied</span>':`<button class="btn btn-p btn-sm" data-id="${j.id}">Apply</button>`}</div></div>`).join(''):'<div class="empty">No roles match. Try a different search or category.</div>';
+  $('more').hidden=V.length>=L.length;
+}
+['q','cat','sort'].forEach(i=>$(i).addEventListener('input',()=>{shown=12;render()}));
+$('more').onclick=()=>{shown+=12;render()};
+$('list').addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(b)openM(+b.dataset.id,b)});
+function openM(id,b){cur=J[id];lastBtn=b;$('mt').textContent=cur.t;$('mco').textContent=cur.co+' · '+cur.loc+' · $'+cur.r+'/hr';$('modal').hidden=false;document.body.style.overflow='hidden';buildQuiz();go(saved?(verified?3:2):1)}
+let saved=false,verified=false,prof={};
+const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const QS=[["You feel unwell the night before a shift. What do you do?", ["Skip the shift without telling anyone", "Tell your supervisor early so they can find cover", "Show up late and hope nobody notices", "Ask a friend to cover without telling anyone"], 1], ["A coworker is upset about a mistake you made. What's your best response?", ["Listen, apologize where fair, and help fix it", "Argue until they agree with you", "Ignore them", "Blame someone else"], 0], ["You finish your tasks early. What do you do next?", ["Wait quietly", "Leave early", "Ask what else needs doing or help a teammate", "Check your phone"], 2], ["The instructions for a new task are unclear. What do you do?", ["Ask for clarification before you start", "Guess and hope it's right", "Wait for someone to notice", "Skip the task"], 0], ["You notice a spill on the floor. What do you do?", ["Walk past it", "Tell a friend later", "Wait for someone else", "Mark or clean it and tell your supervisor"], 3], ["A customer asks for something you can't do. Best response?", ["Say no and walk away", "Promise it anyway", "Ignore the request", "Explain what you can do and offer an alternative or get a supervisor"], 3], ["Your shift starts at 9:00. When should you arrive?", ["A few minutes early, ready to start", "At 9:00 sharp", "Around 9:20", "Whenever traffic allows"], 0], ["You earn $18 an hour and work 6 hours. What do you earn before tax?", ["$96", "$108", "$118", "$128"], 1], ["A coworker asks you to clock them in because they're late. What do you do?", ["Do it to be nice", "Do it just once", "Decline and suggest they tell the supervisor", "Tell everyone about it"], 2], ["You're given three urgent tasks at once. What's the best first step?", ["Do the easiest one first", "Start all three at once", "Ask which matters most, then work in that order", "Wait until someone decides"], 2], ["You see a coworker being treated unfairly. What's a good step?", ["Say nothing", "Report it to a supervisor or HR", "Spread the story", "Confront them angrily in public"], 1], ["You break a piece of equipment by accident. What do you do?", ["Hide it", "Blame the last person who used it", "Wait to see if anyone notices", "Report it right away"], 3], ["What's the safest way to lift a heavy box?", ["Bend your back and jerk it up", "Twist while lifting", "Keep it close, bend your knees, and lift with your legs", "Lift it above your head"], 2], ["A supervisor gives feedback you disagree with. What do you do?", ["Argue immediately", "Complain to coworkers", "Stop talking to them", "Listen, ask questions, then share your view calmly"], 3], ["An email with an unfamiliar link asks for your password. What do you do?", ["Don't click it; report it as suspicious", "Click the link to check", "Reply with your password", "Forward it to coworkers"], 0], ["How should you handle confidential employer information?", ["Share it with friends", "Keep it private and share only with people who need it", "Post it online", "Discuss it in public places"], 1], ["One task takes 45 minutes. How long do 3 identical tasks take?", ["90 minutes", "2 hours", "2 hours 15 minutes", "3 hours"], 2], ["You're running late because of an emergency. What do you do?", ["Say nothing", "Tell your supervisor as soon as you can and give an arrival time", "Turn off your phone", "Blame traffic afterwards"], 1], ["A new teammate struggles with a process you know well. What do you do?", ["Let them figure it out", "Do their work for them every time", "Offer help and show them patiently", "Tell the supervisor they're slow"], 2], ["What shows good attendance and reliability?", ["Being late occasionally", "Skipping when it's busy", "Leaving without telling anyone", "Showing up on time and giving notice when you can't"], 3]];
+function buildQuiz(){
+  $('quiz').innerHTML=QS.map((q,i)=>`<div class="q"><p>${i+1}. ${q[0]}</p>${q[1].map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"><span>${o}</span></label>`).join('')}</div>`).join('');
+}
+function go(n){
+  for(let i=1;i<=4;i++){$('p'+i).hidden=i!==n;const b=$('s'+i);b.classList.toggle('on',i===n);b.classList.toggle('done',i<n)}
+  msg('');document.querySelector('.mbox').scrollTop=0;
+  if(n===1)$('nm').focus({preventScroll:true});
+}
+function closeM(){$('modal').hidden=true;document.body.style.overflow='';if(lastBtn&&lastBtn.isConnected)lastBtn.focus()}
+document.querySelectorAll('[data-close]').forEach(x=>x.onclick=closeM);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').hidden)closeM()});
+function setup(key,ok,label){
+  const d=$('d-'+key),i=$('f-'+key),t=$('t-'+key);
+  function pick(x){
+    if(!x)return;
+    if(!ok.test(x.name)){files[key]=null;return msg('Unsupported file. Upload '+label+'.','err')}
+    if(x.size>8*1024*1024){files[key]=null;return msg('File is over 8 MB. Upload a smaller file.','err')}
+    files[key]=x;msg('');t.replaceChildren();
+    if(x.type.startsWith('image/')){const im=new Image();im.src=URL.createObjectURL(x);im.alt='Preview';t.append(im)}
+    t.append(x.name);const s=document.createElement('small');s.textContent='Click to replace';t.append(s);
+  }
+  d.onclick=()=>i.click();
+  d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();i.click()}};
+  ['dragover','dragenter'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.add('over')}));
+  ['dragleave','drop'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.remove('over')}));
+  d.addEventListener('drop',e=>pick(e.dataTransfer.files[0]));
+  i.onchange=()=>pick(i.files[0]);
+}
+setup('id',/\.(jpe?g|png|pdf)$/i,'a JPG, PNG or PDF');
+setup('cv',/\.(pdf|docx?)$/i,'a PDF, DOC or DOCX');
+$('n2').onclick=()=>{
+  const dt=document.querySelector('[name=dt]:checked').value;
+  if(!files.id)return msg('Upload a photo of your '+dt.toLowerCase()+'.','err');
+  if(!files.cv)return msg('Upload your CV.','err');
+  const b=$('n2');b.disabled=true;b.textContent='Checking…';
+  setTimeout(()=>{b.disabled=false;b.textContent='Next';verified=true;go(3)},1000);
+};
+$('n3').onclick=()=>{
+  let sc=0;
+  for(let i=0;i<QS.length;i++){
+    const c=document.querySelector('[name=q'+i+']:checked');
+    if(!c){document.querySelector('[name=q'+i+']').closest('.q').scrollIntoView({block:'center'});return msg('Answer question '+(i+1)+'.','err')}
+    if(+c.value===QS[i][2])sc++;
+  }
+  const ok=sc>=15,r=$('res');
+  if(ok){
+    applied.add(cur.id);render();
+    r.innerHTML=`<div class="score">${sc}/20</div><h3 style="font-size:24px;margin:10px 0 6px">You're ready to start</h3><p style="font-size:13.5px;color:var(--mu)">You passed. ${esc(cur.co)} can now see your profile, ID check and CV.</p><ul class="vlist"><li>Role: ${esc(cur.t)}, $${cur.r}/hr</li><li>Location: ${esc(cur.loc)}</li><li>Start date: ${esc(prof.st)}</li><li>Offer details and onboarding forms go to ${esc(prof.em)}</li></ul><button type="button" class="btn btn-p" id="startBtn" style="margin-top:22px">Start working</button>`;
+  }else{
+    r.innerHTML=`<div class="score bad">${sc}/20</div><h3 style="font-size:24px;margin:10px 0 6px">Not quite yet</h3><p style="font-size:13.5px;color:var(--mu)">You need 15 of 20 correct (75%) to pass. Retake the assessment when you're ready.</p><button type="button" class="btn btn-p" id="retakeBtn" style="margin-top:22px">Retake assessment</button>`;
+  }
+  go(4);
+};
+$('res').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.id==='startBtn'){const co=cur.co;closeM();toast('Welcome to '+co)}
+  if(b.id==='retakeBtn'){buildQuiz();go(3)}
+};
+$('next').onclick=()=>{
+  const v=id=>$(id).value.trim();
+  if(v('nm').length<2)return msg('Enter your full name.','err');
+  if(!/^\S+@\S+\.\S+$/.test(v('em')))return msg('Enter a valid email address.','err');
+  if(v('ph').replace(/\D/g,'').length<7)return msg('Enter a valid phone number.','err');
+  if(!v('dob'))return msg('Enter your date of birth.','err');
+  if((Date.now()-new Date(v('dob')))/31557600000<18)return msg('You must be 18 or older to apply.','err');
+  if(!v('lc'))return msg('Enter your city and state.','err');
+  for(const [id,n] of [['wa','work authorization'],['ed','education'],['ex','experience'],['av','availability']])if(!v(id))return msg('Select your '+n+'.','err');
+  if(!v('st'))return msg('Choose your earliest start date.','err');
+  if(!v('sk'))return msg('List at least one skill.','err');
+  prof={};['nm','em','ph','dob','lc','wa','ed','ex','av','st','sk','ab'].forEach(k=>prof[k]=v(k));
+  saved=true;go(2);
+};
+$('b2').onclick=()=>go(1);
+$('b3').onclick=()=>go(2);
+const bg=$('burger'),lk=$('links');
+bg.onclick=()=>{const o=lk.classList.toggle('open');bg.setAttribute('aria-expanded',o);bg.setAttribute('aria-label',o?'Close menu':'Open menu')};
+lk.querySelectorAll('a').forEach(a=>a.onclick=()=>{lk.classList.remove('open');bg.setAttribute('aria-expanded',false)});
+addEventListener('scroll',()=>$('hd').classList.toggle('s',scrollY>12));
+$('yr').textContent=new Date().getFullYear();
+render();
+</script>
 </body>
 </html>
