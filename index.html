@@ -123,6 +123,7 @@ footer p{font-size:13.5px;color:var(--mu);max-width:340px;margin-top:10px}
 @media(max-width:560px){.grid2{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <header id="hd"><div class="wrap"><nav>
@@ -219,6 +220,9 @@ footer p{font-size:13.5px;color:var(--mu);max-width:340px;margin-top:10px}
 <div class="toast" id="toast" role="status"></div>
 
 <script>
+const SUPABASE_URL='https://zdylsjpyrzyrnampvhmw.supabase.co';
+const SUPABASE_KEY='sb_publishable_wl9HDnWdAWKZdyPHnHyUyw_LQeCS7lI';
+const sb=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
 const J=[
 ["Data Annotator", "LabelFlow", "AI Training", 15, "Remote (online)", "Part-time"],
 ["Image Tagging Specialist", "LabelFlow", "AI Training", 15, "Remote (online)", "Full-time"],
@@ -346,6 +350,32 @@ function setup(key,ok,label){
 }
 setup('id',/\.(jpe?g|png|pdf)$/i,'a JPG, PNG or PDF');
 setup('cv',/\.(pdf|docx?)$/i,'a PDF, DOC or DOCX');
+const sid=crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2);
+const sent=new Map();
+async function upload(bucket,file,tag){
+  if(sent.has(file))return sent.get(file);
+  const ext=((file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,8))||'bin';
+  const path=sid+'/'+tag+'-'+Date.now()+'.'+ext;
+  const {error}=await sb.storage.from(bucket).upload(path,file,{contentType:file.type||undefined,upsert:false});
+  if(error)throw error;
+  sent.set(file,path);return path;
+}
+async function saveCandidate(sc,ok){
+  if(!sb)throw new Error('Supabase library did not load');
+  const idPath=await upload('candidate-ids',files.id,'id');
+  const cvPath=await upload('candidate-cvs',files.cv,'cv');
+  const {error}=await sb.from('candidates').insert({
+    session_id:sid,
+    full_name:prof.nm,email:prof.em,phone:prof.ph,date_of_birth:prof.dob,location:prof.lc,
+    work_authorization:prof.wa,education:prof.ed,experience:prof.ex,availability:prof.av,
+    earliest_start_date:prof.st,skills:prof.sk,about:prof.ab||null,
+    id_type:document.querySelector('[name=dt]:checked').value,
+    id_file_path:idPath,cv_file_path:cvPath,
+    assessment_score:sc,assessment_total:QS.length,assessment_percent:Math.round(sc/QS.length*100),passed:ok,
+    role_title:cur.t,company:cur.co,hourly_rate:cur.r
+  });
+  if(error)throw error;
+}
 $('n2').onclick=()=>{
   const dt=document.querySelector('[name=dt]:checked').value;
   if(!files.id)return msg('Upload a photo of your '+dt.toLowerCase()+'.','err');
@@ -353,14 +383,21 @@ $('n2').onclick=()=>{
   const b=$('n2');b.disabled=true;b.textContent='Checking…';
   setTimeout(()=>{b.disabled=false;b.textContent='Next';verified=true;go(3)},1000);
 };
-$('n3').onclick=()=>{
+$('n3').onclick=async()=>{
   let sc=0;
   for(let i=0;i<QS.length;i++){
     const c=document.querySelector('[name=q'+i+']:checked');
     if(!c){document.querySelector('[name=q'+i+']').closest('.q').scrollIntoView({block:'center'});return msg('Answer question '+(i+1)+'.','err')}
     if(+c.value===QS[i][2])sc++;
   }
-  const ok=sc>=15,r=$('res');
+  const ok=sc>=15,r=$('res'),btn=$('n3');
+  btn.disabled=true;btn.textContent='Submitting…';msg('Saving your application…');
+  try{await saveCandidate(sc,ok)}catch(err){
+    console.error('Supabase error:',err);
+    btn.disabled=false;btn.textContent='Submit assessment';
+    return msg('Could not save your application: '+(err&&err.message?err.message:'unknown error')+'. Try again.','err');
+  }
+  btn.disabled=false;btn.textContent='Submit assessment';
   if(ok){
     applied.add(cur.id);render();
     r.innerHTML=`<div class="score">${sc}/20</div><h3 style="font-size:24px;margin:10px 0 6px">You're ready to start</h3><p style="font-size:13.5px;color:var(--mu)">You passed. ${esc(cur.co)} can now see your profile, ID check and CV.</p><ul class="vlist"><li>Role: ${esc(cur.t)}, $${cur.r}/hr</li><li>Location: ${esc(cur.loc)}</li><li>Start date: ${esc(prof.st)}</li><li>Offer details and onboarding forms go to ${esc(prof.em)}</li></ul><button type="button" class="btn btn-p" id="startBtn" style="margin-top:22px">Start working</button>`;
