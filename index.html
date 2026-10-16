@@ -122,6 +122,32 @@ footer p{font-size:13.5px;color:var(--mu);max-width:340px;margin-top:10px}
 .score.bad{color:#ff6b5b}
 @media(max-width:560px){.grid2{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* === Added: full-page assessment + review pages === */
+.page{position:fixed;inset:0;z-index:120;background:var(--bg);overflow-y:auto;padding-top:env(safe-area-inset-top,0px);animation:pagein 220ms cubic-bezier(.4,0,.2,1)}
+@keyframes pagein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.page-head{position:sticky;top:0;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);padding-top:env(safe-area-inset-top,0px);z-index:2}
+.page-head .row{display:flex;align-items:center;justify-content:space-between;gap:16px;height:70px}
+.page-head .back{font-family:var(--fd);font-weight:600;font-size:14px;background:none;border:1px solid var(--bd2);color:var(--mu);padding:10px 18px;cursor:pointer;transition:var(--t);--cut:9px;clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,var(--cut) 100%,0 calc(100% - var(--cut)))}
+.page-head .back:hover{border-color:var(--ac);color:var(--ac)}
+.page-body{max-width:820px;margin:0 auto;padding:56px 28px 120px}
+.page-body .eyebrow{margin-bottom:6px}
+.page-body h2{font-size:clamp(24px,3vw,34px);margin-bottom:8px}
+.page-body .sub{color:var(--mu);font-size:14.5px;margin-bottom:36px}
+.progress{position:sticky;top:70px;z-index:3;margin:0 -28px 30px;padding:12px 28px;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:14px;font-family:var(--fm);font-size:12.5px;color:var(--mu)}
+.progress .track{flex:1;height:5px;background:var(--bd2);overflow:hidden}
+.progress .fill{height:100%;background:var(--ac);width:0;transition:width 260ms cubic-bezier(.4,0,.2,1)}
+@media(prefers-reduced-motion:reduce){.progress .fill{transition:none}}
+.review{margin-top:8px}
+.review .card{margin-bottom:16px}
+.review h3{font-size:18px;margin-bottom:14px}
+.review dl{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:13.5px}
+.review dt{color:var(--fa);font-family:var(--fm);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding-top:2px}
+.review dd{color:var(--tx)}
+.review .actions{display:flex;gap:12px;margin-top:24px}
+.review .actions .btn{width:auto}
+@media(max-width:560px){.page-body{padding:36px 18px 100px}.progress{margin:0 -18px 24px;padding:12px 18px}}
+/* === end added === */
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -176,7 +202,7 @@ footer p{font-size:13.5px;color:var(--mu);max-width:340px;margin-top:10px}
 <span class="eyebrow">Apply</span>
 <h3 id="mt" style="font-size:26px;margin-top:10px"></h3>
 <div id="mco" style="font-size:13.5px;color:var(--mu);margin:4px 0 22px"></div>
-<div class="stepbar"><span class="on" id="s1">1 Profile</span><span id="s2">2 Verify</span><span id="s3">3 Assess</span><span id="s4">4 Start</span></div>
+<div class="stepbar"><span class="on" id="s1">1 Profile</span><span id="s2">2 Verify</span><span id="s3">3 Assess</span><span id="s4">4 Review</span></div>
 <div id="p1">
 <div class="grid2">
 <div class="full"><label class="f" for="nm">Full name</label><input type="text" id="nm" autocomplete="name" placeholder="Your full name"></div>
@@ -209,15 +235,45 @@ footer p{font-size:13.5px;color:var(--mu);max-width:340px;margin-top:10px}
 <input type="file" id="f-cv" accept=".pdf,.doc,.docx" hidden>
 <div class="two"><button type="button" class="btn btn-g" id="b2">Back</button><button type="button" class="btn btn-p" id="n2">Next</button></div>
 </div>
-<div id="p3" hidden>
-<p style="font-size:13.5px;color:var(--mu);margin-bottom:20px">Twenty questions. You need 15 correct (75%) to pass.</p>
-<div id="quiz"></div>
-<div class="two"><button type="button" class="btn btn-g" id="b3">Back</button><button type="button" class="btn btn-p" id="n3">Submit assessment</button></div>
-</div>
-<div id="p4" hidden><div id="res"></div></div>
 <div class="msg" id="msg" role="status"></div>
 </div></div>
 <div class="toast" id="toast" role="status"></div>
+
+<!-- === Added: full-page assessment === -->
+<div class="page" id="assessPage" hidden>
+<div class="page-head"><div class="wrap"><div class="row">
+<button type="button" class="back" id="assessBack">&larr; Back</button>
+<span class="eyebrow" id="assessRole">Assessment</span>
+</div></div></div>
+<div class="page-body">
+<span class="eyebrow">Step 3 · Assessment</span>
+<h2 id="assessTitle">Role assessment</h2>
+<p class="sub" id="assessSub">Twenty questions. You need 15 correct (75%) to pass.</p>
+<div class="progress"><span id="progressLabel">0 of 20 answered</span><span class="track"><span class="fill" id="progressFill"></span></span></div>
+<div id="quiz"></div>
+<div class="msg" id="assessMsg" role="status"></div>
+<div class="two" style="margin-top:22px"><button type="button" class="btn btn-g" id="assessBackBtn">Back</button><button type="button" class="btn btn-p" id="n3">Submit assessment</button></div>
+</div>
+</div>
+
+<!-- === Added: review page === -->
+<div class="page" id="reviewPage" hidden>
+<div class="page-head"><div class="wrap"><div class="row">
+<button type="button" class="back" id="reviewBack">&larr; Back</button>
+<span class="eyebrow">Step 4 · Review</span>
+</div></div></div>
+<div class="page-body review">
+<span class="eyebrow">Application review</span>
+<h2>Review your application</h2>
+<p class="sub">Check everything below, then confirm your submission.</p>
+<div id="reviewBody"></div>
+<div class="msg" id="reviewMsg" role="status"></div>
+<div class="actions">
+<button type="button" class="btn btn-g" id="reviewEdit">Edit profile</button>
+<button type="button" class="btn btn-p" id="reviewSubmit">Submit application</button>
+</div>
+</div>
+</div>
 
 <script>
 const SUPABASE_URL='https://zdylsjpyrzyrnampvhmw.supabase.co';
@@ -316,15 +372,141 @@ function render(){
 ['q','cat','sort'].forEach(i=>$(i).addEventListener('input',()=>{shown=12;render()}));
 $('more').onclick=()=>{shown+=12;render()};
 $('list').addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(b)openM(+b.dataset.id,b)});
-function openM(id,b){cur=J[id];lastBtn=b;$('mt').textContent=cur.t;$('mco').textContent=cur.co+' · '+cur.loc+' · $'+cur.r+'/hr';$('modal').hidden=false;document.body.style.overflow='hidden';buildQuiz();go(saved?(verified?3:2):1)}
+function openM(id,b){cur=J[id];lastBtn=b;$('mt').textContent=cur.t;$('mco').textContent=cur.co+' · '+cur.loc+' · $'+cur.r+'/hr';$('modal').hidden=false;document.body.style.overflow='hidden';go(saved?(verified?2:2):1)}
 let saved=false,verified=false,prof={};
 const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const QS=[["You feel unwell the night before a shift. What do you do?", ["Skip the shift without telling anyone", "Tell your supervisor early so they can find cover", "Show up late and hope nobody notices", "Ask a friend to cover without telling anyone"], 1], ["A coworker is upset about a mistake you made. What's your best response?", ["Listen, apologize where fair, and help fix it", "Argue until they agree with you", "Ignore them", "Blame someone else"], 0], ["You finish your tasks early. What do you do next?", ["Wait quietly", "Leave early", "Ask what else needs doing or help a teammate", "Check your phone"], 2], ["The instructions for a new task are unclear. What do you do?", ["Ask for clarification before you start", "Guess and hope it's right", "Wait for someone to notice", "Skip the task"], 0], ["You notice a spill on the floor. What do you do?", ["Walk past it", "Tell a friend later", "Wait for someone else", "Mark or clean it and tell your supervisor"], 3], ["A customer asks for something you can't do. Best response?", ["Say no and walk away", "Promise it anyway", "Ignore the request", "Explain what you can do and offer an alternative or get a supervisor"], 3], ["Your shift starts at 9:00. When should you arrive?", ["A few minutes early, ready to start", "At 9:00 sharp", "Around 9:20", "Whenever traffic allows"], 0], ["You earn $18 an hour and work 6 hours. What do you earn before tax?", ["$96", "$108", "$118", "$128"], 1], ["A coworker asks you to clock them in because they're late. What do you do?", ["Do it to be nice", "Do it just once", "Decline and suggest they tell the supervisor", "Tell everyone about it"], 2], ["You're given three urgent tasks at once. What's the best first step?", ["Do the easiest one first", "Start all three at once", "Ask which matters most, then work in that order", "Wait until someone decides"], 2], ["You see a coworker being treated unfairly. What's a good step?", ["Say nothing", "Report it to a supervisor or HR", "Spread the story", "Confront them angrily in public"], 1], ["You break a piece of equipment by accident. What do you do?", ["Hide it", "Blame the last person who used it", "Wait to see if anyone notices", "Report it right away"], 3], ["What's the safest way to lift a heavy box?", ["Bend your back and jerk it up", "Twist while lifting", "Keep it close, bend your knees, and lift with your legs", "Lift it above your head"], 2], ["A supervisor gives feedback you disagree with. What do you do?", ["Argue immediately", "Complain to coworkers", "Stop talking to them", "Listen, ask questions, then share your view calmly"], 3], ["An email with an unfamiliar link asks for your password. What do you do?", ["Don't click it; report it as suspicious", "Click the link to check", "Reply with your password", "Forward it to coworkers"], 0], ["How should you handle confidential employer information?", ["Share it with friends", "Keep it private and share only with people who need it", "Post it online", "Discuss it in public places"], 1], ["One task takes 45 minutes. How long do 3 identical tasks take?", ["90 minutes", "2 hours", "2 hours 15 minutes", "3 hours"], 2], ["You're running late because of an emergency. What do you do?", ["Say nothing", "Tell your supervisor as soon as you can and give an arrival time", "Turn off your phone", "Blame traffic afterwards"], 1], ["A new teammate struggles with a process you know well. What do you do?", ["Let them figure it out", "Do their work for them every time", "Offer help and show them patiently", "Tell the supervisor they're slow"], 2], ["What shows good attendance and reliability?", ["Being late occasionally", "Skipping when it's busy", "Leaving without telling anyone", "Showing up on time and giving notice when you can't"], 3]];
+
+/* === Changed: per-job assessment sets ===
+   Shape preserved from the original QS: [prompt, [options], correctIndex]
+   DEFAULT_Q is the shared general-employability set (used as the base every
+   role extends with role-specific items). JOB_Q maps job id -> question set. */
+const DEFAULT_Q=[
+["You feel unwell the night before a shift. What do you do?", ["Skip the shift without telling anyone", "Tell your supervisor early so they can find cover", "Show up late and hope nobody notices", "Ask a friend to cover without telling anyone"], 1],
+["A coworker is upset about a mistake you made. What's your best response?", ["Listen, apologize where fair, and help fix it", "Argue until they agree with you", "Ignore them", "Blame someone else"], 0],
+["You finish your tasks early. What do you do next?", ["Wait quietly", "Leave early", "Ask what else needs doing or help a teammate", "Check your phone"], 2],
+["The instructions for a new task are unclear. What do you do?", ["Ask for clarification before you start", "Guess and hope it's right", "Wait for someone to notice", "Skip the task"], 0],
+["You notice a spill on the floor. What do you do?", ["Walk past it", "Tell a friend later", "Wait for someone else", "Mark or clean it and tell your supervisor"], 3],
+["A customer asks for something you can't do. Best response?", ["Say no and walk away", "Promise it anyway", "Ignore the request", "Explain what you can do and offer an alternative or get a supervisor"], 3],
+["Your shift starts at 9:00. When should you arrive?", ["A few minutes early, ready to start", "At 9:00 sharp", "Around 9:20", "Whenever traffic allows"], 0],
+["You earn $18 an hour and work 6 hours. What do you earn before tax?", ["$96", "$108", "$118", "$128"], 1],
+["A coworker asks you to clock them in because they're late. What do you do?", ["Do it to be nice", "Do it just once", "Decline and suggest they tell the supervisor", "Tell everyone about it"], 2],
+["You're given three urgent tasks at once. What's the best first step?", ["Do the easiest one first", "Start all three at once", "Ask which matters most, then work in that order", "Wait until someone decides"], 2],
+["You see a coworker being treated unfairly. What's a good step?", ["Say nothing", "Report it to a supervisor or HR", "Spread the story", "Confront them angrily in public"], 1],
+["You break a piece of equipment by accident. What do you do?", ["Hide it", "Blame the last person who used it", "Wait to see if anyone notices", "Report it right away"], 3],
+["What's the safest way to lift a heavy box?", ["Bend your back and jerk it up", "Twist while lifting", "Keep it close, bend your knees, and lift with your legs", "Lift it above your head"], 2],
+["A supervisor gives feedback you disagree with. What do you do?", ["Argue immediately", "Complain to coworkers", "Stop talking to them", "Listen, ask questions, then share your view calmly"], 3],
+["An email with an unfamiliar link asks for your password. What do you do?", ["Don't click it; report it as suspicious", "Click the link to check", "Reply with your password", "Forward it to coworkers"], 0],
+["How should you handle confidential employer information?", ["Share it with friends", "Keep it private and share only with people who need it", "Post it online", "Discuss it in public places"], 1],
+["One task takes 45 minutes. How long do 3 identical tasks take?", ["90 minutes", "2 hours", "2 hours 15 minutes", "3 hours"], 2],
+["You're running late because of an emergency. What do you do?", ["Say nothing", "Tell your supervisor as soon as you can and give an arrival time", "Turn off your phone", "Blame traffic afterwards"], 1],
+["A new teammate struggles with a process you know well. What do you do?", ["Let them figure it out", "Do their work for them every time", "Offer help and show them patiently", "Tell the supervisor they're slow"], 2],
+["What shows good attendance and reliability?", ["Being late occasionally", "Skipping when it's busy", "Leaving without telling anyone", "Showing up on time and giving notice when you can't"], 3]
+];
+
+const ROLE_Q={
+0:[["A labelling guideline says 'mark all vehicles.' A bicycle is in frame. What do you do?",["Mark it; it's a vehicle","Skip it; not motorized","Ask the project lead if bikes count","Mark it as 'unknown'"],2],["Two annotators label the same image differently. Best action?",["Flip a coin","Report the disagreement to the QA lead","Delete one label","Ignore it"],1],["You're unsure if a blurry object is a pedestrian. What's correct?",["Guess yes","Guess no","Flag it for review per guideline","Skip the whole frame"],2],["Guidelines change mid-task. What do you do?",["Keep using old rules","Re-read the updated guideline and apply it","Stop working","Ask a coworker to decide"],1],["You finish a batch early. Best move?",["Log off","Double-check your labels for errors","Start the next batch without reading it","Message friends"],1]],
+1:[["An image contains a partially occluded dog. Tagging rule says tag visible animals. What do you do?",["Tag dog","Skip","Tag 'occluded'","Ask later"],0],["Tagging a beach scene, you see a whale tail far offshore. What do you do?",["Tag whale","Skip; too small","Tag 'unknown'","Crop it out"],0],["Two tags apply (sunset, ocean). What's the right approach?",["Pick one","Apply both tags","Skip","Ask the client"],1],["A tag you need isn't in the list. What do you do?",["Use the closest one","Invent a new tag","Flag for guideline update","Skip the image"],2],["Tagging speeds up if you skip blurry images. Is that ok?",["Yes, skip blurry","No, follow the guideline for blurry items","Depends on mood","Ask a coworker"],1]],
+2:[["A search result is technically relevant but low quality. Rating scale says 'relevant' means satisfies intent. What do you rate?",["Highly relevant","Relevant","Not relevant","Can't tell"],2],["You're unsure of a query's intent. What do you do?",["Guess","Check the query's likely intent using the guidelines","Rate 'can't tell'","Skip"],1],["Two results are near-identical duplicates. How do you handle?",["Rate both high","Rate the better one high and the other lower per guidelines","Rate both low","Ignore"],1],["A result is spammy but matches keywords. What do you rate?",["Highly relevant","Relevant","Not relevant / spam","Can't tell"],2],["Rating for a foreign-language query you don't speak. What do you do?",["Guess","Use the provided language guidance and rate cautiously","Skip","Rate 'can't tell'"],1]],
+3:[["A survey question is leading. What's the best action?",["Answer anyway","Flag it to the research lead","Skip the whole survey","Rewrite it yourself"],1],["You notice a logic error in the survey flow. What do you do?",["Ignore","Report it with the step and screenshot","Work around it silently","Tell other testers"],1],["Response time guidance says 8–12 minutes. You finish in 3. What do you do?",["Submit","Review your answers and continue thoughtfully","Submit and note it","Rush to next"],1],["A question asks for PII you shouldn't share. What do you do?",["Provide it","Skip or report per protocol","Make something up","Answer vaguely"],1],["You hit the same bug twice. What's best?",["Report once","Report both with reproduction steps","Ignore the second","Screenshot only"],1]],
+4:[["A customer opens with an angry message about a late order. Best first reply?",["Apologize and ask for the order number","Tell them to calm down","Paste policy","Escalate immediately"],0],["A customer asks something you don't know. What do you do?",["Guess","Say you'll find out and follow up","Ignore","Transfer without context"],1],["Two chats are waiting; one is abusive. What do you do?",["Engage the abusive one","Follow the abuse policy and prioritize the other","Close both","Reply angrily"],1],["You need to end a chat. Best practice?",["Disconnect","Confirm resolution and give next steps","Say 'bye'","Leave it open"],1],["A customer wants a refund outside policy. What do you do?",["Approve it","Explain policy and offer escalation path","Ignore","Promise a refund"],1]],
+5:[["An email subject line is vague ('Help'). Best first step?",["Reply 'what do you need?'","Read the body and check the ticket history","Close it","Forward to a colleague"],1],["You must share bad news (delay) by email. Best tone?",["Blunt and short","Clear, empathetic, with a new timeline","Apologetic and vague","Formal and distant"],1],["A customer uses ALL CAPS. Best response?",["Match tone","Stay professional and address the issue","Ignore","Tell them to stop"],1],["You need info only another team has. What do you do?",["Guess and reply","Loop them in with a clear ask","Wait","Escalate to CEO"],1],["An email thread has 12 replies. Best practice?",["Reply-all again","Summarize and move to a clean reply or ticket","Delete it","Forward to everyone"],1]],
+6:[["A visitor types 'hi' then nothing. What do you do?",["Wait indefinitely","Send a friendly prompt and wait a reasonable time","Close the chat","Send a long greeting"],1],["You have 3 concurrent chats. How do you prioritize?",["Newest first","Oldest unanswered that's still waiting, then rotate","Loudest","Random"],1],["A chat is going well but you need to check a policy. What do you do?",["Guess","Tell the customer you're checking and do it","Ignore the policy","Transfer silently"],1],["Customer asks a question outside your scope. What do you do?",["Answer anyway","Transfer or escalate with context","Say 'not my job'","End chat"],1],["You suspect a bot is the 'customer.' What do you do?",["Engage as normal","Follow verification steps","Insult it","Close"],1]],
+7:[["An order shows 'delivered' but the customer says it never arrived. Best first step?",["Issue a refund","Check tracking and delivery details with the customer","Blame the carrier","Escalate"],1],["Customer wants to change the shipping address after dispatch. What do you do?",["Change it","Explain carrier rules and offer options","Ignore","Cancel order"],1],["A customer threatens a chargeback. What do you do?",["Argue","Follow the chargeback protocol and document","Ignore","Refund immediately"],1],["You can't find an order. What do you do?",["Guess","Ask for order number and search carefully","Ask them to re-order","Transfer"],1],["A product arrived damaged. Best first response?",["Apologize and request photos","Blame the warehouse","Offer a discount blindly","Ignore"],0]],
+8:[["You're on a call and the customer is hard to hear. What do you do?",["Guess what they said","Politely ask them to repeat or adjust","Hang up","Continue and hope"],1],["You need to place a caller on hold. What do you do?",["Hold silently","Explain why and how long, then hold","Transfer without notice","Mute and talk to a colleague"],1],["A caller is very upset. Best approach?",["Match energy","Let them finish, acknowledge, then solve","Talk over them","Transfer immediately"],1],["You must read a disclosure. How?",["Skip it","Read it clearly and at a natural pace","Rush it","Paraphrase loosely"],1],["The call drops. What do you do?",["Wait","Attempt to call back per protocol","Log it and move on","Ignore"],1]],
+9:[["You're entering invoice numbers and one doesn't match the source. What do you do?",["Enter anyway","Flag it for review","Delete the row","Guess"],1],["You're entering 500 rows. How do you stay accurate?",["Speed only","Enter carefully, spot-check, and take breaks","Skip the boring ones","Copy-paste blindly"],1],["You're unsure about a field format (date). What do you do?",["Use your own format","Match the template format exactly","Leave blank","Ask a coworker to do it"],1],["You're entering sensitive data. Best practice?",["Share screen","Follow privacy rules and avoid exposing data","Leave it on screen","Email it to yourself"],1],["You notice a pattern of errors in the source data. What do you do?",["Fix one and stop","Report the pattern to your lead","Ignore","Complain in chat"],1]],
+10:[["Your executive asks you to book a flight and hotel. What do you do?",["Book the first options","Confirm dates, preferences, and budget, then book","Ask them to do it","Book cheapest regardless"],1],["You're managing a calendar with conflicting meetings. What do you do?",["Pick one","Flag the conflict and propose a resolution","Cancel one","Ignore"],1],["You're asked to handle a confidential file. What do you do?",["Email to friends","Follow confidentiality protocol","Post it","Leave it open"],1],["Your exec is running late to a call. What do you do?",["Say nothing","Notify attendees and update them","Cancel the call","Blame the exec"],1],["You're asked to draft a sensitive email. What do you do?",["Send it yourself","Draft, share for approval, then send","Refuse","Send to a colleague first"],1]],
+11:[["A client needs to reschedule a meeting last minute. What do you do?",["Say no","Offer the next available slots and confirm","Ignore","Cancel"],1],["Double-booking occurs. What do you do?",["Let both happen","Apologize, resolve, and confirm the correct slot","Blame the system","Cancel both"],1],["A client is hard to reach. What do you do?",["Give up","Try the agreed channels and log attempts","Call repeatedly at night","Mark as no-show"],1],["You need to confirm a time zone. What do you do?",["Guess","Confirm explicitly with the client","Assume local","Skip"],1],["You're booking a recurring meeting. What do you do?",["Pick a time","Confirm recurrence and time zone with all parties","Guess","Set it and forget it"],1]],
+12:[["Audio has two overlapping speakers. What do you do?",["Guess","Follow the transcription guideline for overlaps","Skip the segment","Pick one"],1],["You can't make out a word. What do you do?",["Guess","Mark as [inaudible] per guideline","Skip","Ask a friend"],1],["Speaker uses a technical term you don't know. What do you do?",["Guess spelling","Look it up or flag per guideline","Skip","Write phonetically"],1],["You're transcribing a sensitive call. What do you do?",["Share it","Follow confidentiality protocol","Post it","Discuss with friends"],1],["You're behind on a file. What do you do?",["Rush and skip checks","Notify the lead and adjust expectations","Submit with errors","Ignore"],1]],
+13:[["A caption must fit 32 characters per line. A word would split awkwardly. What do you do?",["Split it anyway","Break the line at a sensible point per guidelines","Skip the word","Overflow the line"],1],["Background music plays under dialogue. What do you do?",["Ignore it","Caption it per style guide","Turn it off","Skip the scene"],1],["A speaker's name isn't given. What do you do?",["Invent one","Use a generic label per guideline","Skip","Ask the client"],1],["You're unsure if a sound is a door or a gunshot. What do you do?",["Guess","Use a neutral descriptor or flag it","Skip","Ask a friend"],1],["Caption timing drifts from audio. What do you do?",["Leave it","Re-sync per spec","Delete captions","Rush"],1]],
+14:[["A subtitle line exceeds the character limit. What do you do?",["Leave it","Split or shorten per style guide","Delete the line","Ignore"],1],["A subtitle contains a cultural reference you don't know. What do you do?",["Guess","Research or flag per guideline","Skip","Ask a friend"],1],["Two lines of dialogue overlap on screen. What do you do?",["Merge them","Follow the overlap rule in the style guide","Drop one","Rush"],1],["You spot a typo in the source subtitle. What do you do?",["Leave it","Fix it per the correction workflow","Report to the client directly","Ignore"],1],["A subtitle uses slang that may date. What do you do?",["Keep it","Follow the localization guideline","Rewrite freely","Skip"],1]],
+15:[["A post contains graphic violence but isn't illegal. What do you do?",["Remove it","Follow the moderation policy for graphic content","Ignore","Escalate to police"],1],["You're unsure if content is a threat. What do you do?",["Ignore","Escalate per the threat policy","Remove it yourself","Reply to the user"],1],["A user appeals a removal. What do you do?",["Reinstate immediately","Review against policy and respond per protocol","Ignore","Ban them"],1],["You see coordinated spam. What do you do?",["Handle one post","Report the pattern and follow the spam workflow","Ignore","Warn the spammer"],1],["You're asked to review content that upsets you. What do you do?",["Push through","Use the wellness resources and follow protocol","Skip it","Vent publicly"],1]],
+16:[["A comment is mean but not a policy violation. What do you do?",["Remove it","Leave it per policy","Reply angrily","Ban the user"],1],["A user posts misinformation. What do you do?",["Ignore","Follow the misinformation workflow","Argue with them","Delete the account"],1],["You can't tell if a post is satire. What do you do?",["Assume it's real","Use context and the satire guidance, escalate if unsure","Remove it","Ignore"],1],["A user messages you privately for help. What do you do?",["Help them","Redirect to official channels","Ignore","Ban them"],1],["You see a colleague's moderation decision you disagree with. What do you do?",["Undo it","Discuss with them or flag to a lead","Complain publicly","Ignore"],1]],
+17:[["A student solves a problem the wrong way but gets the right answer. What do you do?",["Mark correct and move on","Ask them to explain their steps","Mark wrong","Ignore"],1],["A student is frustrated and shuts down. What do you do?",["Push harder","Acknowledge, break the problem down, and rebuild confidence","End the session","Give the answer"],1],["You're unsure if a student's method is valid. What do you do?",["Guess","Verify or look it up","Mark wrong","Skip"],1],["A parent joins the call uninvited. What do you do?",["Continue","Follow the platform policy for guardians","End the call","Ignore them"],1],["A student asks for answers to homework. What do you do?",["Give answers","Guide them to solve it themselves","Refuse and end","Ignore"],1]],
+18:[["A learner is shy and barely speaks. What do you do?",["Push them to talk","Use low-pressure prompts and build rapport","Give up","Switch topics"],1],["A learner's level is lower than expected. What do you do?",["Stick to the plan","Adjust to their level","End the session","Speak faster"],1],["You don't share a first language with the learner. What do you do?",["Use only English strictly","Use visuals and simple English; allow some L1 support","Refuse","Guess"],1],["A learner makes the same error repeatedly. What do you do?",["Ignore","Address it gently with examples","Correct harshly","End"],1],["You're running out of time in a session. What do you do?",["Stop abruptly","Wrap up with a summary and next steps","Extend indefinitely","Rush"],1]],
+19:[["A student asks for the answer to a graded problem. What do you do?",["Give it","Guide them to solve it","Refuse and end","Ignore"],1],["A student submits work that looks copied. What do you do?",["Accuse them","Follow the academic integrity guideline","Ignore","Post it"],1],["A student is stuck on a concept. What do you do?",["Move on","Try a different explanation or example","Give the answer","End"],1],["A student's parent asks for progress. What do you do?",["Share everything","Follow the platform's communication policy","Refuse","Ignore"],1],["You're unsure of a subject detail. What do you do?",["Guess","Verify before teaching it","Skip","Ask the student"],1]],
+20:[["A product listing needs a 200-character title. Yours is 260. What do you do?",["Leave it","Trim to fit while keeping key terms","Cut randomly","Skip"],1],["A listing has a keyword you can't verify. What do you do?",["Include it","Remove or verify per guideline","Guess","Ignore"],1],["You must describe a product you've never seen. What do you do?",["Invent details","Use the source data and follow the brief","Skip","Ask a friend"],1],["A competitor's listing uses a claim you can't substantiate. What do you do?",["Copy it","Avoid unsubstantiated claims per policy","Include it","Ask the client"],1],["You notice a repeated typo in the source data. What do you do?",["Fix one","Report the pattern to the lead","Ignore","Fix all silently"],1]],
+21:[["You find a grammar error that changes meaning. What do you do?",["Fix silently","Flag it with a suggestion per workflow","Ignore","Rewrite the sentence"],1],["A sentence is long but grammatical. What do you do?",["Rewrite it","Leave it unless the brief says otherwise","Cut it","Split it"],1],["The author's voice is unusual but intentional. What do you do?",["Normalize it","Preserve it per the brief","Flag it","Rewrite"],1],["You disagree with a style choice in the style guide. What do you do?",["Ignore the guide","Follow the guide; raise concerns with the lead","Rewrite the guide","Skip"],1],["A citation looks wrong. What do you do?",["Fix it","Verify or flag it per workflow","Ignore","Delete it"],1]],
+22:[["A blog post brief asks for 800 words; you have 1200. What do you do?",["Submit 1200","Trim to brief while keeping key points","Cut randomly","Ask the client"],1],["You need a source for a claim. What do you do?",["Skip it","Find a credible source or adjust the claim","Invent one","Ask a friend"],1],["You're unsure of the target audience. What do you do?",["Guess","Ask the editor or check the brief","Write for everyone","Skip"],1],["A keyword must appear naturally. How do you handle it?",["Stuff it","Weave it in naturally per SEO guidance","Ignore","Add it in a footer"],1],["You spot a factual error after submission. What do you do?",["Ignore","Notify the editor with a correction","Delete the post","Blame the source"],1]],
+23:[["A description is accurate but bland. What do you do?",["Leave it","Improve it within the brief","Rewrite freely","Skip"],1],["A spec includes a claim you can't verify. What do you do?",["Include it","Flag it to the client","Remove it","Guess"],1],["Two products are nearly identical. How do you differentiate?",["Copy-paste","Highlight real differences per the spec","Skip one","Guess"],1],["You're unsure of a unit (oz vs ml). What do you do?",["Guess","Verify from source data","Skip","Use both"],1],["A description exceeds the character limit. What do you do?",["Leave it","Trim per guideline","Cut randomly","Skip"],1]],
+24:[["A translated sentence is grammatically correct but sounds unnatural. What do you do?",["Leave it","Suggest a more natural phrasing per guideline","Rewrite freely","Ignore"],1],["A term has no direct translation. What do you do?",["Invent one","Use the approved gloss or flag it","Skip","Guess"],1],["A cultural reference won't translate. What do you do?",["Translate literally","Adapt per the localization guideline","Cut it","Flag"],1],["You're unsure of a regional variant. What do you do?",["Guess","Ask or follow the locale spec","Pick one","Skip"],1],["A translator's choice changes meaning. What do you do?",["Approve","Flag it with a correction","Ignore","Rewrite"],1]],
+25:[["A catalog has 10,000 SKUs. How do you prioritize?",["Random","Follow the priority list from the lead","Alphabetical","Newest only"],1],["A SKU is missing a category. What do you do?",["Guess","Flag it per workflow","Skip","Invent one"],1],["You notice duplicate SKUs. What do you do?",["Delete one","Report the duplicates per workflow","Ignore","Merge silently"],1],["A product image doesn't match the description. What do you do?",["Ignore","Flag it per workflow","Swap the image","Delete the listing"],1],["You're behind on a batch. What do you do?",["Rush","Notify the lead and adjust","Skip checks","Work overtime without telling"],1]],
+26:[["A customer asks about an order you can't find. What do you do?",["Guess","Ask for details and search carefully","Transfer","Ignore"],1],["A customer wants a return outside policy. What do you do?",["Approve","Explain policy and offer options","Ignore","Argue"],1],["A customer is abusive. What do you do?",["Engage","Follow the abuse policy","Reply angrily","Close silently"],1],["A refund is approved but slow. What do you do?",["Ignore","Set expectations and follow up","Promise faster","Blame the bank"],1],["You're unsure of a shipping policy. What do you do?",["Guess","Check the policy or ask a lead","Skip","Tell the customer to check"],1]],
+27:[["You need to schedule a week of posts. What do you do?",["Post randomly","Follow the content calendar and brand voice","Ask the client for everything","Skip"],1],["A post gets negative comments. What do you do?",["Delete them","Follow the community guideline","Ignore","Reply angrily"],1],["You need an image you don't have rights to. What do you do?",["Use it","Source a licensed or approved image","Skip","Ask a friend"],1],["A hashtag is trending but off-brand. What do you do?",["Use it","Follow brand guidance","Ignore","Ask the client"],1],["You're unsure of posting frequency. What do you do?",["Guess","Check the brief","Post more","Post less"],1]],
+28:[["An email campaign needs a subject line. What do you do?",["Write a vague one","Write a clear, honest one per the brief","Use ALL CAPS","Skip"],1],["A list segment is unclear. What do you do?",["Send to all","Confirm the segment before sending","Skip","Guess"],1],["A link is broken in a test send. What do you do?",["Send anyway","Fix it before sending","Ignore","Send to a small list"],1],["You're unsure of send time. What do you do?",["Guess","Follow the brief or ask","Send now","Skip"],1],["A subscriber asks to unsubscribe. What do you do?",["Ignore","Process per compliance rules","Ask why","Delay"],1]],
+29:[["You're building a lead list. What do you do?",["Buy a random list","Follow the ICP and data rules","Scrape everything","Skip"],1],["A lead's email bounces. What do you do?",["Keep it","Remove or verify per workflow","Ignore","Guess another"],1],["You're unsure if a lead is in scope. What do you do?",["Include","Check against the ICP","Skip","Ask a friend"],1],["You find a lead's personal social profile. What do you do?",["Use it","Follow the privacy guideline","Ignore","Share it"],1],["A lead asks to be removed. What do you do?",["Ignore","Process per compliance","Delay","Ask why"],1]],
+30:[["You call a lead and they say 'not now.' What do you do?",["Hang up","Ask when to follow up and log it","Push harder","Call back in 5 min"],1],["You're unsure if a prospect is qualified. What do you do?",["Book anyway","Ask qualifying questions per the script","Skip","Guess"],1],["A prospect asks a question you can't answer. What do you do?",["Guess","Say you'll find out and follow up","Ignore","Transfer without context"],1],["You're running late for a call. What do you do?",["Skip it","Notify the prospect and reschedule","Join late silently","Blame traffic"],1],["A prospect is rude. What do you do?",["Match tone","Stay professional and follow the script","Hang up","Report them"],1]],
+31:[["A prospect says 'send info.' What do you do?",["Send a brochure and stop","Send info and propose a specific next step","Ignore","Call back repeatedly"],1],["You're unsure of pricing. What do you do?",["Guess","Check the approved pricing sheet","Skip","Ask the prospect"],1],["A prospect goes cold. What do you do?",["Give up","Follow the nurture sequence","Call daily","Ignore"],1],["A deal is stuck in legal. What do you do?",["Ignore","Follow up with the right stakeholder","Blame legal","Skip"],1],["You hit your quota early. What do you do?",["Stop","Help the team or work the pipeline","Log off","Celebrate publicly"],1]],
+32:[["You're reconciling an account and it's off by $1. What do you do?",["Ignore","Investigate the discrepancy","Round it","Ask a friend"],1],["You're unsure of a tax category. What do you do?",["Guess","Check the chart of accounts or ask","Skip","Use last year's"],1],["A receipt is missing. What do you do?",["Skip it","Flag it per workflow","Invent one","Ask the vendor"],1],["You notice a pattern of small errors. What do you do?",["Fix one","Report the pattern","Ignore","Blame the software"],1],["You're asked to backdate an entry. What do you do?",["Do it","Refuse and follow policy","Ignore","Ask a coworker"],1]],
+33:[["An invoice doesn't match the PO. What do you do?",["Pay it","Flag the mismatch per workflow","Ignore","Approve partially"],1],["A vendor calls about a late payment. What do you do?",["Ignore","Check status and respond per policy","Argue","Promise a date you can't keep"],1],["You're unsure of a payment term. What do you do?",["Guess","Check the contract","Skip","Ask the vendor"],1],["You spot a duplicate invoice. What do you do?",["Pay both","Flag the duplicate","Ignore","Delete one"],1],["You're behind on processing. What do you do?",["Rush","Notify the lead and prioritize","Skip checks","Work silently"],1]],
+34:[["You need to find a stat from a credible source. What do you do?",["Use a blog","Use a primary or reputable source","Guess","Skip"],1],["A source contradicts another. What do you do?",["Pick one","Note the conflict and use the more credible source","Ignore","Ask a friend"],1],["You're unsure of a fact. What do you do?",["State it anyway","Verify before including","Skip","Guess"],1],["You find a paywalled study. What do you do?",["Pirate it","Find an accessible equivalent or the abstract","Skip","Guess"],1],["A request is vague. What do you do?",["Guess","Ask clarifying questions","Skip","Do everything"],1]],
+35:[["A bug only appears on one device. What do you do?",["Ignore","Document the device and reproduction steps","Guess","Close it"],1],["You're unsure if a bug is a feature. What do you do?",["Guess","Check the spec or ask","Close","Reopen"],1],["A test fails intermittently. What do you do?",["Ignore","Flag it as flaky with evidence","Delete the test","Pass it manually"],1],["You find a security issue while testing. What do you do?",["Post it","Report it privately per policy","Ignore","Fix it yourself"],1],["You're behind on test cases. What do you do?",["Rush","Notify the lead and prioritize","Skip cases","Work silently"],1]],
+36:[["An app crashes on launch for some users. What do you do?",["Ignore","Report with device, OS, and steps","Guess","Blame the OS"],1],["You can't reproduce a bug. What do you do?",["Close it","Ask for more info and log attempts","Ignore","Guess"],1],["A build is unstable. What do you do?",["Ship it","Flag it with logs","Ignore","Roll back silently"],1],["You find a UI glitch. What do you do?",["Ignore","Report with a screenshot","Fix it yourself","Skip"],1],["You're asked to test a feature you don't understand. What do you do?",["Guess","Ask for the spec and clarify","Skip","Test randomly"],1]],
+37:[["A user's issue is fixed but they're still upset. What do you do?",["End the ticket","Acknowledge and confirm resolution","Ignore","Escalate"],1],["You can't reproduce a user's issue. What do you do?",["Close it","Gather details and try again","Guess","Blame the user"],1],["A user shares a password in a ticket. What do you do?",["Use it","Advise them to change it and follow security protocol","Ignore","Save it"],1],["You need admin access to fix something. What do you do?",["Use a colleague's","Request access per policy","Guess","Skip"],1],["A fix works but breaks something else. What do you do?",["Ship it","Roll back and report per change control","Ignore","Patch over it"],1]],
+38:[["You're evaluating two AI responses; both are fluent. What do you do?",["Pick longer","Score against the rubric for accuracy and helpfulness","Pick randomly","Skip"],1],["A response is fluent but factually wrong. What do you do?",["Score high","Score low on accuracy per rubric","Ignore","Rewrite it"],1],["A prompt is ambiguous. What do you do?",["Guess","Note the ambiguity and score per guidance","Skip","Ask a friend"],1],["A response contains bias. What do you do?",["Ignore","Flag it per the bias guideline","Score high","Rewrite"],1],["You're unsure of the correct answer. What do you do?",["Guess","Verify or flag","Skip","Score high"],1]],
+39:[["You're recording voice samples. What do you do?",["Rush","Follow the recording spec and consent process","Skip consent","Guess"],1],["A recording has background noise. What do you do?",["Submit","Re-record per the noise guideline","Ignore","Edit it out"],1],["You're unsure of the script pronunciation. What do you do?",["Guess","Follow the pronunciation guide","Skip","Ask a friend"],1],["A participant wants to withdraw. What do you do?",["Ignore","Follow the withdrawal process","Delay","Ask why"],1],["You're behind on recordings. What do you do?",["Rush","Notify the lead","Skip checks","Work silently"],1]],
+40:[["A video shows a policy violation but the audio is unclear. What do you do?",["Guess","Review the video and follow the policy","Skip","Escalate blindly"],1],["You can't tell if content is real or staged. What do you do?",["Assume real","Use context and follow guidance","Skip","Remove it"],1],["A video is graphic. What do you do?",["Watch fully","Follow the graphic content policy and use wellness resources","Skip","Share it"],1],["You see a pattern of violations from one user. What do you do?",["Handle one","Report the pattern","Ignore","Warn them"],1],["You're unsure of a policy edge case. What do you do?",["Guess","Escalate per protocol","Skip","Remove it"],1]],
+41:[["A new customer can't complete onboarding. What do you do?",["Ignore","Walk them through it and log the issue","Transfer","Ask them to retry"],1],["You're unsure of a step in onboarding. What do you do?",["Guess","Check the guide or ask","Skip","Tell the customer to figure it out"],1],["A customer is frustrated by a delay. What do you do?",["Argue","Acknowledge and set expectations","Ignore","Blame the system"],1],["You spot a bug in onboarding. What do you do?",["Ignore","Report it with steps","Work around silently","Tell the customer"],1],["You're behind on onboarding calls. What do you do?",["Rush","Notify the lead and prioritize","Skip","Work silently"],1]],
+42:[["A community member breaks a rule but is popular. What do you do?",["Ignore","Apply the rule fairly per policy","Ban them","Warn them privately"],1],["You're unsure if a post is a rule break. What do you do?",["Guess","Check the guideline or escalate","Skip","Remove it"],1],["A member appeals a ban. What do you do?",["Reinstate","Review per the appeals process","Ignore","Ban them"],1],["You see harassment. What do you do?",["Ignore","Follow the harassment policy","Reply","Warn the harasser"],1],["You're burned out from moderation. What do you do?",["Push through","Use wellness resources and follow protocol","Skip work","Vent publicly"],1]],
+43:[["A survey response looks fake. What do you do?",["Include it","Flag it per the data quality workflow","Delete it","Ignore"],1],["You're unsure if a respondent is eligible. What do you do?",["Include","Check against the screening criteria","Skip","Guess"],1],["A respondent asks about compensation. What do you do?",["Guess","Follow the approved script","Ignore","Promise more"],1],["You spot a pattern of duplicate responses. What do you do?",["Ignore","Report the pattern","Delete one","Skip"],1],["You're behind on moderation. What do you do?",["Rush","Notify the lead and prioritize","Skip checks","Work silently"],1]],
+44:[["A CRM record has a wrong phone number. What do you do?",["Leave it","Correct or flag per workflow","Delete the record","Guess"],1],["You find duplicate contacts. What do you do?",["Ignore","Merge per the dedupe workflow","Delete one","Skip"],1],["A record is missing a field. What do you do?",["Guess","Flag it per workflow","Skip","Invent a value"],1],["You're unsure of a data standard. What do you do?",["Guess","Check the standard or ask","Skip","Use your own"],1],["You're behind on cleaning. What do you do?",["Rush","Notify the lead and prioritize","Skip checks","Work silently"],1]],
+45:[["A doctor's dictation includes a drug name you don't know. What do you do?",["Guess","Look it up or flag per guideline","Skip","Write phonetically"],1],["Audio is unclear. What do you do?",["Guess","Mark [inaudible] per guideline","Skip","Ask a friend"],1],["You're unsure of a medical abbreviation. What do you do?",["Guess","Check the approved abbreviation list","Skip","Write it out"],1],["You see a potential patient safety issue. What do you do?",["Ignore","Flag it per protocol","Post it","Tell a friend"],1],["You're behind on files. What do you do?",["Rush","Notify the lead and prioritize","Skip checks","Work silently"],1]],
+46:[["A course module needs updating. What do you do?",["Ignore","Follow the update process and version it","Rewrite freely","Skip"],1],["A student is struggling. What do you do?",["Ignore","Offer support and resources","Fail them","Skip"],1],["You're unsure of a course policy. What do you do?",["Guess","Check the policy or ask","Skip","Tell the student to guess"],1],["A student asks for an extension. What do you do?",["Approve","Follow the extension policy","Ignore","Deny harshly"],1],["You're behind on grading. What do you do?",["Rush","Notify the lead and prioritize","Skip","Grade randomly"],1]],
+47:[["A user's issue requires admin access. What do you do?",["Use a colleague's","Request access per policy","Guess","Skip"],1],["You can't reproduce a user's issue. What do you do?",["Close it","Gather details and try again","Guess","Blame the user"],1],["A user shares a password. What do you do?",["Use it","Advise them to change it and follow security protocol","Ignore","Save it"],1],["A fix works but breaks something else. What do you do?",["Ship it","Roll back and report per change control","Ignore","Patch over it"],1],["You're unsure of a config. What do you do?",["Guess","Check the docs or ask","Skip","Change it randomly"],1]],
+48:[["A customer is at risk of churning. What do you do?",["Ignore","Follow the retention playbook","Offer a big discount blindly","Escalate"],1],["You're unsure of a customer's history. What do you do?",["Guess","Check the account notes","Skip","Ask the customer"],1],["A customer is upset about a feature. What do you do?",["Argue","Acknowledge and share the roadmap per policy","Ignore","Promise a date"],1],["You spot a pattern of complaints. What do you do?",["Ignore","Report the pattern","Handle one","Warn the customer"],1],["You're behind on follow-ups. What do you do?",["Rush","Notify the lead and prioritize","Skip","Work silently"],1]],
+49:[["Your exec asks you to book travel during a storm. What do you do?",["Book the first flight","Check options and flag risks","Ignore","Ask them to do it"],1],["A meeting needs a confidential deck. What do you do?",["Email it widely","Follow the confidentiality protocol","Post it","Leave it open"],1],["You're unsure of your exec's preference. What do you do?",["Guess","Check notes or ask","Skip","Do it your way"],1],["A vendor asks for your exec's personal number. What do you do?",["Give it","Follow the privacy policy","Ignore","Ask the vendor why"],1],["You're behind on tasks. What do you do?",["Rush","Notify your exec and prioritize","Skip","Work silently"],1]],
+50:[["A keyword isn't ranking. What do you do?",["Ignore","Analyze and follow the SEO playbook","Stuff it more","Skip"],1],["A page has thin content. What do you do?",["Ignore","Improve it per the brief","Delete it","Skip"],1],["You spot a broken internal link. What do you do?",["Ignore","Fix or flag per workflow","Delete the page","Skip"],1],["A competitor outranks you. What do you do?",["Copy them","Analyze and follow the strategy","Ignore","Complain"],1],["You're unsure of a search intent. What do you do?",["Guess","Research or ask","Skip","Use your own"],1]],
+51:[["A brand crisis erupts on social. What do you do?",["Post casually","Follow the crisis playbook and escalate","Ignore","Reply angrily"],1],["A post goes viral negatively. What do you do?",["Delete it","Follow the escalation and response policy","Ignore","Blame the algorithm"],1],["You're unsure of brand voice. What do you do?",["Guess","Check the brand guide","Skip","Use your own"],1],["A influencer asks for payment. What do you do?",["Agree","Follow the influencer policy","Ignore","Promise payment"],1],["You're behind on the content calendar. What do you do?",["Rush","Notify the lead and prioritize","Skip","Post randomly"],1]],
+52:[["A client wants a logo in 3 hours. What do you do?",["Rush","Scope the request and set expectations","Refuse","Guess"],1],["A file is missing fonts. What do you do?",["Use a random font","Outline or substitute per the brand guide","Skip","Guess"],1],["A client asks for revisions beyond scope. What do you do?",["Do them free","Follow the scope and change process","Refuse harshly","Ignore"],1],["You're unsure of color codes. What do you do?",["Guess","Check the brand guide","Skip","Use your own"],1],["You're behind on deliverables. What do you do?",["Rush","Notify the client and prioritize","Skip","Work silently"],1]],
+53:[["Footage is shaky. What do you do?",["Use it","Stabilize or flag per the brief","Skip","Guess"],1],["A client wants a cut under 30 seconds. What do you do?",["Leave it long","Edit to the brief","Refuse","Guess"],1],["Audio is out of sync. What do you do?",["Ignore","Re-sync per workflow","Delete the clip","Guess"],1],["You're unsure of music licensing. What do you do?",["Use it","Use licensed or approved music","Skip","Ask a friend"],1],["You're behind on edits. What do you do?",["Rush","Notify the client and prioritize","Skip","Work silently"],1]],
+54:[["A test passes locally but fails in CI. What do you do?",["Ignore","Investigate the environment difference","Disable the test","Guess"],1],["You find a regression. What do you do?",["Ignore","Report with evidence","Fix silently","Skip"],1],["A test is flaky. What do you do?",["Ignore","Flag it with evidence","Delete it","Pass it manually"],1],["You're unsure if a bug is in scope. What do you do?",["Guess","Check the spec or ask","Skip","Reopen"],1],["You're behind on test cases. What do you do?",["Rush","Notify the lead and prioritize","Skip","Work silently"],1]],
+55:[["A prospect asks for a discount. What do you do?",["Give it","Follow the pricing policy and value framing","Ignore","Refuse harshly"],1],["A deal is stuck in procurement. What do you do?",["Ignore","Follow up with the right stakeholder","Blame procurement","Skip"],1],["You're unsure of the contract terms. What do you do?",["Guess","Check the approved terms or ask legal","Skip","Ask the prospect"],1],["A prospect goes dark. What do you do?",["Give up","Follow the nurture sequence","Call daily","Ignore"],1],["You hit quota early. What do you do?",["Stop","Help the team or work the pipeline","Log off","Celebrate publicly"],1]],
+56:[["A dataset has missing values. What do you do?",["Ignore","Handle per the analysis plan (drop, impute, flag)","Guess","Delete the column"],1],["A query returns unexpected results. What do you do?",["Trust it","Check the logic and data","Ignore","Guess"],1],["You spot an outlier. What do you do?",["Remove it","Investigate before deciding","Ignore","Keep it"],1],["You're unsure of a metric definition. What do you do?",["Guess","Check the data dictionary","Skip","Use your own"],1],["You're behind on analysis. What do you do?",["Rush","Notify the lead and prioritize","Skip checks","Work silently"],1]],
+57:[["A user reports a layout bug on mobile. What do you do?",["Ignore","Reproduce and fix per the spec","Guess","Blame the browser"],1],["You're unsure of a CSS approach. What do you do?",["Guess","Check the codebase conventions or ask","Skip","Use inline styles"],1],["A dependency has a vulnerability. What do you do?",["Ignore","Flag it per the security process","Patch silently","Skip"],1],["You're behind on tickets. What do you do?",["Rush","Notify the lead and prioritize","Skip tests","Work silently"],1],["A feature is ambiguous. What do you do?",["Guess","Ask clarifying questions","Skip","Build everything"],1]],
+58:[["A user is confused by a flow. What do you do?",["Ignore","Run usability testing or review the flow","Guess","Redesign freely"],1],["You're unsure of a design system rule. What do you do?",["Guess","Check the design system","Skip","Use your own"],1],["A client wants an inaccessible color. What do you do?",["Use it","Flag accessibility and propose alternatives","Ignore","Refuse harshly"],1],["A prototype needs testing. What do you do?",["Skip","Follow the test plan","Guess","Ship it"],1],["You're behind on designs. What do you do?",["Rush","Notify the lead and prioritize","Skip","Work silently"],1]],
+59:[["A component re-renders too often. What do you do?",["Ignore","Profile and optimize per best practice","Guess","Rewrite freely"],1],["You're unsure of an accessibility requirement. What do you do?",["Guess","Check WCAG or ask","Skip","Use your own"],1],["A build fails on a dependency update. What do you do?",["Ignore","Investigate and fix per process","Roll back silently","Skip"],1],["You're behind on features. What do you do?",["Rush","Notify the lead and prioritize","Skip tests","Work silently"],1],["A design is ambiguous. What do you do?",["Guess","Ask clarifying questions","Skip","Build everything"],1]],
+60:[["You're mopping a floor and a customer walks through. What do you do?",["Keep mopping","Pause, warn them, or place a sign","Ignore","Rush"],1],["You find a hazardous spill. What do you do?",["Wipe it","Follow the hazard protocol and use PPE","Ignore","Ask a coworker"],1],["You're unsure which chemical to use. What do you do?",["Guess","Check the label and SDS","Skip","Mix them"],1],["You're behind on your route. What do you do?",["Rush","Notify the supervisor and prioritize","Skip areas","Work silently"],1],["You see damage in a restroom. What do you do?",["Ignore","Report it per workflow","Fix it yourself","Skip"],1]],
+61:[["A guest leaves a tip. What do you do?",["Keep it","Follow the hotel's tip policy","Ignore","Split it"],1],["You find a guest's belongings. What do you do?",["Keep them","Turn them in per lost-and-found","Ignore","Ask a coworker"],1],["A guest asks for extra towels. What do you do?",["Refuse","Provide per policy","Ignore","Charge them"],1],["You're behind on rooms. What do you do?",["Rush","Notify the supervisor and prioritize","Skip rooms","Work silently"],1],["You see a safety hazard. What do you do?",["Ignore","Report it per workflow","Fix it yourself","Skip"],1]],
+62:[["A swimmer is in distress. What do you do?",["Wait","Enter the water per your training","Yell","Call for backup only"],1],["You're unsure of a pool rule. What do you do?",["Guess","Check the rulebook or ask","Skip","Make one up"],1],["A child is unattended. What do you do?",["Ignore","Follow the unattended child protocol","Yell at the parent","Skip"],1],["You see lightning. What do you do?",["Ignore","Follow the weather protocol and clear the pool","Wait","Ask a coworker"],1],["You're behind on a rotation. What do you do?",["Rush","Notify the supervisor and prioritize","Skip","Work silently"],1]],
+63:[["A car's mirror is loose. What do you do?",["Ignore","Report it to the supervisor","Fix it yourself","Skip"],1],["You're unsure of a chemical mix. What do you do?",["Guess","Check the label and SDS","Skip","Mix them"],1],["A customer is impatient. What do you do?",["Argue","Stay professional and keep the line moving","Ignore","Rush dangerously"],1],["You're behind on cars. What do you do?",["Rush","Notify the supervisor and prioritize","Skip cars","Work silently"],1],["You see a safety hazard. What do you do?",["Ignore","Report it per workflow","Fix it yourself","Skip"],1]],
+64:[["You're using a mower near a bystander. What do you do?",["Keep going","Stop and warn them to move","Ignore","Rush"],1],["You find a hazardous plant. What do you do?",["Ignore","Flag it per protocol and use PPE","Skip","Pull it"],1],["You're unsure of a tool's use. What do you do?",["Guess","Check the manual or ask","Skip","Use it anyway"],1],["You're behind on a route. What do you do?",["Rush","Notify the supervisor and prioritize","Skip areas","Work silently"],1],["You see a safety hazard. What do you do?",["Ignore","Report it per workflow","Fix it yourself","Skip"],1]],
+65:[["You're unsure of a weld spec. What do you do?",["Guess","Check the spec or ask","Skip","Weld anyway"],1],["You see a safety hazard. What do you do?",["Ignore","Report it per workflow","Fix it yourself","Skip"],1],["You're behind on a job. What do you do?",["Rush","Notify the supervisor and prioritize","Skip checks","Work silently"],1],["A tool is damaged. What do you do?",["Use it","Tag it out and report","Ignore","Fix it yourself"],1],["You're unsure of PPE. What do you do?",["Guess","Check the requirement or ask","Skip","Use your own"],1]],
+66:[["You're unsure of a pipe size. What do you do?",["Guess","Measure and verify","Skip","Ask a friend"],1],["You find a leak after a repair. What do you do?",["Ignore","Report and re-fix per workflow","Patch it","Skip"],1],["You're unsure of a code requirement. What do you do?",["Guess","Check the code or ask","Skip","Use your own"],1],["A customer is unhappy with the work. What do you do?",["Argue","Listen and address per policy","Ignore","Blame them"],1],["You're behind on jobs. What do you do?",["Rush","Notify the dispatcher and prioritize","Skip checks","Work silently"],1]],
+67:[["You see someone tailgating into a secure area. What do you do?",["Ignore","Follow the access control protocol","Confront them","Skip"],1],["You're unsure of a post order. What do you do?",["Guess","Check the post orders or ask","Skip","Make one up"],1],["You see a suspicious package. What do you do?",["Open it","Follow the suspicious item protocol","Ignore","Move it"],1],["A visitor is aggressive. What do you do?",["Match tone","Follow the de-escalation protocol","Ignore","Escalate immediately"],1],["You're unsure of an incident report. What do you do?",["Guess","Check the format or ask","Skip","Write vaguely"],1]],
+68:[["You're unsure of a load's weight. What do you do?",["Guess","Check the manifest or weigh it","Skip","Lift anyway"],1],["You see a safety hazard in the aisle. What do you do?",["Ignore","Report it per workflow","Fix it yourself","Skip"],1],["You're behind on picks. What do you do?",["Rush","Notify the supervisor and prioritize","Skip checks","Work silently"],1],["A pallet is unstable. What do you do?",["Ignore","Restack or flag it","Lift anyway","Skip"],1],["You're unsure of a forklift rule. What do you do?",["Guess","Check the manual or ask","Skip","Use your own"],1]],
+69:[["A client refuses a bath. What do you do?",["Force it","Respect their choice and document","Ignore","Skip the visit"],1],["You're unsure of a medication schedule. What do you do?",["Guess","Check the care plan or ask","Skip","Ask the client"],1],["You see signs of abuse. What do you do?",["Ignore","Report per mandated reporting","Confront the family","Skip"],1],["A client falls. What do you do?",["Move them","Follow the fall protocol","Ignore","Call family first"],1],["You're behind on visits. What do you do?",["Rush","Notify the supervisor and prioritize","Skip visits","Work silently"],1]],
+70:[["You're unsure of a vitals range. What do you do?",["Guess","Check the reference or ask","Skip","Record it anyway"],1],["A patient is anxious. What do you do?",["Ignore","Acknowledge and reassure per protocol","Rush","Skip"],1],["You see a safety hazard. What do you do?",["Ignore","Report it per workflow","Fix it yourself","Skip"],1],["You're unsure of a sterilization step. What do you do?",["Guess","Check the protocol or ask","Skip","Use your own"],1],["You're behind on tasks. What do you do?",["Rush","Notify the supervisor and prioritize","Skip checks","Work silently"],1]],
+71:[["A patient's condition changes suddenly. What do you do?",["Wait","Follow the escalation protocol and notify the provider","Ignore","Document later"],1],["You're unsure of a dose. What do you do?",["Guess","Verify per the five rights","Skip","Ask a coworker to guess"],1],["You see a safety hazard. What do you do?",["Ignore","Report it per workflow","Fix it yourself","Skip"],1],["A family member is upset. What do you do?",["Argue","Listen and follow the communication policy","Ignore","Escalate"],1],["You're behind on charting. What do you do?",["Rush","Notify the supervisor and prioritize","Skip entries","Work silently"],1]],
+72:[["You're unsure of a route restriction. What do you do?",["Guess","Check the route and follow the rule","Skip","Ignore"],1],["You see a safety hazard on the road. What do you do?",["Ignore","Report it per protocol","Fix it yourself","Skip"],1],["You're behind schedule. What do you do?",["Speed","Notify dispatch and prioritize safety","Skip breaks","Work silently"],1],["A load shifts. What do you do?",["Ignore","Stop and secure it per protocol","Keep driving","Skip"],1],["You're unsure of a log rule. What do you do?",["Guess","Check the regulation or ask","Skip","Use your own"],1]],
+73:[["You're unsure of a wire gauge. What do you do?",["Guess","Check the code or ask","Skip","Use your own"],1],["You see a safety hazard. What do you do?",["Ignore","Report it per workflow","Fix it yourself","Skip"],1],["A circuit keeps tripping. What do you do?",["Reset it","Investigate per troubleshooting workflow","Ignore","Replace the breaker"],1],["You're unsure of a lockout step. What do you do?",["Guess","Follow the LOTO procedure","Skip","Use your own"],1],["You're behind on a job. What do you do?",["Rush","Notify the supervisor and prioritize","Skip checks","Work silently"],1]],
+74:[["A patient's family asks for information. What do you do?",["Share everything","Follow HIPAA and the communication policy","Refuse harshly","Ignore"],1],["You're unsure of a dose. What do you do?",["Guess","Verify per the five rights","Skip","Ask a coworker to guess"],1],["A patient deteriorates. What do you do?",["Wait","Follow the escalation protocol","Ignore","Document later"],1],["You see a safety hazard. What do you do?",["Ignore","Report it per workflow","Fix it yourself","Skip"],1],["You're behind on charting. What do you do?",["Rush","Notify the supervisor and prioritize","Skip entries","Work silently"],1]]
+};
+
+/* Compose each job's 20-question set: first 15 from DEFAULT_Q (general
+   employability), last 5 role-specific from ROLE_Q[job id]. */
+const JOB_Q={};
+J.forEach(j=>{ JOB_Q[j.id]=DEFAULT_Q.slice(0,15).concat(ROLE_Q[j.id]||DEFAULT_Q.slice(15)); });
+let activeQ=DEFAULT_Q;
+const roleQ=()=>JOB_Q[cur.id]||DEFAULT_Q;
+/* === end per-job sets === */
+
 function buildQuiz(){
-  $('quiz').innerHTML=QS.map((q,i)=>`<div class="q"><p>${i+1}. ${q[0]}</p>${q[1].map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"><span>${o}</span></label>`).join('')}</div>`).join('');
+  activeQ=roleQ();
+  $('quiz').innerHTML=activeQ.map((q,i)=>`<div class="q" data-qi="${i}"><p>${i+1}. ${q[0]}</p>${q[1].map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"><span>${o}</span></label>`).join('')}</div>`).join('');
+  updateProgress();
 }
+/* === Added: progress tracking for the full-page assessment === */
+function updateProgress(){
+  if(!activeQ.length){$('progressLabel').textContent='';$('progressFill').style.width='0';return}
+  let done=0;
+  for(let i=0;i<activeQ.length;i++){if(document.querySelector(`[name=q${i}]:checked`))done++}
+  $('progressLabel').textContent=done+' of '+activeQ.length+' answered';
+  $('progressFill').style.width=(done/activeQ.length*100)+'%';
+}
+document.addEventListener('change',e=>{if(e.target.name&&e.target.name.startsWith('q'))updateProgress()});
+/* === end added === */
+
 function go(n){
-  for(let i=1;i<=4;i++){$('p'+i).hidden=i!==n;const b=$('s'+i);b.classList.toggle('on',i===n);b.classList.toggle('done',i<n)}
+  for(let i=1;i<=2;i++){$('p'+i).hidden=i!==n;const b=$('s'+i);b.classList.toggle('on',i===n);b.classList.toggle('done',i<n)}
   msg('');document.querySelector('.mbox').scrollTop=0;
   if(n===1)$('nm').focus({preventScroll:true});
 }
@@ -371,46 +553,137 @@ async function saveCandidate(sc,ok){
     earliest_start_date:prof.st,skills:prof.sk,about:prof.ab||null,
     id_type:document.querySelector('[name=dt]:checked').value,
     id_file_path:idPath,cv_file_path:cvPath,
-    assessment_score:sc,assessment_total:QS.length,assessment_percent:Math.round(sc/QS.length*100),passed:ok,
+    assessment_score:sc,assessment_total:activeQ.length,assessment_percent:Math.round(sc/activeQ.length*100),passed:ok,
     role_title:cur.t,company:cur.co,hourly_rate:cur.r
   });
   if(error)throw error;
 }
+
+/* === Changed: p2 "Next" now opens the full-page assessment instead of modal step 3 === */
 $('n2').onclick=()=>{
   const dt=document.querySelector('[name=dt]:checked').value;
   if(!files.id)return msg('Upload a photo of your '+dt.toLowerCase()+'.','err');
   if(!files.cv)return msg('Upload your CV.','err');
   const b=$('n2');b.disabled=true;b.textContent='Checking…';
-  setTimeout(()=>{b.disabled=false;b.textContent='Next';verified=true;go(3)},1000);
+  setTimeout(()=>{b.disabled=false;b.textContent='Next';verified=true;openAssess()},1000);
 };
+
+/* === Added: full-page assessment open/back/close, progress, submit → review === */
+let lastScore=0,lastPass=false;
+function openAssess(){
+  if(!cur)return;
+  $('assessRole').textContent=cur.t+' · '+cur.co;
+  $('assessTitle').textContent=cur.t+' assessment';
+  $('assessSub').textContent='Twenty questions. You need 15 correct (75%) to pass.';
+  buildQuiz();
+  $('modal').hidden=true;document.body.style.overflow='hidden';
+  $('assessPage').hidden=false;$('assessPage').scrollTop=0;
+  $('assessMsg').textContent='';$('assessMsg').className='msg';
+  history.pushState({page:'assess'},'');
+}
+function closeAssess(){
+  $('assessPage').hidden=true;
+  $('modal').hidden=false;document.body.style.overflow='hidden';
+  go(2);
+}
+$('assessBack').onclick=closeAssess;
+$('assessBackBtn').onclick=closeAssess;
+
 $('n3').onclick=async()=>{
   let sc=0;
-  for(let i=0;i<QS.length;i++){
-    const c=document.querySelector('[name=q'+i+']:checked');
-    if(!c){document.querySelector('[name=q'+i+']').closest('.q').scrollIntoView({block:'center'});return msg('Answer question '+(i+1)+'.','err')}
-    if(+c.value===QS[i][2])sc++;
+  for(let i=0;i<activeQ.length;i++){
+    const c=document.querySelector(`[name=q${i}]:checked`);
+    if(!c){document.querySelector(`[name=q${i}]`).closest('.q').scrollIntoView({block:'center'});return aMsg('Answer question '+(i+1)+'.','err')}
+    if(+c.value===activeQ[i][2])sc++;
   }
-  const ok=sc>=15,r=$('res'),btn=$('n3');
-  btn.disabled=true;btn.textContent='Submitting…';msg('Saving your application…');
-  try{await saveCandidate(sc,ok)}catch(err){
-    console.error('Supabase error:',err);
+  const ok=sc>=15;
+  const btn=$('n3');
+  btn.disabled=true;btn.textContent='Checking…';aMsg('Scoring your answers…');
+  setTimeout(()=>{
     btn.disabled=false;btn.textContent='Submit assessment';
-    return msg('Could not save your application: '+(err&&err.message?err.message:'unknown error')+'. Try again.','err');
-  }
-  btn.disabled=false;btn.textContent='Submit assessment';
-  if(ok){
-    applied.add(cur.id);render();
-    r.innerHTML=`<div class="score">${sc}/20</div><h3 style="font-size:24px;margin:10px 0 6px">You're ready to start</h3><p style="font-size:13.5px;color:var(--mu)">You passed. ${esc(cur.co)} can now see your profile, ID check and CV.</p><ul class="vlist"><li>Role: ${esc(cur.t)}, $${cur.r}/hr</li><li>Location: ${esc(cur.loc)}</li><li>Start date: ${esc(prof.st)}</li><li>Offer details and onboarding forms go to ${esc(prof.em)}</li></ul><button type="button" class="btn btn-p" id="startBtn" style="margin-top:22px">Start working</button>`;
-  }else{
-    r.innerHTML=`<div class="score bad">${sc}/20</div><h3 style="font-size:24px;margin:10px 0 6px">Not quite yet</h3><p style="font-size:13.5px;color:var(--mu)">You need 15 of 20 correct (75%) to pass. Retake the assessment when you're ready.</p><button type="button" class="btn btn-p" id="retakeBtn" style="margin-top:22px">Retake assessment</button>`;
-  }
-  go(4);
+    lastScore=sc;lastPass=ok;
+    $('assessPage').hidden=true;document.body.style.overflow='hidden';
+    showReview(sc,ok);
+  },500);
 };
-$('res').onclick=e=>{
-  const b=e.target.closest('button');if(!b)return;
-  if(b.id==='startBtn'){const co=cur.co;closeM();toast('Welcome to '+co)}
-  if(b.id==='retakeBtn'){buildQuiz();go(3)}
+function aMsg(t,k){const m=$('assessMsg');m.textContent=t;m.className='msg '+(k||'')}
+/* === end added === */
+
+/* === Added: review page === */
+function showReview(sc,ok){
+  const r=$('reviewBody');
+  const dt=document.querySelector('[name=dt]:checked').value;
+  r.innerHTML=`
+    <div class="card">
+      <h3>Role</h3>
+      <dl>
+        <dt>Title</dt><dd>${esc(cur.t)}</dd>
+        <dt>Company</dt><dd>${esc(cur.co)}</dd>
+        <dt>Location</dt><dd>${esc(cur.loc)}</dd>
+        <dt>Type</dt><dd>${esc(cur.ty)}</dd>
+        <dt>Rate</dt><dd>$${cur.r}/hr</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Your profile</h3>
+      <dl>
+        <dt>Name</dt><dd>${esc(prof.nm)}</dd>
+        <dt>Email</dt><dd>${esc(prof.em)}</dd>
+        <dt>Phone</dt><dd>${esc(prof.ph)}</dd>
+        <dt>Date of birth</dt><dd>${esc(prof.dob)}</dd>
+        <dt>Location</dt><dd>${esc(prof.lc)}</dd>
+        <dt>Work auth</dt><dd>${esc(prof.wa)}</dd>
+        <dt>Education</dt><dd>${esc(prof.ed)}</dd>
+        <dt>Experience</dt><dd>${esc(prof.ex)}</dd>
+        <dt>Availability</dt><dd>${esc(prof.av)}</dd>
+        <dt>Earliest start</dt><dd>${esc(prof.st)}</dd>
+        <dt>Skills</dt><dd>${esc(prof.sk)}</dd>
+        ${prof.ab?`<dt>About</dt><dd>${esc(prof.ab)}</dd>`:''}
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Verification</h3>
+      <dl>
+        <dt>ID type</dt><dd>${esc(dt)}</dd>
+        <dt>ID file</dt><dd>${files.id?esc(files.id.name):'—'}</dd>
+        <dt>CV</dt><dd>${files.cv?esc(files.cv.name):'—'}</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Assessment</h3>
+      <div class="score${ok?'':' bad'}">${sc}/${activeQ.length}</div>
+      <p style="font-size:13.5px;color:var(--mu);margin-top:8px">${ok?'Pass — 15 or more correct (75%).':'Below pass mark — you need 15 of 20 (75%).'}</p>
+    </div>`;
+  $('reviewMsg').textContent='';$('reviewMsg').className='msg';
+  $('reviewSubmit').disabled=!ok;
+  $('reviewSubmit').textContent=ok?'Submit application':'Cannot submit — retake required';
+  $('reviewPage').hidden=false;$('reviewPage').scrollTop=0;
+  history.pushState({page:'review'},'');
+}
+$('reviewEdit').onclick=()=>{
+  $('reviewPage').hidden=true;$('modal').hidden=false;document.body.style.overflow='hidden';go(1);
 };
+$('reviewBack').onclick=()=>{
+  $('reviewPage').hidden=true;
+  $('assessPage').hidden=false;$('assessPage').scrollTop=0;
+  history.pushState({page:'assess'},'');
+};
+$('reviewSubmit').onclick=async()=>{
+  const btn=$('reviewSubmit'),m=$('reviewMsg');
+  btn.disabled=true;btn.textContent='Submitting…';m.className='msg';m.textContent='Saving your application…';
+  try{await saveCandidate(lastScore,lastPass)}catch(err){
+    console.error('Supabase error:',err);
+    btn.disabled=false;btn.textContent='Submit application';
+    m.className='msg err';m.textContent='Could not save your application: '+(err&&err.message?err.message:'unknown error')+'. Try again.';
+    return;
+  }
+  applied.add(cur.id);render();
+  $('reviewPage').hidden=true;document.body.style.overflow='';
+  const co=cur.co;cur=null;
+  toast('Application sent to '+co);
+};
+/* === end review === */
+
 $('next').onclick=()=>{
   const v=id=>$(id).value.trim();
   if(v('nm').length<2)return msg('Enter your full name.','err');
