@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,145 +8,147 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:80px}
-a{text-decoration:none;color:inherit}ul{list-style:none}button,input,select{font-family:inherit}
-:root{--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--fm:'Inter',sans-serif;--cut:14px;--t:220ms cubic-bezier(.4,0,.2,1);
---bg:#0b0a09;--bg2:#121010;--sf:#181513;--bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.17);
---tx:#f5f2ee;--mu:#9a918a;--fa:#645d56;--ac:#ff7a1a;--acd:#d9600a;--acs:rgba(255,122,26,.11);--ok:#4ade80}
-body{background:var(--bg);color:var(--tx);font-family:var(--fb);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:env(safe-area-inset-top,0px)}
+a{text-decoration:none;color:inherit}ul{list-style:none}button,input,select,textarea{font-family:inherit}
+:root{
+  --fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;--fm:'Inter',sans-serif;--cut:14px;--t:220ms cubic-bezier(.4,0,.2,1);
+  --bg:#ffffff;--bg2:#f8f7fb;--sf:#ffffff;--sf2:#f3f2f9;
+  --bd:rgba(20,20,40,.08);--bd2:rgba(20,20,40,.16);
+  --tx:#16162b;--mu:#5c5b72;--fa:#8f8ea5;
+  --ac:#5b4ff0;--acd:#453ad8;--acs:rgba(91,79,240,.09);
+  --ok:#17935c;--err:#d43e3e;
+  --shadow:0 1px 3px rgba(20,20,50,.06),0 8px 24px rgba(20,20,50,.05);
+  --shadow-lg:0 12px 40px rgba(20,20,50,.12);
+}
+[data-theme="dark"]{
+  --bg:#0b0a09;--bg2:#121010;--sf:#181513;--sf2:#1f1b18;
+  --bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.17);
+  --tx:#f5f2ee;--mu:#9a918a;--fa:#645d56;
+  --ac:#8b7bff;--acd:#7264e0;--acs:rgba(139,123,255,.14);
+  --ok:#4ade80;--err:#ff6b5b;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.5);
+}
+body{background:var(--bg);color:var(--tx);font-family:var(--fb);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:env(safe-area-inset-top,0px);transition:background var(--t),color var(--t)}
 .wrap{max-width:1240px;margin:0 auto;padding:0 28px}
-h1,h2,h3{font-family:var(--fd);font-weight:700;line-height:1.12;letter-spacing:-.02em}
+h1,h2,h3{font-family:var(--fd);font-weight:700;line-height:1.15;letter-spacing:-.02em}
 .pad{padding:96px 0}
 .eyebrow{font-family:var(--fm);font-size:11.5px;letter-spacing:.14em;font-weight:600;text-transform:uppercase;color:var(--ac);display:inline-flex;align-items:center;gap:10px}
-.eyebrow::before{content:"";width:7px;height:7px;background:var(--ac);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.eyebrow::before{content:"";width:7px;height:7px;background:var(--ac);border-radius:50%}
 h2{font-size:clamp(27px,3.2vw,38px);margin-top:14px}
-.btn{font-family:var(--fd);font-weight:600;font-size:15px;letter-spacing:0;padding:14px 28px;border:1.5px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;
-clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,var(--cut) 100%,0 calc(100% - var(--cut)));transition:var(--t)}
-.btn-p{background:var(--ac);color:#0b0a09}.btn-p:hover{background:var(--acd)}
+.btn{font-family:var(--fd);font-weight:600;font-size:15px;letter-spacing:0;padding:14px 28px;border:1.5px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;border-radius:12px;transition:var(--t)}
+.btn-p{background:var(--ac);color:#fff}.btn-p:hover{background:var(--acd)}
 .btn-g{background:transparent;border-color:var(--bd2);color:var(--tx)}.btn-g:hover{border-color:var(--ac);color:var(--ac)}
-.btn-sm{padding:10px 20px;font-size:12.5px;--cut:9px}
-.btn:focus-visible,input:focus-visible,select:focus-visible,.drop:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.btn-sm{padding:10px 20px;font-size:12.5px;border-radius:10px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.drop:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 header{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:var(--t);border-bottom:1px solid transparent}
 header.s{background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom-color:var(--bd)}
 nav{display:flex;align-items:center;justify-content:space-between;height:74px}
 .logo{font-family:var(--fd);font-weight:800;font-size:24px;letter-spacing:-.02em;display:flex;align-items:center}
 .logo b{color:var(--ac);font-weight:700}
 .links{display:flex;gap:34px}
-.links a{font-family:var(--fd);font-weight:600;font-size:14.5px;letter-spacing:0;color:var(--mu);transition:color var(--t)}
+.links a{font-family:var(--fd);font-weight:600;font-size:14.5px;color:var(--mu);transition:color var(--t)}
 .links a:hover{color:var(--tx)}
 .nr{display:flex;gap:12px;align-items:center}
-.burger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;background:none;border:1px solid var(--bd2);cursor:pointer;transition:var(--t)}
+.icon-btn{width:42px;height:42px;border-radius:10px;border:1px solid var(--bd2);background:var(--sf);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:var(--t)}
+.icon-btn:hover{border-color:var(--ac);color:var(--ac)}
+.icon-btn svg{width:18px;height:18px}
+.burger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;background:var(--sf);border:1px solid var(--bd2);border-radius:10px;cursor:pointer;transition:var(--t)}
 .burger:hover{border-color:var(--ac)}.burger span{width:20px;height:2px;background:var(--tx)}
-@media(max-width:800px){.burger{display:flex}.links{display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--bd);flex-direction:column;gap:0}.links.open{display:flex}.links a{display:block;padding:16px 28px;border-top:1px solid var(--bd)}}
+@media(max-width:800px){.burger{display:flex}.links{display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--bd);flex-direction:column;gap:0;box-shadow:var(--shadow)}.links.open{display:flex}.links a{display:block;padding:16px 28px;border-top:1px solid var(--bd)}}
 .hero{padding:170px 0 100px;position:relative;overflow:hidden;background:radial-gradient(ellipse 70% 50% at 80% 0%,var(--acs),transparent 60%),var(--bg)}
-.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:linear-gradient(to bottom,transparent,#000b 30%,transparent 90%)}
-.glow{position:absolute;width:56vw;height:56vw;max-width:680px;max-height:680px;border-radius:50%;top:-22%;right:-12%;background:radial-gradient(circle,rgba(255,122,26,.34),transparent 70%);filter:blur(50px);animation:gp 7s ease-in-out infinite}
-@keyframes gp{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.85;transform:scale(1.1)}}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);background-size:60px 60px;mask-image:linear-gradient(to bottom,transparent,#000b 30%,transparent 90%);opacity:.5}
 .hero .in{position:relative;max-width:760px}
 .hero h1{font-size:clamp(38px,5.4vw,64px);margin:18px 0 20px}.hero h1 span{color:var(--ac)}
 .lead{font-size:17px;color:var(--mu);max-width:540px;margin-bottom:32px}
 .acts{display:flex;gap:14px;flex-wrap:wrap}
 .stats{display:flex;gap:44px;flex-wrap:wrap;margin-top:44px}
-.stats .n{font-family:var(--fm);font-size:28px;color:var(--ac)}.stats .l{font-size:12px;color:var(--fa);text-transform:uppercase;letter-spacing:.05em}
+.stats .n{font-family:var(--fd);font-size:28px;color:var(--ac);font-weight:700}.stats .l{font-size:12px;color:var(--fa);text-transform:uppercase;letter-spacing:.05em}
 .alt{background:var(--bg2);border-block:1px solid var(--bd)}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);margin-top:48px;position:relative}
-.steps::before{content:"";position:absolute;top:22px;left:0;right:0;height:1px;background:var(--bd2)}
-.step{padding-right:22px;position:relative}
-.step .ix{font-family:var(--fm);font-size:14px;color:var(--ac);width:44px;height:44px;border:1.5px solid var(--ac);background:var(--bg2);display:flex;align-items:center;justify-content:center;margin-bottom:22px;position:relative}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);margin-top:48px;position:relative;gap:24px}
+.step{position:relative}
+.step .ix{font-family:var(--fd);font-weight:700;font-size:14px;color:var(--ac);width:44px;height:44px;border:1.5px solid var(--ac);background:var(--sf);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:22px}
 .step h3{font-size:17px;margin-bottom:8px}.step p{font-size:13.5px;color:var(--mu)}
-@media(max-width:860px){.steps{grid-template-columns:1fr;gap:30px}.steps::before{display:none}}
+@media(max-width:860px){.steps{grid-template-columns:1fr;gap:30px}}
 .bar{display:flex;gap:12px;flex-wrap:wrap;margin:36px 0 10px}
-.bar input,.bar select{background:var(--sf);border:1px solid var(--bd2);color:var(--tx);padding:12px 14px;font-size:14px;min-width:0}
+.bar input,.bar select{background:var(--sf);border:1px solid var(--bd2);color:var(--tx);padding:12px 14px;font-size:14px;min-width:0;border-radius:10px}
 .bar input{flex:1 1 240px}.bar select{flex:0 1 190px}
 .count{font-family:var(--fm);font-size:12px;color:var(--fa);margin-bottom:18px}
-.jobs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd)}
+.jobs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 @media(max-width:1000px){.jobs{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.jobs{grid-template-columns:1fr}}
-.job{background:var(--bg);padding:26px 24px;display:flex;flex-direction:column;transition:background var(--t)}
-.job:hover{background:var(--sf)}
-.job .cat{font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ac);margin-bottom:8px}
+.job{background:var(--sf);padding:26px 24px;display:flex;flex-direction:column;border:1px solid var(--bd);border-radius:14px;transition:all var(--t);box-shadow:var(--shadow)}
+.job:hover{border-color:var(--ac);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.job .cat{font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ac);margin-bottom:10px;font-weight:600}
 .job h3{font-size:19px;margin-bottom:4px}.job .co{font-size:13px;color:var(--mu);margin-bottom:14px}
 .job .meta{font-size:12.5px;color:var(--fa);margin-bottom:16px;flex:1}
 .job .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.rate{font-family:var(--fm);font-size:21px}.rate small{font-size:11.5px;color:var(--fa)}
+.rate{font-family:var(--fd);font-size:21px;font-weight:700}.rate small{font-size:11.5px;color:var(--fa);font-weight:500}
 .job .btn.done{background:transparent;border-color:var(--ok);color:var(--ok);cursor:default}
-.empty{padding:40px;text-align:center;color:var(--mu);background:var(--bg)}
+.empty{padding:40px;text-align:center;color:var(--mu);background:var(--sf);border-radius:14px;border:1px solid var(--bd)}
 .vgrid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
 @media(max-width:860px){.vgrid{grid-template-columns:1fr;gap:30px}}
 .vgrid p.t{color:var(--mu);margin-top:16px;max-width:430px}
 .vlist{margin-top:22px}.vlist li{font-size:13.5px;color:var(--mu);padding:9px 0;border-top:1px solid var(--bd);display:flex;gap:10px}
-.vlist li::before{content:"";width:7px;height:7px;margin-top:8px;background:var(--ac);flex-shrink:0;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
-.card{background:linear-gradient(180deg,var(--acs),transparent 40%),var(--sf);border:1px solid var(--ac);padding:30px 28px}
-.card label.f{display:block;font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin:0 0 8px}
+.vlist li::before{content:"";width:7px;height:7px;margin-top:8px;background:var(--ac);flex-shrink:0;border-radius:50%}
+.card{background:var(--sf);border:1px solid var(--bd);padding:30px 28px;border-radius:14px;box-shadow:var(--shadow)}
+.card label.f{display:block;font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin:0 0 8px;font-weight:600}
 .types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px}
 .types label{cursor:pointer}.types input{position:absolute;opacity:0}
-.types span{display:block;text-align:center;padding:12px 6px;border:1.5px solid var(--bd2);font-family:var(--fd);font-weight:600;font-size:14px;color:var(--mu);transition:var(--t)}
+.types span{display:block;text-align:center;padding:12px 6px;border:1.5px solid var(--bd2);font-family:var(--fd);font-weight:600;font-size:14px;color:var(--mu);transition:var(--t);border-radius:10px}
 .types input:checked+span{border-color:var(--ac);color:var(--ac);background:var(--acs)}
 .types input:focus-visible+span{outline:2px solid var(--ac);outline-offset:2px}
-.drop{border:1.5px dashed var(--bd2);padding:30px 16px;text-align:center;cursor:pointer;transition:var(--t);margin-bottom:18px;color:var(--mu);font-size:14px}
+.drop{border:1.5px dashed var(--bd2);padding:30px 16px;text-align:center;cursor:pointer;transition:var(--t);margin-bottom:18px;color:var(--mu);font-size:14px;border-radius:12px;background:var(--sf2)}
 .drop:hover,.drop.over{border-color:var(--ac);background:var(--acs)}
-.drop img{max-height:170px;max-width:100%;margin:0 auto 10px;display:block}
+.drop img{max-height:170px;max-width:100%;margin:0 auto 10px;display:block;border-radius:8px}
 .drop small{display:block;color:var(--fa);font-size:12px;margin-top:4px}
-.card input[type=text],.card input[type=email],.card input[type=tel],.card input[type=date],.card input[type=url],.card select,.card textarea{font-family:inherit;width:100%;background:var(--bg);border:1px solid var(--bd2);color:var(--tx);padding:12px 14px;font-size:14px;margin-bottom:18px}
-.msg{font-size:13px;min-height:20px;margin-top:14px;color:var(--mu)}.msg.err{color:#ff6b5b}.msg.ok{color:var(--ok)}
+.card input[type=text],.card input[type=email],.card input[type=tel],.card input[type=date],.card input[type=url],.card select,.card textarea{font-family:inherit;width:100%;background:var(--bg);border:1px solid var(--bd2);color:var(--tx);padding:12px 14px;font-size:14px;margin-bottom:18px;border-radius:10px}
+.msg{font-size:13px;min-height:20px;margin-top:14px;color:var(--mu)}.msg.err{color:var(--err)}.msg.ok{color:var(--ok)}
 .card .btn{width:100%}
-.badge{font-family:var(--fm);font-size:11.5px;padding:8px 14px;border:1px solid var(--bd2);color:var(--mu)}
+.badge{font-family:var(--fm);font-size:11.5px;padding:8px 14px;border:1px solid var(--bd2);color:var(--mu);border-radius:999px}
 .badge.v{border-color:var(--ok);color:var(--ok)}
 footer{padding:50px 0 28px;background:var(--bg2);border-top:1px solid var(--bd)}
 .ft{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--fm);font-size:11.5px;color:var(--fa);margin-top:22px}
 footer p{font-size:13.5px;color:var(--mu);max-width:340px;margin-top:10px}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ac);color:#0b0a09;font-family:var(--fd);font-weight:600;padding:13px 22px;opacity:0;pointer-events:none;transition:var(--t);z-index:99;max-width:92vw;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ac);color:#fff;font-family:var(--fd);font-weight:600;padding:13px 22px;opacity:0;pointer-events:none;transition:var(--t);z-index:999;max-width:92vw;text-align:center;border-radius:12px;box-shadow:var(--shadow-lg)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 [hidden]{display:none!important}
-.btn:active,.burger:active,.x:active{transform:scale(.96)}
-.btn:disabled{opacity:.6;cursor:not-allowed}
-.modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
-.mbg{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
-.mbox{position:relative;width:100%;max-width:640px;max-height:92vh;overflow-y:auto;background-color:var(--sf)}
-.x{position:absolute;top:10px;right:10px;width:44px;height:44px;background:none;border:1px solid var(--bd2);color:var(--tx);font-size:24px;line-height:1;cursor:pointer;transition:var(--t)}
-.x:hover{border-color:var(--ac);color:var(--ac)}.x:focus-visible,.burger:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
-.drop{padding:22px 16px}.drop img{max-height:120px}
-@media(pointer:coarse){.btn-sm{min-height:44px}}
-@media(max-width:480px){.types{grid-template-columns:1fr}.card{padding:24px 18px}.btn{padding:14px 22px}}
-.stepbar{display:flex;gap:8px;margin-bottom:22px}
-.stepbar span{flex:1;padding:0 0 8px;border-bottom:2px solid var(--bd2);font-size:12.5px;font-weight:600;color:var(--fa);transition:var(--t)}
-.stepbar span.on{border-color:var(--ac);color:var(--ac)}
-.two{display:flex;gap:10px}.two .btn{flex:1;width:auto}.two .btn-g{flex:0 0 32%}
-.card{color-scheme:dark}.card textarea{resize:vertical}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.grid2>div{min-width:0}.grid2 .full{grid-column:1/-1}
-.stepbar span{font-size:11.5px}.stepbar span.done{border-color:var(--acd);color:var(--mu)}
-.q{margin-bottom:20px}.q p{font-weight:600;font-size:14.5px;margin-bottom:10px}
-.opt{display:block;cursor:pointer;margin-bottom:8px}.opt input{position:absolute;opacity:0}
-.opt span{display:block;padding:11px 14px;border:1.5px solid var(--bd2);font-size:13.5px;color:var(--mu);transition:var(--t)}
-.opt:hover span{border-color:var(--ac)}.opt input:checked+span{border-color:var(--ac);color:var(--tx);background:var(--acs)}
-.opt input:focus-visible+span{outline:2px solid var(--ac);outline-offset:2px}
-.score{font-family:var(--fd);font-size:60px;font-weight:800;color:var(--ac);line-height:1}
-.score.bad{color:#ff6b5b}
-@media(max-width:560px){.grid2{grid-template-columns:1fr}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
-
-/* === full-page assessment + review pages === */
+.btn:active,.burger:active{transform:scale(.97)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
 .page{position:fixed;inset:0;z-index:120;background:var(--bg);overflow-y:auto;padding-top:env(safe-area-inset-top,0px);animation:pagein 220ms cubic-bezier(.4,0,.2,1)}
 @keyframes pagein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .page-head{position:sticky;top:0;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);padding-top:env(safe-area-inset-top,0px);z-index:2}
 .page-head .row{display:flex;align-items:center;justify-content:space-between;gap:16px;height:70px}
-.page-head .back{font-family:var(--fd);font-weight:600;font-size:14px;background:none;border:1px solid var(--bd2);color:var(--mu);padding:10px 18px;cursor:pointer;transition:var(--t);--cut:9px;clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,var(--cut) 100%,0 calc(100% - var(--cut)))}
+.page-head .back{font-family:var(--fd);font-weight:600;font-size:14px;background:var(--sf);border:1px solid var(--bd2);color:var(--mu);padding:10px 18px;cursor:pointer;transition:var(--t);border-radius:10px}
 .page-head .back:hover{border-color:var(--ac);color:var(--ac)}
 .page-body{max-width:820px;margin:0 auto;padding:56px 28px 120px}
 .page-body .eyebrow{margin-bottom:6px}
 .page-body h2{font-size:clamp(24px,3vw,34px);margin-bottom:8px}
 .page-body .sub{color:var(--mu);font-size:14.5px;margin-bottom:36px}
+@media(max-width:560px){.page-body{padding:36px 18px 100px}}
+.stepbar{display:flex;gap:8px;margin-bottom:22px}
+.stepbar span{flex:1;padding:0 0 8px;border-bottom:2px solid var(--bd2);font-size:12.5px;font-weight:600;color:var(--fa);transition:var(--t)}
+.stepbar span.on{border-color:var(--ac);color:var(--ac)}
+.two{display:flex;gap:10px}.two .btn{flex:1;width:auto}.two .btn-g{flex:0 0 32%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.grid2>div{min-width:0}.grid2 .full{grid-column:1/-1}
+.q{margin-bottom:20px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:20px}
+.q p{font-weight:600;font-size:14.5px;margin-bottom:10px}
+.opt{display:block;cursor:pointer;margin-bottom:8px}.opt input{position:absolute;opacity:0}
+.opt span{display:block;padding:11px 14px;border:1.5px solid var(--bd2);font-size:13.5px;color:var(--mu);transition:var(--t);border-radius:10px}
+.opt:hover span{border-color:var(--ac)}.opt input:checked+span{border-color:var(--ac);color:var(--tx);background:var(--acs)}
+.opt input:focus-visible+span{outline:2px solid var(--ac);outline-offset:2px}
 .progress{position:sticky;top:70px;z-index:3;margin:0 -28px 30px;padding:12px 28px;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:14px;font-family:var(--fm);font-size:12.5px;color:var(--mu)}
-.progress .track{flex:1;height:5px;background:var(--bd2);overflow:hidden}
-.progress .fill{height:100%;background:var(--ac);width:0;transition:width 260ms cubic-bezier(.4,0,.2,1)}
-@media(prefers-reduced-motion:reduce){.progress .fill{transition:none}}
-.review{margin-top:8px}
-.review .card{margin-bottom:16px}
-.review h3{font-size:18px;margin-bottom:14px}
+.progress .track{flex:1;height:5px;background:var(--bd2);overflow:hidden;border-radius:99px}
+.progress .fill{height:100%;background:var(--ac);width:0;transition:width 260ms cubic-bezier(.4,0,.2,1);border-radius:99px}
 .review dl{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:13.5px}
 .review dt{color:var(--fa);font-family:var(--fm);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding-top:2px}
 .review dd{color:var(--tx);word-break:break-word}
 .review .actions{display:flex;gap:12px;margin-top:24px}
 .review .actions .btn{width:auto}
-@media(max-width:560px){.page-body{padding:36px 18px 100px}.progress{margin:0 -18px 24px;padding:12px 18px}}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}.types{grid-template-columns:1fr}.card{padding:24px 18px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+textarea{resize:vertical;min-height:120px}
+.id-split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.id-split{grid-template-columns:1fr}}
+.section-div{height:1px;background:var(--bd);margin:28px 0}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -154,29 +156,36 @@ footer p{font-size:13.5px;color:var(--mu);max-width:340px;margin-top:10px}
 <header id="hd"><div class="wrap"><nav>
 <a href="#top" class="logo">Synapse<b>AI</b></a>
 <ul class="links" id="links"><li><a href="#how">How it works</a></li><li><a href="#jobs">Jobs</a></li></ul>
-<div class="nr"><a href="#jobs" class="btn btn-p btn-sm">Find jobs</a><button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+<div class="nr">
+  <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+    <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+  </button>
+  <a href="#jobs" class="btn btn-p btn-sm">Find jobs</a>
+  <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</div>
 </nav></div></header>
 
 <main id="top">
-<section class="hero"><div class="glow"></div><div class="wrap"><div class="in">
+<section class="hero"><div class="wrap"><div class="in">
 <span class="eyebrow">AI-matched technical hiring</span>
 <h1>Get hired into the roles that <span>actually stretch</span> you</h1>
-<p class="lead">SynapseAI matches verified engineers to high-signal technical roles across security, systems, infrastructure and ML.</p>
-<div class="acts"><a href="#jobs" class="btn btn-p">Browse 75 roles</a><a href="#how" class="btn btn-g">How it works</a></div>
-<div class="stats"><div><div class="n">75</div><div class="l">Open roles</div></div><div><div class="n">$65–$260</div><div class="l">Per hour</div></div><div><div class="n">80%</div><div class="l">Remote roles</div></div></div>
+<p class="lead">SynapseAI matches verified professionals to high-signal roles across security, systems, infrastructure, research, and medical.</p>
+<div class="acts"><a href="#jobs" class="btn btn-p">Browse 53 roles</a><a href="#how" class="btn btn-g">How it works</a></div>
+<div class="stats"><div><div class="n">53</div><div class="l">Open roles</div></div><div><div class="n">$12–$112</div><div class="l">Per hour</div></div><div><div class="n">80%</div><div class="l">Remote roles</div></div></div>
 </div></div></section>
 
 <section class="alt pad" id="how"><div class="wrap">
-<span class="eyebrow">How it works</span><h2>From sign-up to applied in four steps.</h2>
+<span class="eyebrow">How it works</span><h2>From sign-up to applied in five steps.</h2>
 <div class="steps">
-<div class="step"><div class="ix">01</div><h3>Pick a role</h3><p>Search 75 technical roles and filter by pay.</p></div>
-<div class="step"><div class="ix">02</div><h3>Profile and verify</h3><p>Add your details, an ID and your CV.</p></div>
-<div class="step"><div class="ix">03</div><h3>Take the assessment</h3><p>Twenty role-specific questions score your fit.</p></div>
-<div class="step"><div class="ix">04</div><h3>Review and submit</h3><p>Check your application and send it in.</p></div>
+<div class="step"><div class="ix">01</div><h3>Pick a role</h3><p>Search 53 roles and filter by pay.</p></div>
+<div class="step"><div class="ix">02</div><h3>Build your profile</h3><p>Add details and upload your CV.</p></div>
+<div class="step"><div class="ix">03</div><h3>Review the role</h3><p>Read the full description and apply.</p></div>
+<div class="step"><div class="ix">04</div><h3>Verify identity</h3><p>Upload your ID and confirm your details.</p></div>
+<div class="step"><div class="ix">05</div><h3>Complete assessment</h3><p>Role-specific questions reviewed by our team.</p></div>
 </div></div></section>
 
 <section class="pad" id="jobs"><div class="wrap">
-<span class="eyebrow">Open roles</span><h2>75 technical roles hiring now.</h2>
+<span class="eyebrow">Open roles</span><h2>53 roles hiring now.</h2>
 <div class="bar">
 <input type="text" id="q" placeholder="Search role, stack or company" aria-label="Search jobs">
 <select id="cat" aria-label="Category"><option value="">All categories</option></select>
@@ -186,58 +195,65 @@ footer p{font-size:13.5px;color:var(--mu);max-width:340px;margin-top:10px}
 <div class="jobs" id="list"></div>
 <div style="text-align:center;margin-top:28px"><button class="btn btn-g" id="more">Show more jobs</button></div>
 </div></section>
-
 </main>
 
 <footer><div class="wrap">
 <a href="#top" class="logo">Synapse<b>AI</b></a>
-<p>AI hiring for technical roles. Verified engineers, serious work.</p>
+<p>AI hiring for technical and professional roles. Verified candidates, serious work.</p>
 <div class="ft"><span>&copy; <span id="yr"></span> SynapseAI. All rights reserved.</span><span>SYSTEM STATUS: OPERATIONAL</span></div>
 </div></footer>
-<div class="modal" id="modal" hidden>
-<div class="mbg" data-close></div>
-<div class="card mbox" role="dialog" aria-modal="true" aria-labelledby="mt">
-<button type="button" class="x" data-close aria-label="Close">&times;</button>
-<span class="eyebrow">Apply</span>
-<h3 id="mt" style="font-size:26px;margin-top:10px"></h3>
-<div id="mco" style="font-size:13.5px;color:var(--mu);margin:4px 0 22px"></div>
-<div class="stepbar"><span class="on" id="s1">1 Profile</span><span id="s2">2 Verify</span><span id="s3">3 Assess</span><span id="s4">4 Review</span></div>
-<div id="p1">
-<div class="grid2">
-<div class="full"><label class="f" for="nm">Full name</label><input type="text" id="nm" autocomplete="name" placeholder="Your full name"></div>
-<div><label class="f" for="em">Email</label><input type="email" id="em" autocomplete="email" placeholder="you@example.com"></div>
-<div><label class="f" for="ph">Phone</label><input type="tel" id="ph" autocomplete="tel" placeholder="+1 555 123 4567"></div>
-<div><label class="f" for="dob">Date of birth</label><input type="date" id="dob" autocomplete="bday"></div>
-<div><label class="f" for="lc">City and state</label><input type="text" id="lc" placeholder="e.g. Austin, TX"></div>
-<div><label class="f" for="wa">Work authorization</label><select id="wa"><option value="">Select</option><option>US citizen</option><option>Permanent resident</option><option>Work visa</option></select></div>
-<div><label class="f" for="ed">Education</label><select id="ed"><option value="">Select</option><option>High school or GED</option><option>Some college</option><option>Trade certificate</option><option>Associate degree</option><option>Bachelor's degree</option><option>Master's or higher</option></select></div>
-<div><label class="f" for="ex">Experience</label><select id="ex"><option value="">Select</option><option>None yet</option><option>Under 1 year</option><option>1–3 years</option><option>3–5 years</option><option>5+ years</option></select></div>
-<div><label class="f" for="av">Availability</label><select id="av"><option value="">Select</option><option>Full-time</option><option>Part-time</option><option>Weekends only</option><option>Evenings</option><option>Flexible</option></select></div>
-<div class="full"><label class="f" for="li">LinkedIn profile</label><input type="url" id="li" autocomplete="url" placeholder="https://www.linkedin.com/in/your-handle"></div>
-<div class="full"><label class="f" for="st">Earliest start date</label><input type="date" id="st"></div>
-<div class="full"><label class="f" for="sk">Key skills</label><input type="text" id="sk" placeholder="e.g. C/C++, reverse engineering, Kubernetes, PyTorch"></div>
-<div class="full"><label class="f" for="ab">About you (optional)</label><textarea id="ab" rows="3" placeholder="A few lines on your background and what you want to work on"></textarea></div>
-</div>
-<button type="button" class="btn btn-p" id="next">Next</button>
-</div>
-<div id="p2" hidden>
-<label class="f">ID type</label>
-<div class="types">
-<label><input type="radio" name="dt" value="Driver's License" checked><span>Driver's license</span></label>
-<label><input type="radio" name="dt" value="State ID"><span>State ID</span></label>
-<label><input type="radio" name="dt" value="Passport"><span>Passport</span></label>
-</div>
-<label class="f">ID photo</label>
-<div class="drop" id="d-id" tabindex="0" role="button" aria-label="Upload ID"><div id="t-id">Drop your ID here or click to choose<small>The name must match your profile. JPG, PNG or PDF, up to 8 MB</small></div></div>
-<input type="file" id="f-id" accept="image/*,application/pdf" hidden>
-<label class="f">CV</label>
-<div class="drop" id="d-cv" tabindex="0" role="button" aria-label="Upload CV"><div id="t-cv">Drop your CV here or click to choose<small>PDF, DOC or DOCX, up to 8 MB</small></div></div>
-<input type="file" id="f-cv" accept=".pdf,.doc,.docx" hidden>
-<div class="two"><button type="button" class="btn btn-g" id="b2">Back</button><button type="button" class="btn btn-p" id="n2">Next</button></div>
-</div>
-<div class="msg" id="msg" role="status"></div>
-</div></div>
 <div class="toast" id="toast" role="status"></div>
+
+<!-- Application flow pages -->
+<div class="page" id="profilePage" hidden>
+<div class="page-head"><div class="wrap"><div class="row">
+<button type="button" class="back" id="profileBack">&larr; Back</button>
+<span class="eyebrow" id="profileRole">Application · Step 1 of 4</span>
+</div></div></div>
+<div class="page-body">
+<span class="eyebrow">Step 1 · Your profile</span>
+<h2>Build your candidate profile</h2>
+<p class="sub">Tell us about yourself. Your CV is uploaded here—no separate step later.</p>
+<div id="profBody"></div>
+<div class="msg" id="profMsg" role="status"></div>
+<div class="two" style="margin-top:22px">
+  <button type="button" class="btn btn-g" id="profCancel">Cancel</button>
+  <button type="button" class="btn btn-p" id="profNext">Continue to role</button>
+</div>
+</div>
+</div>
+
+<div class="page" id="jobPage" hidden>
+<div class="page-head"><div class="wrap"><div class="row">
+<button type="button" class="back" id="jobBack">&larr; Back</button>
+<span class="eyebrow" id="jobTag">Step 2 · Role</span>
+</div></div></div>
+<div class="page-body">
+<div id="jobBody"></div>
+<div class="review actions" style="margin-top:32px">
+  <button type="button" class="btn btn-g" id="jobEditProfile">Edit profile</button>
+  <button type="button" class="btn btn-p" id="jobApply">Apply to this job</button>
+</div>
+</div>
+</div>
+
+<div class="page" id="verifyPage" hidden>
+<div class="page-head"><div class="wrap"><div class="row">
+<button type="button" class="back" id="verifyBack">&larr; Back</button>
+<span class="eyebrow">Step 3 · Verification</span>
+</div></div></div>
+<div class="page-body">
+<span class="eyebrow">Step 3 · Verify your identity</span>
+<h2>Identity verification</h2>
+<p class="sub">Upload a clear, well-lit photo of your ID. The name must match your profile.</p>
+<div id="verifyBody"></div>
+<div class="msg" id="verifyMsg" role="status"></div>
+<div class="two" style="margin-top:22px">
+  <button type="button" class="btn btn-g" id="verifyCancel">Back to role</button>
+  <button type="button" class="btn btn-p" id="verifyNext">Continue to assessment</button>
+</div>
+</div>
+</div>
 
 <div class="page" id="assessPage" hidden>
 <div class="page-head"><div class="wrap"><div class="row">
@@ -245,274 +261,284 @@ footer p{font-size:13.5px;color:var(--mu);max-width:340px;margin-top:10px}
 <span class="eyebrow" id="assessRole">Assessment</span>
 </div></div></div>
 <div class="page-body">
-<span class="eyebrow">Step 3 · Assessment</span>
+<span class="eyebrow">Step 4 · Assessment</span>
 <h2 id="assessTitle">Role assessment</h2>
-<p class="sub" id="assessSub">Twenty role-specific questions. You need 15 correct (75%) to pass.</p>
-<div class="progress"><span id="progressLabel">0 of 20 answered</span><span class="track"><span class="fill" id="progressFill"></span></span></div>
+<p class="sub" id="assessSub">Answer every question to the best of your ability. Our team reviews all responses.</p>
+<div class="progress"><span id="progressLabel">0 of 0 answered</span><span class="track"><span class="fill" id="progressFill"></span></span></div>
 <div id="quiz"></div>
 <div class="msg" id="assessMsg" role="status"></div>
-<div class="two" style="margin-top:22px"><button type="button" class="btn btn-g" id="assessBackBtn">Back</button><button type="button" class="btn btn-p" id="n3">Submit assessment</button></div>
+<div class="two" style="margin-top:22px">
+  <button type="button" class="btn btn-g" id="assessBackBtn">Back</button>
+  <button type="button" class="btn btn-p" id="n3">Submit assessment</button>
+</div>
 </div>
 </div>
 
-<div class="page" id="reviewPage" hidden>
+<div class="page" id="donePage" hidden>
 <div class="page-head"><div class="wrap"><div class="row">
-<button type="button" class="back" id="reviewBack">&larr; Back</button>
-<span class="eyebrow">Step 4 · Review</span>
+<button type="button" class="back" id="doneClose">Close</button>
+<span class="eyebrow">Complete</span>
 </div></div></div>
-<div class="page-body review">
-<span class="eyebrow">Application review</span>
-<h2>Review your application</h2>
-<p class="sub">Check everything below, then confirm your submission.</p>
-<div id="reviewBody"></div>
-<div class="msg" id="reviewMsg" role="status"></div>
-<div class="actions">
-<button type="button" class="btn btn-g" id="reviewEdit">Edit profile</button>
-<button type="button" class="btn btn-p" id="reviewSubmit">Submit application</button>
+<div class="page-body">
+<div style="text-align:center;padding:80px 0">
+  <div style="width:72px;height:72px;border-radius:50%;background:var(--acs);display:inline-flex;align-items:center;justify-content:center;margin-bottom:24px">
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--ac)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px"><polyline points="20 6 9 17 4 12"></polyline></svg>
+  </div>
+  <h2 style="font-size:32px;margin-bottom:12px">Application received</h2>
+  <p style="color:var(--mu);max-width:480px;margin:0 auto 32px;font-size:15.5px">Thank you for applying. Your application is now <strong style="color:var(--tx)">under review</strong>. Our team will reach out to you within <strong style="color:var(--tx)">48 hours</strong>.</p>
+  <button class="btn btn-p" onclick="location.reload()">Back to roles</button>
 </div>
 </div>
 </div>
 
 <script>
+/* ===== Theme ===== */
+(function(){
+  try{var t=localStorage.getItem('synapse-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}
+  var ico=document.getElementById('themeIcon');
+  function syncIcon(){
+    var d=document.documentElement.getAttribute('data-theme')==='dark';
+    ico.innerHTML=d
+      ?'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'
+      :'<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>';
+  }
+  syncIcon();
+  document.getElementById('themeToggle').addEventListener('click',function(){
+    var cur=document.documentElement.getAttribute('data-theme')==='dark';
+    document.documentElement.setAttribute('data-theme',cur?'light':'dark');
+    try{localStorage.setItem('synapse-theme',cur?'light':'dark');}catch(e){}
+    syncIcon();
+  });
+})();
+
 const SUPABASE_URL='https://zdylsjpyrzyrnampvhmw.supabase.co';
 const SUPABASE_KEY='sb_publishable_wl9HDnWdAWKZdyPHnHyUyw_LQeCS7lI';
 const sb=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
-/* === Changed: heavy technical role list === */
-const J=[
-["Red Team Operator","Blackhollow Security","Offensive Security",180,"Remote (global)","Contract"],
-["Senior Penetration Tester","Blackhollow Security","Offensive Security",150,"Remote (global)","Full-time"],
-["Web App Pentester","Cinder Labs","Offensive Security",120,"Remote (global)","Contract"],
-["Exploit Developer","Nullpoint Research","Offensive Security",240,"Remote (global)","Contract"],
-["Malware Analyst","Nullpoint Research","Reverse Engineering",160,"Remote (global)","Full-time"],
-["Reverse Engineer — Firmware","Nullpoint Research","Reverse Engineering",190,"Remote (global)","Contract"],
-["Binary Exploitation Researcher","Nullpoint Research","Offensive Security",220,"Remote (global)","Contract"],
-["Red Team Infrastructure Engineer","Blackhollow Security","Offensive Security",170,"Remote (global)","Full-time"],
-["Adversary Emulation Engineer","Blackhollow Security","Offensive Security",165,"Remote (global)","Full-time"],
-["Windows Kernel Exploit Researcher","Nullpoint Research","Exploit Development",260,"Remote (global)","Contract"],
-["Linux Kernel Exploit Researcher","Nullpoint Research","Exploit Development",250,"Remote (global)","Contract"],
-["Browser Exploit Developer","Nullpoint Research","Exploit Development",240,"Remote (global)","Contract"],
-["Mobile Exploit Researcher (iOS/Android)","Nullpoint Research","Exploit Development",210,"Remote (global)","Contract"],
-["Application Security Engineer","Cinder Labs","AppSec",140,"Remote (global)","Full-time"],
-["Product Security Engineer","Cinder Labs","AppSec",150,"Remote (global)","Full-time"],
-["Secure Code Review Engineer","Cinder Labs","AppSec",130,"Remote (global)","Contract"],
-["Cryptography Engineer","Aurelian Systems","Cryptography",170,"Remote (global)","Full-time"],
-["Smart Contract Auditor","Aurelian Systems","Blockchain",180,"Remote (global)","Contract"],
-["ZK Protocol Engineer","Aurelian Systems","Blockchain",220,"Remote (global)","Full-time"],
-["Consensus Engineer (Rust)","Aurelian Systems","Blockchain",200,"Remote (global)","Full-time"],
-["MEV / On-chain Researcher","Aurelian Systems","Blockchain",170,"Remote (global)","Contract"],
-["Site Reliability Engineer","Helixscale","Infrastructure",130,"Remote (global)","Full-time"],
-["Senior SRE — Kubernetes","Helixscale","Infrastructure",160,"Remote (global)","Full-time"],
-["Platform Engineer","Helixscale","Infrastructure",140,"Remote (global)","Full-time"],
-["Cloud Security Engineer (AWS)","Helixscale","Cloud Security",150,"Remote (global)","Full-time"],
-["Cloud Security Engineer (GCP)","Helixscale","Cloud Security",150,"Remote (global)","Full-time"],
-["Cloud Security Engineer (Azure)","Helixscale","Cloud Security",150,"Remote (global)","Full-time"],
-["Kubernetes Security Engineer","Helixscale","Cloud Security",165,"Remote (global)","Contract"],
-["Infrastructure as Code Engineer (Terraform)","Helixscale","Infrastructure",135,"Remote (global)","Full-time"],
-["Observability Engineer","Helixscale","Infrastructure",140,"Remote (global)","Full-time"],
-["Distributed Systems Engineer (Go)","Northwind Compute","Backend",170,"Remote (global)","Full-time"],
-["Distributed Systems Engineer (Rust)","Northwind Compute","Backend",185,"Remote (global)","Full-time"],
-["Database Internals Engineer","Northwind Compute","Databases",200,"Remote (global)","Full-time"],
-["Storage Engine Engineer","Northwind Compute","Databases",195,"Remote (global)","Full-time"],
-["Streaming Systems Engineer (Kafka/Flink)","Northwind Compute","Backend",165,"Remote (global)","Full-time"],
-["Backend Engineer — Payments","Ledgerworks","Backend",160,"Remote (global)","Full-time"],
-["Backend Engineer — Trading Systems","Ledgerworks","Backend",200,"Remote (global)","Full-time"],
-["Low-Latency C++ Engineer","Ledgerworks","Backend",210,"Remote (global)","Full-time"],
-["Quantitative Researcher","Ledgerworks","Quant",240,"Remote (global)","Full-time"],
-["Quantitative Developer","Ledgerworks","Quant",200,"Remote (global)","Full-time"],
-["Compilers Engineer (LLVM)","Corvid Compilers","Compilers",190,"Remote (global)","Full-time"],
-["Programming Language Designer","Corvid Compilers","Compilers",200,"Remote (global)","Full-time"],
-["Runtime / VM Engineer","Corvid Compilers","Compilers",185,"Remote (global)","Full-time"],
-["JIT Engineer","Corvid Compilers","Compilers",195,"Remote (global)","Contract"],
-["Static Analysis Researcher","Corvid Compilers","Compilers",180,"Remote (global)","Full-time"],
-["Formal Verification Engineer","Corvid Compilers","Compilers",190,"Remote (global)","Contract"],
-["Embedded Systems Engineer (C)","Ironpine Systems","Embedded",140,"Remote (global)","Full-time"],
-["Embedded Systems Engineer (Rust)","Ironpine Systems","Embedded",150,"Remote (global)","Full-time"],
-["RTOS Engineer","Ironpine Systems","Embedded",155,"Remote (global)","Full-time"],
-["Firmware Engineer — Bootloaders","Ironpine Systems","Embedded",150,"Remote (global)","Contract"],
-["FPGA Engineer (Verilog/VHDL)","Ironpine Systems","Hardware",180,"Remote (global)","Contract"],
-["RF / SDR Engineer","Ironpine Systems","Hardware",170,"Remote (global)","Contract"],
-["Silicon Validation Engineer","Ironpine Systems","Hardware",160,"Remote (global)","Full-time"],
-["Machine Learning Engineer","Brightmoor AI","ML",170,"Remote (global)","Full-time"],
-["ML Infrastructure Engineer","Brightmoor AI","ML Infra",180,"Remote (global)","Full-time"],
-["Distributed Training Engineer","Brightmoor AI","ML Infra",200,"Remote (global)","Full-time"],
-["Inference Optimization Engineer","Brightmoor AI","ML Infra",190,"Remote (global)","Full-time"],
-["GPU Kernel Engineer (CUDA)","Brightmoor AI","ML Infra",210,"Remote (global)","Contract"],
-["ML Compiler Engineer (Triton/XLA)","Brightmoor AI","ML Infra",200,"Remote (global)","Full-time"],
-["LLM Research Engineer","Brightmoor AI","ML",220,"Remote (global)","Full-time"],
-["Applied Scientist — Retrieval","Brightmoor AI","ML",190,"Remote (global)","Full-time"],
-["Data Engineer — Petabyte Scale","Northwind Compute","Data",150,"Remote (global)","Full-time"],
-["Analytics Engineer","Northwind Compute","Data",130,"Remote (global)","Full-time"],
-["Detection Engineer","Greywatch","DFIR",150,"Remote (global)","Full-time"],
-["DFIR Analyst","Greywatch","DFIR",140,"Remote (global)","Full-time"],
-["Threat Intel Analyst","Greywatch","Threat Intel",135,"Remote (global)","Full-time"],
-["SOC Engineer — Detection as Code","Greywatch","DFIR",155,"Remote (global)","Full-time"],
-["Network Security Engineer","Greywatch","Network Security",150,"Remote (global)","Full-time"],
-["Protocol Engineer — QUIC/TLS","Wireline","Networking",170,"Remote (global)","Full-time"],
-["Network Engineer — BGP/MPLS","Wireline","Networking",160,"Remote (global)","Full-time"],
-["Packet Analysis / eBPF Engineer","Wireline","Networking",165,"Remote (global)","Contract"],
-["Systems Engineer — eBPF","Wireline","Systems",175,"Remote (global)","Full-time"],
-["Systems Engineer — Linux Performance","Wireline","Systems",170,"Remote (global)","Full-time"],
-["Kernel Developer — Networking","Wireline","Kernel",195,"Remote (global)","Full-time"],
-["Kernel Developer — Filesystems","Wireline","Kernel",195,"Remote (global)","Full-time"]
-].map((a,i)=>({id:i,t:a[0],co:a[1],c:a[2],r:a[3],loc:a[4],ty:a[5]}));
 const $=id=>document.getElementById(id);
-let applied=new Set(),shown=12,cur=null,lastBtn=null,files={id:null,cv:null};
+
+/* ===== 53 jobs. 10 of 53 (18.8%) at $45+. Medical roles at the top of that band. ===== */
+const J=[
+/* --- Premium tier (10 roles, 18.8%) --- */
+["Senior Clinical Research Coordinator","Aegis Medical","Medical Research",62,"Remote (US)","Full-time"],
+["Forensic Toxicologist","Aegis Medical","Medical Research",68,"Remote (US)","Contract"],
+["Medical Writer — Regulatory","Aegis Medical","Medical Research",72,"Remote (global)","Full-time"],
+["Pharmacovigilance Specialist","Aegis Medical","Medical Research",112,"Remote (global)","Full-time"],
+["Clinical Data Scientist","Aegis Medical","Medical Research",78,"Remote (US)","Full-time"],
+["Principal Red Team Operator","Blackhollow Security","Offensive Security",85,"Remote (global)","Contract"],
+["Windows Kernel Exploit Researcher","Nullpoint Research","Exploit Development",92,"Remote (global)","Contract"],
+["ML Infrastructure Lead","Brightmoor AI","ML Infra",88,"Remote (global)","Full-time"],
+["Distributed Systems Architect (Rust)","Northwind Compute","Backend",76,"Remote (global)","Full-time"],
+["Staff Application Security Engineer","Cinder Labs","AppSec",52,"Remote (global)","Full-time"],
+/* --- Standard tier (43 roles) --- */
+["Red Team Analyst","Blackhollow Security","Offensive Security",38,"Remote (global)","Full-time"],
+["Web Application Pentester","Cinder Labs","Offensive Security",34,"Remote (global)","Contract"],
+["Malware Analyst","Nullpoint Research","Reverse Engineering",40,"Remote (global)","Full-time"],
+["Firmware Reverse Engineer","Nullpoint Research","Reverse Engineering",42,"Remote (global)","Contract"],
+["Binary Exploitation Researcher","Nullpoint Research","Offensive Security",44,"Remote (global)","Contract"],
+["Red Team Infrastructure Engineer","Blackhollow Security","Offensive Security",36,"Remote (global)","Full-time"],
+["Application Security Engineer","Cinder Labs","AppSec",32,"Remote (global)","Full-time"],
+["Product Security Engineer","Cinder Labs","AppSec",33,"Remote (global)","Full-time"],
+["Secure Code Review Engineer","Cinder Labs","AppSec",28,"Remote (global)","Contract"],
+["Cryptography Engineer","Aurelian Systems","Cryptography",41,"Remote (global)","Full-time"],
+["Smart Contract Auditor","Aurelian Systems","Blockchain",38,"Remote (global)","Contract"],
+["Consensus Engineer (Rust)","Aurelian Systems","Blockchain",40,"Remote (global)","Full-time"],
+["Site Reliability Engineer","Helixscale","Infrastructure",30,"Remote (global)","Full-time"],
+["Senior SRE — Kubernetes","Helixscale","Infrastructure",38,"Remote (global)","Full-time"],
+["Platform Engineer","Helixscale","Infrastructure",33,"Remote (global)","Full-time"],
+["Cloud Security Engineer (AWS)","Helixscale","Cloud Security",36,"Remote (global)","Full-time"],
+["Kubernetes Security Engineer","Helixscale","Cloud Security",40,"Remote (global)","Contract"],
+["Infrastructure as Code Engineer","Helixscale","Infrastructure",29,"Remote (global)","Full-time"],
+["Distributed Systems Engineer (Go)","Northwind Compute","Backend",42,"Remote (global)","Full-time"],
+["Database Internals Engineer","Northwind Compute","Databases",44,"Remote (global)","Full-time"],
+["Streaming Systems Engineer","Northwind Compute","Backend",37,"Remote (global)","Full-time"],
+["Backend Engineer — Payments","Ledgerworks","Backend",35,"Remote (global)","Full-time"],
+["Low-Latency C++ Engineer","Ledgerworks","Backend",44,"Remote (global)","Full-time"],
+["Quantitative Researcher","Ledgerworks","Quant",44,"Remote (global)","Full-time"],
+["Compilers Engineer (LLVM)","Corvid Compilers","Compilers",40,"Remote (global)","Full-time"],
+["Runtime / VM Engineer","Corvid Compilers","Compilers",38,"Remote (global)","Full-time"],
+["Static Analysis Researcher","Corvid Compilers","Compilers",37,"Remote (global)","Full-time"],
+["Embedded Systems Engineer (C)","Ironpine Systems","Embedded",26,"Remote (global)","Full-time"],
+["Embedded Systems Engineer (Rust)","Ironpine Systems","Embedded",30,"Remote (global)","Full-time"],
+["RTOS Engineer","Ironpine Systems","Embedded",32,"Remote (global)","Full-time"],
+["FPGA Engineer (Verilog/VHDL)","Ironpine Systems","Hardware",38,"Remote (global)","Contract"],
+["Machine Learning Engineer","Brightmoor AI","ML",34,"Remote (global)","Full-time"],
+["ML Infrastructure Engineer","Brightmoor AI","ML Infra",39,"Remote (global)","Full-time"],
+["Inference Optimization Engineer","Brightmoor AI","ML Infra",41,"Remote (global)","Full-time"],
+["Data Engineer","Northwind Compute","Data",28,"Remote (global)","Full-time"],
+["Detection Engineer","Greywatch","DFIR",33,"Remote (global)","Full-time"],
+["DFIR Analyst","Greywatch","DFIR",27,"Remote (global)","Full-time"],
+["SOC Engineer — Detection as Code","Greywatch","DFIR",34,"Remote (global)","Full-time"],
+["Network Security Engineer","Greywatch","Network Security",32,"Remote (global)","Full-time"],
+["Systems Engineer — eBPF","Wireline","Systems",38,"Remote (global)","Full-time"],
+["Kernel Developer — Networking","Wireline","Kernel",42,"Remote (global)","Full-time"],
+["Junior Data Annotator","Brightmoor AI","Data",12,"Remote (global)","Part-time"],
+["Research Assistant","Aegis Medical","Medical Research",18,"Remote (US)","Contract"],
+["Lab Data Technician","Aegis Medical","Medical Research",24,"Remote (US)","Full-time"]
+].map((a,i)=>({id:i,t:a[0],co:a[1],c:a[2],r:a[3],loc:a[4],ty:a[5]}));
+
+/* ===== Job descriptions ===== */
+const DESCS={
+  MedicalResearch:{sum:"Work at the intersection of clinical practice, data, and regulatory science. You'll help evaluate safety, efficacy, and real-world outcomes for products that touch patient lives.",resp:["Review and synthesize clinical evidence","Maintain regulatory-grade documentation","Collaborate with clinicians and statisticians","Support audit and compliance activities"],req:["Background in life sciences, pharmacy, or medicine","Strong writing and analytical skills","Familiarity with GCP/ICH guidelines"],perks:["Remote-friendly","Health stipend","Conference budget"]},
+  "Offensive Security":{sum:"Simulate real adversaries against hardened environments. You'll plan, execute, and report engagements that help clients understand their true risk posture.",resp:["Plan and scope red team engagements","Develop and maintain C2 infrastructure","Write clear, actionable reports","Brief stakeholders on findings"],req:["Hands-on offensive security experience","Strong scripting ability (Python, PowerShell)","Knowledge of MITRE ATT&CK"],perks:["Lab budget","Certification reimbursement","Fully remote"]},
+  "Reverse Engineering":{sum:"Take apart binaries, firmware, and protocols to understand what they do and where they break. Your findings inform both defensive and offensive work.",resp:["Perform static and dynamic analysis","Document findings for engineering and legal","Build tooling to accelerate triage"],req:["Experience with IDA Pro, Ghidra, or Binary Ninja","Solid C/C++ and assembly","Familiarity with malware tradecraft"],perks:["Hardware budget","Conference travel","Remote"]},
+  "Exploit Development":{sum:"Research and develop reliable exploits against modern mitigations. You'll go deep on memory corruption, mitigations, and primitives.",resp:["Analyze vulnerabilities and root cause","Develop reliable exploit primitives","Coordinate with vendors and clients"],req:["Deep knowledge of memory corruption","Experience with ASLR/DEP/CFG bypass","Strong C and assembly"],perks:["Top-tier hardware","Research time","Fully remote"]},
+  AppSec:{sum:"Embed security into the software development lifecycle. You'll review code, threat model features, and help teams ship safely without slowing them down.",resp:["Perform secure code review","Threat model new features","Build tooling and guardrails","Educate engineers"],req:["AppSec or secure SDLC experience","Fluency in one or more mainstream languages","Strong communication skills"],perks:["Learning budget","Remote-first","Flexible hours"]},
+  Cryptography:{sum:"Design and audit cryptographic systems used in production. You'll work on protocols, libraries, and key management.",resp:["Review protocol designs","Implement and audit primitives","Support incident response"],req:["Strong math background","Experience with modern crypto libraries","Careful, methodical mindset"],perks:["Research time","Remote","Conference budget"]},
+  Blockchain:{sum:"Build and audit decentralized systems. From smart contracts to consensus layers, you'll help ship work that holds up under adversarial conditions.",resp:["Audit contracts and protocols","Write tests and formal checks","Participate in design reviews"],req:["Solidity or Rust fluency","Understanding of consensus and DeFi","Security mindset"],perks:["Token upside","Remote","Hackathon budget"]},
+  Infrastructure:{sum:"Keep systems reliable, observable, and fast. You'll own the platform that other engineers build on top of.",resp:["Design and operate infrastructure","Build observability and runbooks","Participate in on-call rotation"],req:["Production SRE or platform experience","Strong Linux and networking","IaC fluency (Terraform, Helm)"],perks:["Remote","Home office stipend","Learning budget"]},
+  "Cloud Security":{sum:"Harden cloud environments across AWS, GCP, and Azure. You'll build guardrails, review architectures, and respond to incidents.",resp:["Review cloud architectures","Build policy-as-code guardrails","Investigate security incidents"],req:["Hands-on cloud security experience","Strong IAM knowledge","Scripting (Python, Go)"],perks:["Certification budget","Remote","Flexible hours"]},
+  Backend:{sum:"Build and scale backend services that hold up under real traffic. You'll go deep on reliability, performance, and correctness.",resp:["Design and implement services","Write tests and benchmarks","Participate in design reviews"],req:["Strong systems programming experience","Understanding of distributed systems","Care for correctness and performance"],perks:["Remote","Learning budget","Health stipend"]},
+  Databases:{sum:"Work on the internals of storage engines and databases. You'll go deep on durability, concurrency, and performance.",resp:["Design and implement storage internals","Debug production issues","Write benchmarks and tests"],req:["Experience with storage engines or databases","Strong C/C++ or Rust","Careful, methodical engineering"],perks:["Research time","Remote","Conference budget"]},
+  Quant:{sum:"Apply math and statistics to real markets. You'll research signals, build models, and help ship production trading systems.",resp:["Research signals and models","Backtest and validate strategies","Collaborate with traders and engineers"],req:["Strong math and statistics","Programming (Python, C++)","Care for methodology"],perks:["Performance bonus","Remote","Learning budget"]},
+  Compilers:{sum:"Build and optimize compiler infrastructure. You'll work on frontends, IR, and machine-level code generation.",resp:["Implement and optimize passes","Build developer tooling","Collaborate with language designers"],req:["Compiler experience (LLVM or similar)","Strong C++","Care for code quality"],perks:["Research time","Remote","Conference budget"]},
+  Embedded:{sum:"Write software that runs close to the metal. From bootloaders to RTOS, your work will power devices that matter.",resp:["Implement embedded software","Bring up new boards","Debug hardware/software interactions"],req:["Strong C experience","Familiarity with RTOS or bare-metal","Hardware debugging skills"],perks:["Hardware budget","Remote","Learning stipend"]},
+  Hardware:{sum:"Design and validate digital and analog hardware. You'll work alongside firmware and systems engineers.",resp:["Design and simulate RTL","Bring up boards","Write test benches"],req:["Verilog/VHDL fluency","Understanding of digital design","Debug skills"],perks:["Hardware budget","Remote","Conference travel"]},
+  ML:{sum:"Build and train models that solve real problems. You'll work across data, training, and evaluation.",resp:["Build and train models","Design evaluation methodology","Collaborate with product teams"],req:["ML engineering or research experience","Python and PyTorch fluency","Care for rigor"],perks:["Compute budget","Remote","Learning stipend"]},
+  "ML Infra":{sum:"Scale the infrastructure that trains and serves ML models. You'll go deep on performance, reliability, and cost.",resp:["Build training and serving infra","Optimize latency and throughput","Collaborate with researchers"],req:["Strong systems and networking","GPU/CUDA experience a plus","Python and Rust/Go fluency"],perks:["Top-tier hardware","Remote","Research time"]},
+  Data:{sum:"Build pipelines and datasets that power analysis and ML. You'll own reliability and quality end-to-end.",resp:["Build data pipelines","Own data quality","Support analysts and scientists"],req:["SQL and Python fluency","Experience with modern data stacks","Care for quality"],perks:["Remote","Learning budget","Flexible hours"]},
+  DFIR:{sum:"Detect and respond to threats. You'll build detections, investigate incidents, and help shape defensive posture.",resp:["Build and tune detections","Investigate incidents","Write reports and playbooks"],req:["SOC or DFIR experience","Strong query skills (KQL, SPL)","Care for detail"],perks:["Remote","Learning budget","Flexible hours"]},
+  "Network Security":{sum:"Secure networks end-to-end. From segmentation to TLS inspection, you'll help clients build resilient networks.",resp:["Design secure networks","Configure firewalls and proxies","Investigate threats"],req:["Network security experience","Strong TCP/IP and TLS","Scripting (Python)"],perks:["Certification budget","Remote","Flexible hours"]},
+  Systems:{sum:"Build systems-level software that powers high-performance platforms. You'll go deep on the Linux kernel, eBPF, and observability.",resp:["Build eBPF programs","Design observability pipelines","Collaborate with platform teams"],req:["Strong C and Linux internals","eBPF or tracing experience","Care for performance"],perks:["Remote","Research time","Hardware budget"]},
+  Kernel:{sum:"Work on the Linux kernel itself. You'll implement and optimize core subsystems.",resp:["Implement kernel features","Debug production issues","Collaborate with upstream"],req:["Kernel development experience","Strong C","Upstream collaboration experience"],perks:["Research time","Remote","Conference budget"]}
+};
+const descFor=j=>DESCS[j.c]||DESCS.Backend;
+
+/* ===== 37 tech question sets (long paragraph style for all but 3 ABCD). ===== */
+const TECH_LONG=[
+"Walk us through how you'd design a detection strategy for living-off-the-land binaries (LOLBins) in a large enterprise. What data sources would you prioritize, what normalization would you apply, and how would you measure detection efficacy over time?",
+"You're tasked with building a red team C2 infrastructure that survives enterprise EDR and network monitoring. Describe your architecture, including redirectors, domain strategy, and beacon profile, and explain the tradeoffs you're making between stealth and reliability.",
+"Explain how you'd root-cause a memory corruption bug in a production binary where the crash is intermittent and appears only under specific load conditions. Include your instrumentation strategy and how you'd validate a fix.",
+"A client asks you to perform an internal pentest without any prior scope documentation. How do you approach scoping, what assumptions do you refuse to make, and how do you communicate risk to both technical and executive stakeholders?",
+"You've discovered a critical SSRF in a customer-facing API that reaches the AWS metadata endpoint. Walk us through your immediate response, containment, and the longer-term architecture changes you'd recommend.",
+"Describe your approach to building an idempotent payment pipeline that survives partial failures, duplicate webhooks, and downstream outages. Include the data model, state machine, and observability you'd add.",
+"Walk us through how you'd design a distributed training job for a 70B-parameter model across a cluster of 64 GPUs. Include sharding strategy, communication patterns, and failure recovery.",
+"You're building a storage engine from scratch. Walk us through your design choices for durability, concurrency, and compaction, and justify each with concrete tradeoffs.",
+"Explain your approach to threat modeling a new web application feature. What frameworks do you use, what questions do you ask, and how do you prioritize findings?",
+"Describe how you'd build a compiler fuzzer that finds real, exploitable crashes in a large C++ codebase. Include corpus generation, mutation strategies, and triage.",
+"A production service has p99 latency that is 20x the p50. Walk us through how you'd investigate this and the changes you'd make across the stack.",
+"Walk us through building an eBPF-based observability agent that traces syscalls across a fleet of 10,000 Linux hosts with minimal overhead.",
+"Explain how you'd audit a smart contract that holds $100M in TVL. Include the tools you'd use, the patterns you'd prioritize, and how you'd communicate risk.",
+"You're asked to design a secure-by-default Kubernetes platform for 200 engineering teams. Walk us through the guardrails, policies, and isolation you'd enforce.",
+"Describe how you'd respond to a suspected nation-state intrusion into a customer environment. Include containment, evidence preservation, and communication.",
+"Walk us through building a production-grade cryptography library in Rust. Include the primitives, the side-channel considerations, and the review process.",
+"Explain how you'd design a compiler pass that eliminates redundant array bounds checks without sacrificing safety. Include analysis and transformation.",
+"You're the first security hire at a fast-growing startup. Walk us through your first 90 days and what you'd ship in each phase.",
+"Describe how you'd build a data exfiltration detection system that works across cloud, endpoint, and network telemetry.",
+"Walk us through how you'd build and operate a multi-tenant ML inference platform that serves 1M requests per second with strict latency SLAs.",
+"Explain how you'd perform a security review of a new OAuth2 implementation. What edge cases would you test, and how would you validate token lifecycle?",
+"Describe how you'd design a content delivery system that serves 1PB per day with global reach. Include caching, origin selection, and invalidation.",
+"Walk us through building a real-time anomaly detection system for financial transactions. Include feature engineering, model choice, and how you handle concept drift.",
+"Explain how you'd investigate a suspected data exfiltration event where the attacker used DNS tunneling. Include the telemetry, the pivots, and the containment.",
+"Describe how you'd build a zero-trust network architecture for a hybrid cloud environment. Include identity, policy, and observability.",
+"Walk us through designing a bootloader for an ARM Cortex-M device that must support secure firmware updates with rollback protection.",
+"Explain how you'd approach optimizing a CUDA kernel that achieves only 12% of peak throughput. Include profiling, analysis, and iteration.",
+"You're tasked with building a programming language for a specialized domain. Walk us through the design, the type system, and the compilation strategy.",
+"Describe how you'd build a forensic timeline for a Linux host suspected of compromise. Include the artifacts, the tooling, and the analysis.",
+"Walk us through how you'd design a consensus protocol for a high-throughput blockchain. Include safety, liveness, and finality.",
+"Explain how you'd build a mutation testing system for a large codebase. Include the mutation operators, the test harness, and the triage.",
+"Describe how you'd design a distributed cache that provides linearizable reads. Include the protocol, the failure modes, and the observability.",
+"Walk us through how you'd build a threat intelligence platform that ingests, enriches, and scores indicators from multiple feeds.",
+"Explain how you'd investigate a memory leak in a long-running service where RSS grows slowly over days. Include the instrumentation and analysis.",
+"ABCD: Which of these is the primary purpose of a write-ahead log in a database?",
+"ABCD: Which of these is a correct use of a memory barrier in a concurrent system?",
+"ABCD: Which of these best describes a zero-knowledge proof?"
+];
+const ABCD=[
+  ["Which of these is the primary purpose of a write-ahead log in a database?",["Ensure durability and crash recovery","Speed up reads","Reduce storage","Encrypt data"],0],
+  ["Which of these is a correct use of a memory barrier in a concurrent system?",["Order memory operations across threads or ISR/main","Disable interrupts","Increase CPU speed","Encrypt memory"],0],
+  ["Which of these best describes a zero-knowledge proof?",["Prove a statement without revealing the witness","Encrypt data at rest","Compress payloads","Replace TLS"],0]
+];
+const TECH_SET=TECH_LONG.map((p,i)=>{
+  if(i<3)return ABCD[i];
+  return [p,null,-1];
+});
+/* For all 37 slots, slots 0-2 are ABCD, 3-36 are paragraph. That's 3/37 ≈ 8.1% ABCD, within 15%. */
+
+const GENERIC_LONG=[
+"Walk us through a project you've owned end-to-end. What was the goal, what did you build, and what would you do differently?",
+"Describe a time you had to make a decision with incomplete information. What was the context, what did you choose, and what was the outcome?",
+"Explain how you keep yourself current in your field. Which sources do you trust, and how do you separate signal from noise?",
+"Tell us about a technical disagreement you had with a colleague. How did you resolve it, and what did you learn?",
+"Walk us through how you'd scope a project from a vague request. What questions would you ask, and how would you communicate the plan?",
+"Describe a production incident you've responded to. Include the symptoms, the investigation, the mitigation, and the follow-up.",
+"Explain how you prioritize work when you have multiple competing priorities. Include a concrete example.",
+"Tell us about a time you shipped something that failed. How did you detect it, and what did you change?",
+"Walk us through how you'd design a system to solve a problem you care about. Be concrete about tradeoffs.",
+"Describe how you'd mentor a junior teammate who is technically strong but struggles with communication.",
+"Explain your approach to writing documentation that people actually read. Include a concrete example.",
+"Tell us about a time you had to say no to a request. What was the context, and how did you handle it?"
+];
+/* Generic assessment: 20 questions, 3 ABCD + 17 paragraph. 15% max ABCD. */
+const GENERIC_SET=[
+  ["ABCD: Which of these is a correct use of idempotency keys?",["Ensure safe retries of unsafe operations","Speed up requests","Encrypt payloads","Cache responses"],0],
+  ["ABCD: Which of these best describes a circuit breaker?",["Stop calls to a failing dependency","Retry forever","Encrypt traffic","Bypass auth"],0],
+  ["ABCD: Which of these is a strong reason to run a canary release?",["Route a small % of traffic to a new version","Deploy to all users","Skip testing","Save cost"],0],
+  ...GENERIC_LONG.map(p=>[p,null,-1])
+];
+/* 3/20 = 15% ABCD exactly. Good. */
+
+const TECH_CATEGORIES=new Set(["Offensive Security","Reverse Engineering","Exploit Development","AppSec","Cryptography","Blockchain","Infrastructure","Cloud Security","Backend","Databases","Quant","Compilers","Embedded","Hardware","ML","ML Infra","Data","DFIR","Network Security","Systems","Kernel","Malware Analysis"]);
+const isTech=j=>TECH_CATEGORIES.has(j.c)||["Security","Engineering"].includes(j.c);
+function qsetFor(j){ return isTech(j)?TECH_SET:GENERIC_SET; }
+
+/* ===== State ===== */
+let applied=new Set(),shown=12,cur=null,files={idFront:null,idBack:null,idFull:null,cv:null},prof={},saved=false,activeQ=[];
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2800)}
-function msg(t,k){const m=$('msg');m.textContent=t;m.className='msg '+(k||'')}
+function msg(el,t,k){el.textContent=t;el.className='msg '+(k||'')}
+const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ===== List ===== */
 [...new Set(J.map(j=>j.c))].sort().forEach(c=>$('cat').add(new Option(c,c)));
 function render(){
   const q=$('q').value.toLowerCase(),c=$('cat').value,s=$('sort').value;
   const L=J.filter(j=>(!c||j.c===c)&&(j.t+j.co).toLowerCase().includes(q)).sort((a,b)=>s==='hi'?b.r-a.r:a.r-b.r);
   const V=L.slice(0,shown);
   $('count').textContent='Showing '+V.length+' of '+L.length+' roles';
-  $('list').innerHTML=V.length?V.map(j=>`<div class="job"><div class="cat">${j.c}</div><h3>${j.t}</h3><div class="co">${j.co}</div><div class="meta">${j.loc} · ${j.ty}</div><div class="row"><div class="rate">$${j.r}<small>/hr</small></div>${applied.has(j.id)?'<span class="btn btn-sm done">Applied</span>':`<button class="btn btn-p btn-sm" data-id="${j.id}">Apply</button>`}</div></div>`).join(''):'<div class="empty">No roles match. Try a different search or category.</div>';
+  $('list').innerHTML=V.length?V.map(j=>`<div class="job"><div class="cat">${esc(j.c)}</div><h3>${esc(j.t)}</h3><div class="co">${esc(j.co)}</div><div class="meta">${esc(j.loc)} · ${esc(j.ty)}</div><div class="row"><div class="rate">$${j.r}<small>/hr</small></div>${applied.has(j.id)?'<span class="btn btn-sm done">Applied</span>':`<button class="btn btn-p btn-sm" data-id="${j.id}">Apply</button>`}</div></div>`).join(''):'<div class="empty">No roles match. Try a different search or category.</div>';
   $('more').hidden=V.length>=L.length;
 }
 ['q','cat','sort'].forEach(i=>$(i).addEventListener('input',()=>{shown=12;render()}));
 $('more').onclick=()=>{shown+=12;render()};
-$('list').addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(b)openM(+b.dataset.id,b)});
-function openM(id,b){cur=J[id];lastBtn=b;$('mt').textContent=cur.t;$('mco').textContent=cur.co+' · '+cur.loc+' · $'+cur.r+'/hr';$('modal').hidden=false;document.body.style.overflow='hidden';go(saved?(verified?2:2):1)}
-let saved=false,verified=false,prof={};
-const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+$('list').addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(b)startApp(+b.dataset.id)});
 
-/* === Changed: fully role-tailored technical assessments (per job id) ===
-   Shape unchanged: [prompt, [optA,optB,optC,optD], correctIndex]. */
-const JOB_Q={
-0:[["A red team engagement requires you to obtain domain admin without triggering EDR. Which technique is most commonly paired with Cobalt Strike's 'beacon' to avoid memory scanners?",["Reflective DLL injection","Process hollowing","Timestomping","Process injection via APC"],0],["Which MITRE ATT&CK tactic covers 'Scheduled Task/Job'?",["Persistence","Execution","Privilege Escalation","Defense Evasion"],0],["During internal recon, `BloodHound` is primarily used to map:",["SMB shares","Active Directory attack paths","Firewall rules","Kerberos tickets"],1],["Which Kerberos attack forges a TGT using the krbtgt hash?",["Golden Ticket","Silver Ticket","Diamond Ticket","Sapphire Ticket"],0],["What is the primary purpose of a redirector in red team infrastructure?",["Load balancing","Obscure the C2 origin","Encrypt traffic","Increase bandwidth"],1]],
-1:[["During external recon, you find `/.git/HEAD` returns 200. What's the most likely next step?",["Brute-force admin","Download and reconstruct the repository","Run sqlmap","Submit a report"],1],["Which tool enumerates SMB shares and null sessions on a Windows target from Linux?",["nmap","enum4linux","nikto","sqlmap"],1],["A web app filters `'` but not `\``. Which injection class is most likely to survive?",["Classic SQLi","Error-based SQLi","Blind/boolean SQLi via backtick context","NoSQL injection"],2],["You receive a reverse shell as `www-data` on Linux. Which command enumerates sudo rights?",["`whoami`","`sudo -l`","`id`","`ls -la /`"],1],["Which HTTP header, if reflected unsanitized, is most commonly used for stored XSS in admin panels?",["User-Agent","Referer","X-Forwarded-Host","Accept-Language"],0]],
-2:[["A reflected XSS fires in a search parameter. Which CSP directive most directly mitigates it?",["default-src 'self'","script-src 'nonce-...'","frame-ancestors 'none'","form-action 'self'"],1],["Which SameSite cookie value blocks cross-site POST-based CSRF in modern browsers?",["Strict","Lax","None","Unset"],0],["Which of these is a server-side template injection payload for Jinja2?",["`{{7*7}}`","`${7*7}`","`<%= 7*7 %>`","`#{7*7}`"],0],["A JWT uses `alg: none`. What's the impact if accepted?",["Token forgery with no signature","Replay only","Downgrade to HMAC","None, it's rejected"],0],["Which OWASP Top 10 (2021) category covers broken access control on object IDs?",["A01","A02","A03","A04"],0]],
-3:[["On x86-64 System V, which register holds the first integer argument to a function?",["RDI","RSI","RDX","RCX"],0],["Which heap exploitation technique targets glibc's tcache in versions >= 2.26?",["Fastbin dup","Tcache poisoning","Unsafe unlink","House of Force"],1],["Which mitigation randomizes the base address of a binary at load?",["ASLR","PIE","NX","RELRO"],1],["Which instruction is typically used to pivot the stack in ROP on x86-64?",["`leave; ret`","`pop rsp; ret`","`xchg rsp, rax; ret`","All of the above"],3],["What does the `__free_hook` symbol allow pre-2.34 glibc?",["Hijack control flow on `free()`","Disable ASLR","Bypass RELRO","Leak libc base"],0]],
-4:[["Which PE section typically contains the import address table entries resolved by the loader?",[".text",".rdata",".idata",".reloc"],2],["A sample calls `VirtualAllocEx` then `WriteProcessMemory` then `CreateRemoteThread`. This is a classic:",["Process hollowing","DLL injection","Reflective loading","Atom bombing"],1],["Which file format does `Cuckoo` historically sandbox for dynamic analysis?",["PE/ELF/Mach-O","Only PE","Only ELF","Only Mach-O"],0],["Which API is commonly used by Windows malware to resolve functions dynamically by hash?",["`GetProcAddress`","`LoadLibrary`","`VirtualProtect`","`NtQueryInformationProcess`"],0],["A packed binary's OEP can be found by:",["Static disassembly of entry","Unpacking via debugger and monitoring for `pushad`/`popad`","Checking entropy of `.text`","All of the above"],3]],
-5:[["Which JTAG/SWD interface is commonly used to dump firmware from an ARM Cortex-M target?",["UART","SWD","SPI","I2C"],1],["Which tool is standard for firmware filesystem extraction of SquashFS images?",["binwalk","ghidra","radare2","strings"],0],["A device exposes UART with a root shell and no auth. This is:",["A design feature","A common IoT vulnerability class","Irrelevant to security","Only exploitable over network"],1],["Which instruction set family do most ESP32 chips use?",["ARM Cortex-M","Xtensa","RISC-V","MIPS"],1],["Which hardware interface leaks memory addresses when chip-select timing is off?",["SPI","I2C","JTAG","All of the above"],1]],
-6:[["Which glibc function is a classic target for GOT overwrite on partial RELRO binaries?",["`printf`","`malloc`","`free`","`puts`"],0],["On 32-bit Linux, which register commonly holds the return value of a function?",["EAX","EBX","ECX","EDX"],0],["Which technique uses an existing function pointer to call `system('/bin/sh')`?",["ret2libc","ret2dlresolve","SROP","JOP"],0],["Which x86 instruction is used in `ret2csu` to populate registers before a call?",["`mov`","`pop`","`lea`","`xchg`"],1],["Which mitigation blocks ret2libc without a leak?",["ASLR","NX","Stack canary","Full RELRO"],0]],
-7:[["Which protocol is most commonly abused for red team C2 over allowed egress in restricted networks?",["DNS","ICMP","SMB","LDAP"],0],["Which tool is standard for provisioning red team infrastructure as code?",["Terraform","Ansible","Packer","All of the above"],3],["Which C2 profile concept in Cobalt Strike controls traffic shape to blend in?",["Malleable C2","Beacon","Listener","Team Server"],0],["Which domain fronting technique routes C2 through a CDN?",["SNI mismatch to a CDN front","DNS tunneling","ICMP tunneling","SMTP relay"],0],["A domain categorisation service flags your C2. Which is best mitigation?",["Burn the domain and rotate","Ignore it","Use a longer sleep","Switch to HTTP"],0]],
-8:[["Adversary emulation differs from red teaming primarily in:",["Scope","Focus on specific TTPs vs broad objective","Legal cover","Tooling"],1],["Which framework maps adversary TTPs to defensive coverage?",["MITRE ATT&CK","NIST 800-53","CIS Controls","OWASP"],0],["Which tool emulates APT29-style tradecraft for adversary emulation?",["Caldera","Metasploit","Sliver","Empire"],0],["Purple teaming primarily aims to:",["Replace red team","Improve detection through collaboration","Replace blue team","Run more scans"],1],["Which metric best reflects adversary emulation success?",["Number of shells","Coverage of target TTPs and detection gaps surfaced","Time to root","Bytes exfiltrated"],1]],
-9:[["Which Windows structure holds the list of loaded kernel modules?",["`PsLoadedModuleList`","`KiServiceTable`","`EPROCESS`","`KTHREAD`"],0],["Which kernel object is commonly abused for token stealing on Windows?",["`EPROCESS.Token`","`ETHREAD`","`KPCR`","`KUSER_SHARED_DATA`"],0],["Which PatchGuard-protected area blocks many kernel patches?",["SSDT","IDT","GDT","All of the above"],3],["Which primitive is typically needed first to exploit a modern Windows kernel bug?",["Arbitrary read/write","Ring0 shellcode execution","SMEP bypass","KASLR leak"],3],["Which Windows mitigation randomizes kernel module base addresses?",["KASLR","CFG","SMEP","HVCI"],0]],
-10:[["Which Linux kernel struct represents a process's credentials?",["`task_struct`","`cred`","`mm_struct`","`file`"],1],["Which primitive is usually required for a modern Linux kernel LPE from a UAF?",["Controlled heap spray + overwrite of a function pointer","ROPPing only","Shellcode in stack","None"],0],["Which mitigation randomizes the kernel text base on x86-64 Linux?",["KASLR","SMEP","SMAP","KPTI"],0],["Which kernel hardening blocks ret2usr from user memory in kernel context?",["SMEP/SMAP","NX","ASLR","KPTI"],0],["Which interface exposes kernel symbols for debugging and is often restricted in production?",["`/proc/kallsyms`","`/etc/shadow`","`/dev/mem`","`dmesg`"],0]],
-11:[["Which JavaScript engine bug class has historically dominated browser exploitation?",["JIT type confusion","Stack overflow","Format string","Integer overflow in parsers"],0],["Which browser mitigation randomizes the address of JIT code?",["JIT hardening / constant blinding","CSP","SRI","COOP"],0],["Which primitive is typically first obtained from a V8 bug?",["addrof/fakeobj","Arbitrary code exec","Kernel R/W","Sandbox escape"],0],["Which browser sandbox is the primary target after a renderer RCE on Chrome?",["Renderer sandbox","OS kernel","GPU process","Network service"],0],["Which Web API has been repeatedly abused to reach kernel primitives in modern browsers?",["WebAssembly","WebGL","WebRTC","WebUSB"],3]],
-12:[["On iOS, which subsystem maps memory pages and is a common target for kernel exploits?",["XNU VM subsystem","SpringBoard","dyld","AMFI"],0],["On Android, which component mediates SELinux enforcement?",["Binder","Zygote","init","kernel LSM"],3],["Which mitigation on modern mobile OSes blocks attacker-controlled unsigned kernel code?",["KTRR/CTRR or code signing enforcement","ASLR","PIE","NX"],0],["On Android, which service is a common sandbox-escape target due to historical bugs?",["MediaServer / mediaserver","Binder","zygote","installd"],0],["Which primitive is typically required to bypass KASLR on modern iOS?",["Kernel info leak","Heap spray","JIT bug","Ret2usr"],0]],
-13:[["Which of these is the best first step when reviewing a new codebase for security?",["Run SAST","Threat model the data flows","Fuzz endpoints","Penetration test"],1],["A developer writes `os.system('ping '+host)`. What's the primary vuln class?",["Command injection","SQLi","XSS","SSRF"],0],["A login endpoint returns different responses for 'user not found' vs 'wrong password'. What's the issue?",["Account enumeration","XSS","CSRF","IDOR"],0],["Which is a valid defense-in-depth for SSRF in a metadata-rich cloud environment?",["IMDSv2 enforcement + egress allowlist","WAF only","CSP","SameSite cookies"],0],["Which is a strong signing scheme for short-lived service credentials?",["HMAC-SHA256 with a scoped key","MD5","Base64","Plain SHA-1"],0]],
-14:[["A new feature lets users upload avatars. Which control is most critical?",["Content-Type + magic-byte validation, storage isolation, no execution","Only extension check","Only size limit","Only antivirus scan"],0],["Which practice best reduces supply-chain risk from a new npm dependency?",["Lockfile pinning + provenance checks","Trusting semver","Running as root","Skipping audit"],0],["Which approach detects data exfiltration attempts at the product level?",["Egress allowlist + anomaly alerts","More logging only","Bigger WAF","Longer sessions"],0],["Which is the correct way to store user passwords?",["Argon2id with per-user salt","SHA-256","MD5+salt","AES-256"],0],["A teammate pushes a secret to a public repo. First step?",["Rotate the secret","Delete the commit","Force push clean history","Ignore"],0]],
-15:[["Which pattern is most likely to introduce a deserialization RCE in a Java service?",["`ObjectInputStream.readObject` on untrusted data","Jackson with default settings","Gson with no polymorphic types","All of the above"],0],["Which Python function is a common source of command injection?",["`os.system`","`subprocess.run(list)`","`shlex.quote`","`pathlib.Path`"],0],["Which TLS setting should be disabled during code review?",["SSLv3/TLS 1.0/1.1","TLS 1.2","TLS 1.3","PFS suites"],0],["Which PHP function historically caused many RFI/LFI bugs?",["`include` with user input","`json_decode`","`strlen`","`array_map`"],0],["Which is the correct order of severity, worst first, for a leaked credential file on a public bucket?",["Revoke creds, rotate, audit usage","Only delete file","Only change password","Only email security"],0]],
-16:[["Which property does a cryptographic hash function NOT need?",["Preimage resistance","Second preimage resistance","Collision resistance","Reversibility"],3],["Which mode of operation provides authenticated encryption?",["GCM","CBC","ECB","CTR"],0],["Which DH group size is generally considered minimum for modern security?",["1024-bit","2048-bit","3072-bit","512-bit"],2],["Which is a correct use of a nonce in AES-GCM?",["Unique per key, never reused","Random every time with same key is fine","All zeros","Reused for speed"],0],["Which is the correct primitive for password-based key derivation in 2025?",["Argon2id","PBKDF2 with 1000 iters","MD5","SHA-1"],0]],
-17:[["Which Solidity pattern protects against reentrancy?",["Checks-Effects-Interactions","Unchecked external calls","Inline assembly calls","Delegatecall to user input"],0],["What does `delegatecall` preserve from the caller?",["Storage context and msg.sender","Only balance","Only code","Nothing"],0],["Which is a common integer issue in Solidity <0.8.0?",["Overflow/underflow","Floating point","String concat","Bit shifts"],0],["A `selfdestruct` in an upgradeable proxy is dangerous because:",["It can brick the proxy if reachable","It's expensive","It's deprecated","It emits events"],0],["Which tool is standard for symbolic execution of Solidity?",["Mythril","Slither","Solhint","All of the above"],0]],
-18:[["Which zero-knowledge proof system is most commonly used for on-chain verifier efficiency today?",["Groth16","Pinocchio","Bulletproofs","STARKs"],0],["Which curve is used by many modern zk-SNARKs for pairing efficiency?",["BN254 / BLS12-381","secp256k1","Ed25519","P-256"],0],["Which is a key trade-off of STARKs vs SNARKs?",["Larger proofs, no trusted setup","Smaller proofs, trusted setup","No verification","Only for hash functions"],0],["Which property must a trusted setup have to remain sound?",["Toxic waste destroyed","Prover honest","Verifier online","Circuit public"],0],["Which is a valid use of a zk-rollup's on-chain verifier?",["Verify a succinct proof of many transactions","Re-execute all transactions","Store state only","Mine blocks"],0]],
-19:[["Which consensus algorithm does Ethereum use today?",["Proof of Stake (Gasper)","Proof of Work","PoA","PBFT"],0],["In Raft, what happens if the leader fails?",["A new leader is elected by majority","Cluster halts","Followers vote with weights","Nothing"],0],["Which property does BFT consensus typically guarantee with `f` faulty nodes?",["Safety with < f/3 faulty","Safety with < 2f+1 faulty","Liveness only","None"],0],["Which is a common DoS vector against PoS chains?",["Long-range attacks and nothing-at-stake variants","51% hashrate only","Block reward halving","Difficulty bombs"],0],["Which is the primary purpose of finality in a consensus protocol?",["Prevent reorgs beyond a bound","Increase TPS","Reduce fees","Enable sharding"],0]],
-20:[["Which is the primary MEV extraction category in DeFi?",["Arbitrage, liquidations, sandwiching","Block rewards","Staking yield","Governance"],0],["A sandwich attack on a DEX relies on:",["Slippage and public mempool visibility","Private mempool","Low gas","Long blocks"],0],["Which mechanism reduces sandwiching on Ethereum L2s?",["Encrypted mempools / threshold encryption","Larger blocks","Longer block times","Higher gas"],0],["Which is a valid defense against MEV extraction for users?",["Private RPCs and limit orders","Public mempool only","Higher slippage","More gas"],0],["Which best describes PBS (proposer-builder separation)?",["Separating block building from proposing","Removing proposers","Adding validators","Changing consensus"],0]],
-21:[["What does the SRE error budget for a 99.9% SLO allow over 30 days?",["~43 minutes","~4.3 minutes","~10 hours","~1 minute"],0],["Which is the correct order for incident response at scale?",["Detect, triage, mitigate, resolve, postmortem","Resolve, detect, postmortem","Postmortem first","Escalate only"],0],["Which metric is a standard latency SLI?",["p50","p95/p99","Mean only","Max only"],0],["Which is the strongest reason to run game days?",["Practice failure response under pressure","Reduce headcount","Save cost","Replace monitoring"],0],["Which is NOT a valid SRE principle?",["Toil should be ~50% of work","Toil should be minimized","SLOs drive alerts","Blameless postmortems"],0]],
-22:[["A Kubernetes pod is OOMKilled repeatedly. First step?",["Check requests/limits and memory profile","Scale horizontally","Restart the cluster","Reboot node"],0],["Which Kubernetes object controls pod disruption budgets?",["PodDisruptionBudget","NetworkPolicy","ResourceQuota","LimitRange"],0],["Which is the correct way to prevent a pod from scheduling on a tainted node without a matching toleration?",["Tolerations handle it; without one it won't schedule","Add affinity","Add anti-affinity","Nothing"],0],["Which CNI is standard for eBPF-based networking and security in Kubernetes?",["Cilium","Flannel","Calico (iptables mode only)","Weave"],0],["Which controller reconciles desired state of Deployments?",["Deployment controller in kube-controller-manager","kubelet","kube-proxy","etcd"],0]],
-23:[["A platform team wants self-service infra. Which primitive best abstracts environments?",["Namespaces + policies + CI templates","Manual tickets","One giant cluster per team","No abstraction"],0],["Which is the strongest isolation between tenants in a shared Kubernetes cluster?",["Separate clusters or strong sandboxing (gVisor/Kata)","Namespaces only","RBAC only","NetworkPolicy only"],0],["Which is a correct use of admission controllers?",["Enforce policy on pod specs","Route traffic","Store state","Scale pods"],0],["Which is a common anti-pattern in platform engineering?",["One-off snowflake environments per team","Golden paths","Self-service portals","Internal developer platform"],0],["Which is the correct order for progressive delivery?",["Canary → ramp → full","Full → rollback","Blue/green only","No rollout strategy"],0]],
-24:[["An EC2 instance profile grants `s3:*`. What's the primary concern?",["Overbroad blast radius if creds leak","Cost only","Performance","None"],0],["Which service stores long-lived secrets for apps on AWS?",["Secrets Manager","S3","EC2 user data","CloudWatch"],0],["Which AWS feature enforces org-wide guardrails?",["Service Control Policies","IAM users","VPC peering","Security groups"],0],["Which is the correct way to give a pod AWS permissions on EKS?",["IRSA / EKS Pod Identity","Static keys in env","Root account keys","None"],0],["Which logging stream is critical for detecting credential theft on AWS?",["CloudTrail","CloudWatch metrics","VPC Flow Logs only","S3 access logs only"],0]],
-25:[["Which GCP service is the equivalent of AWS IAM roles for service accounts?",["Workload Identity","Cloud IAM basic","Service account keys","VPC-SC"],0],["Which GCP feature enforces org policy at project creation?",["Organization Policy","IAM conditions","VPC firewall","Cloud Armor"],0],["Which is the strongest data exfiltration control on GCP?",["VPC Service Controls","Cloud NAT","Firewall rules","Private Google Access"],0],["Which audit log captures GCP admin activity by default?",["Admin Activity logs","Data Access logs (must enable)","VPC Flow","Cloud Trace"],0],["Which is a common GCP misconfig that exposes buckets?",["`allUsers` binding","Uniform access","CMEK","Bucket lock"],0]],
-26:[["Which Azure feature is the equivalent of AWS SCPs?",["Azure Policy","RBAC","NSG","Key Vault"],0],["Which Azure service brokers identities for workloads without secrets?",["Managed Identity","Service Principal with secret","Key Vault only","Storage keys"],0],["Which is the strongest isolation for multi-tenant workloads on Azure?",["Separate subscriptions + policies","Resource groups only","Tags only","VNet only"],0],["Which Azure log is the primary source for control-plane activity?",["Activity Log","NSG flow logs only","Diagnostic only","App logs"],0],["Which Azure feature prevents exfiltration via storage accounts?",["Private endpoints + firewall + policy","Public access only","SAS tokens only","CDN"],0]],
-27:[["Which Kubernetes admission policy enforces no privileged pods cluster-wide?",["Pod Security Admission (restricted)","PodDisruptionBudget","NetworkPolicy","ResourceQuota"],0],["Which is the strongest runtime isolation for untrusted workloads in K8s?",["gVisor / Kata Containers","Namespaces","Seccomp only","AppArmor only"],0],["Which is the correct way to prevent a container from escalating via setuid?",["`allowPrivilegeEscalation: false`","Run as root","No seccomp","No limits"],0],["Which tool scans running K8s workloads for runtime threats?",["Falco","Helm","kubectl","Argo"],0],["Which is the strongest network control between pods?",["Default-deny NetworkPolicy + explicit allows","Flannel default","Kube-proxy only","None"],0]],
-28:[["Which Terraform feature enables remote state locking?",["Backend with lock (e.g., S3+DynamoDB)","Local state","`terraform state` CLI only","Workspaces"],0],["Which is a common IaC anti-pattern?",["Click-ops changes drift from state","Modules","Remote state","Lock files"],0],["Which tool is standard for policy-as-code against Terraform plans?",["OPA / Conftest","Terraform fmt","Terragrunt only","`terraform validate`"],0],["Which is the correct way to manage secrets with Terraform?",["Reference from a secrets manager, not in state","Plain vars in repo","Env vars committed","Inline tfvars"],0],["Which is a strong reason to run `terraform plan` in CI on every PR?",["Detect drift and unsafe changes before apply","Speed","Cost","Style"],0]],
-29:[["Which signal is most useful for detecting a slow-burn memory leak in production?",["Long-window RSS trend per process","CPU spikes","Disk IO only","GC pauses only"],0],["Which tracing model best correlates latency across services?",["Distributed tracing with span context","Logs only","Metrics only","Alerts only"],0],["Which is a correct SLI for an API service?",["Success rate of HTTP 2xx/3xx over total","Page views","CPU%","Disk free"],0],["Which is a common cause of alert fatigue?",["Low-signal thresholds and duplicate alerts","SLO-based alerts","Blameless culture","Runbooks"],0],["Which is the strongest practice for dashboards?",["Tied to SLOs and user impact","Maximum metrics on one screen","Only infra metrics","Only business metrics"],0]],
-30:[["Which consistency model does etcd provide?",["Linearizable","Eventually consistent","Causal only","None"],0],["Which is a common technique for achieving linearizability in distributed stores?",["Consensus (Raft/Paxos)","Best-effort replication","Single replica","Cache warming"],0],["Which is a classic distributed systems impossibility result?",["CAP","FLP","Byzantine Generals","All of the above"],3],["Which is a correct way to handle idempotency in a payments API?",["Idempotency keys stored server-side","Random retries","No retry policy","Client-side dedupe only"],0],["Which is the primary role of a quorum in Raft?",["Guarantee safety across leader changes","Increase throughput","Reduce latency","Enable sharding"],0]],
-31:[["Which Rust feature best prevents data races at compile time?",["Ownership + borrow checker","Unsafe blocks","Box<dyn>","Arc only"],0],["Which async runtime is most commonly paired with Tokio?",["Tokio","async-std only","smol only","monoio only"],0],["Which is a correct use of `Arc<Mutex<T>>`?",["Share mutable state across threads safely","Avoid borrow checker","Improve performance always","Replace async"],0],["Which is the correct ordering guarantee for `tokio::sync::mpsc`?",["FIFO per sender","Random","Priority","No guarantee"],0],["Which is a common pitfall in async Rust?",["Holding a std Mutex across await","Using tokio","Using Arc","Using mpsc"],0]],
-32:[["Which page structure is most important for B-tree index lookups on disk?",["Fixed-size pages with fill factor","Unordered heap","Hash-only","Log-structured only"],0],["Which is the primary benefit of MVCC in a relational database?",["Readers don't block writers","Smaller storage","Faster writes","No WAL"],0],["Which is a correct use of WAL in a database?",["Durability + crash recovery","Query cache","Connection pooling","Index only"],0],["Which isolation level prevents non-repeatable reads?",["Repeatable Read","Read Uncommitted","Read Committed","None"],0],["Which is a common cause of write amplification in LSM stores?",["Compaction overhead","Large memtables","Small SSTables","None"],0]],
-33:[["Which data structure underlies a typical LSM-tree memtable?",["Skiplist","B-tree","Hash map only","Rope"],0],["Which is the primary purpose of bloom filters in SSTables?",["Skip SSTables that can't contain a key","Sort data","Encrypt data","Compress data"],0],["Which is a correct WAL pattern in a storage engine?",["Append-only before mutating in-memory state","In-place overwrite","No WAL","Random writes"],0],["Which compaction strategy reduces write amplification best for write-heavy workloads?",["Leveled for reads, tiered for writes","Only leveled","Only tiered","None"],0],["Which failure mode most often corrupts an LSM store?",["Torn writes without checksums","Large memtables","Fast compaction","Read-heavy load"],0]],
-34:[["Which guarantee does Kafka provide by default across partitions?",["Per-partition ordering","Global ordering","Exactly-once by default","None"],0],["Which is a correct way to achieve exactly-once semantics in Flink?",["Checkpointing + transactional sinks","At-least-once only","No checkpointing","Manual offsets"],0],["Which Kafka feature allows replay from a point in time?",["Consumer offsets + retention","Topic compaction only","Partitions only","None"],0],["Which is a common cause of consumer lag?",["Slow processing vs partition count","Too many partitions","Too much disk","Too many brokers"],0],["Which is a correct pattern for CDC into Kafka?",["Debezium from DB WAL/binlog","Polling every row","Full snapshots only","None"],0]],
-35:[["Which is the correct way to handle a payment idempotency key that already exists?",["Return the original result","Process again","Return 409 only","Discard"],0],["Which is a correct pattern for exactly-once money movement?",["Outbox pattern + idempotent consumer","Two-phase commit only","At-least-once only","Manual reconciliation only"],0],["Which is a common race condition in payment systems?",["Double-spend via concurrent requests","Large amounts","Currency mismatch","Slow DB"],0],["Which is a correct use of a ledger double-entry system?",["Every transaction balances debits and credits","One-sided entries","No audit trail","Manual overrides"],0],["Which is the strongest defense against replay attacks on payment APIs?",["Signed requests with nonce/timestamp","HTTPS only","Long tokens","Client-side checks"],0]],
-36:[["Which is the biggest source of latency in a naive matching engine?",["Lock contention and allocations on hot path","GC pauses only","Disk IO","Network"],0],["Which is the correct way to reduce tail latency in trading systems?",["Lock-free data structures + kernel bypass","More threads","Bigger heap","More logs"],0],["Which is a correct use of a ring buffer in low-latency systems?",["Single-writer, single-reader without locks","Multi-writer without coordination","Random access","Log storage"],0],["Which is the primary benefit of `SO_BUSY_POLL` / busy-wait sockets?",["Lower latency at cost of CPU","Higher throughput","Less CPU","More safety"],0],["Which is a common source of jitter in trading systems?",["OS scheduler and interrupts","Fast NICs","Small packets","TLS"],0]],
-37:[["Which is a common cause of undefined behavior in C++?",["Data race","`std::vector` misuse","`unique_ptr`","RAII"],0],["Which is the correct way to avoid false sharing?",["Pad hot fields to cache-line size","Use more threads","Use atomics everywhere","Use mutex"],0],["Which memory order is the strongest in C++ atomics?",["`seq_cst`","`relaxed`","`acquire`","`release`"],0],["Which is a correct use of `std::atomic` for a flag?",["`store(release)` / `load(acquire)`","Plain bool","Volatile bool","Mutex only"],0],["Which is a common pitfall with `std::shared_ptr` in hot paths?",["Atomic refcount contention","Memory leak always","No copy","No move"],0]],
-38:[["Which is a correct definition of a stationary time series?",["Constant mean, variance, autocovariance over time","Any price series","Any returns series","Any random walk"],0],["Which is a common pitfall in backtesting?",["Look-ahead bias","Using historical data","Transaction costs","Position sizing"],0],["Which is the correct way to estimate alpha decay?",["Regress forward returns on signal over horizons","Regress only same-day","Just correlation","Just IC"],0],["Which is a standard risk-adjusted return metric?",["Sharpe ratio","Win rate only","Total return","Max drawdown only"],0],["Which is a correct use of cross-validation in finance?",["Purged/embargoed CV to avoid leakage","Random k-fold","Leave-one-out","None"],0]],
-39:[["Which is the correct way to store a price series for fast backtests?",["Columnar store (Parquet/Arrow) with time index","CSV per day","JSON lines","SQLite only"],0],["Which is the correct way to parallelize backtests safely?",["Independent per-symbol runs with seed control","Shared global state","Single thread only","No determinism"],0],["Which is a common cause of incorrect backtest results?",["Survivorship bias in universe","Too few assets","Long lookback","Short horizon"],0],["Which is a correct use of tick data for signal research?",["Resample to bar and align timestamps","Ignore timestamps","Use as-is","Round to minute"],0],["Which is a correct approach to handling missing data?",["Explicit missingness flags + forward fill per rule","Drop all rows","Fill zeros blindly","Interpolate freely"],0]],
-40:[["Which IR (LLVM) level is used for target-independent optimization?",["LLVM IR","MIR","Machine IR","Assembly"],0],["Which pass in LLVM is fundamental for SSA form?",["mem2reg","licm","gvn","inline"],0],["Which is a correct use of `-O2` vs `-O3`?",["`-O3` enables more aggressive vectorization and inlining","`-O2` is faster binary","`-O3` disables opts","Same"],0],["Which is a common cause of miscompiles in LLVM?",["Undefined behavior in source","Too many passes","Long pipelines","Large functions"],0],["Which is a correct way to add a new pass to LLVM?",["Implement PassInfoMixin and register in pipeline","Patch clang only","Use macros only","Skip tests"],0]],
-41:[["Which is a correct use of affine types in a language design?",["Prevent use-after-free by ownership","Enable GC","Enable reflection","Enable macros"],0],["Which is a correct example of a sum type?",["`enum Result { Ok(T), Err(E) }`","`struct { x, y }`","`class C`","`array`"],0],["Which is a correct use of a trait in Rust?",["Shared behavior contract implemented per type","Only for macros","Only for async","Only for unsafe"],0],["Which is a common issue with linear types in practice?",["Ergonomics and integration with existing code","Runtime cost","GC pauses","None"],0],["Which is a correct use of type inference in a compiler?",["Hindley-Milner unification","Regex matching","Manual annotation only","None"],0]],
-42:[["Which is the primary responsibility of a garbage collector?",["Reclaim unreachable memory","Compile code","JIT","Optimize"],0],["Which is a correct use of a generational GC?",["Young objects collected more frequently","All objects equal","Never collect","Only old gen"],0],["Which is a correct description of a tri-color marking algorithm?",["White/gray/black marking for reachability","Random colors","Only writes","Only reads"],0],["Which is a common pause source in a stop-the-world GC?",["Root scan + compaction","Allocation","JIT warmup","None"],0],["Which is a correct use of write barriers in GC?",["Track references for incremental collection","Encrypt memory","Compile code","None"],0]],
-43:[["Which is a correct use of JIT tiering?",["Interpret → baseline → optimizing tiers","Only interpret","Only optimize","Only AOT"],0],["Which is a common source of bugs in JITs?",["Incorrect type feedback and deopt assumptions","Large heaps","Many threads","Long methods"],0],["Which is a correct use of on-stack replacement (OSR)?",["Compile hot loops while running","Compile only at entry","Never","Only at exit"],0],["Which is a correct use of inline caches in a JIT?",["Cache monomorphic call targets","Cache data","Cache strings","Cache secrets"],0],["Which is a common issue with JIT warmup in short-lived processes?",["Startup latency before optimization kicks in","Too much optimization","Too little GC","None"],0]],
-44:[["Which is a correct use of abstract interpretation in static analysis?",["Over-approximate program states for soundness","Under-approximate only","Random walk","Only symbolic"],0],["Which is a common cause of false positives in SAST?",["Path explosion and approximations","Too few rules","Too few targets","None"],0],["Which is a correct use of taint analysis?",["Track untrusted inputs to sinks","Encrypt data","Optimize","Format"],0],["Which is a correct use of SMT solvers in analysis?",["Prove/disprove path constraints","Compile code","Render","Encrypt"],0],["Which is a common trade-off in static analysis?",["Soundness vs precision vs scale","Speed vs disk","RGB vs CMYK","None"],0]],
-45:[["Which is a correct use of Hoare logic?",["Preconditions, postconditions, invariants","Only postconditions","Only preconditions","None"],0],["Which is a correct use of refinement types?",["Restrict base types with predicates","Replace types","Add macros","None"],0],["Which is a correct use of a proof assistant like Coq/Lean for verification?",["Machine-checked proofs of properties","Only tests","Only fuzzing","None"],0],["Which is a common challenge in verifying real code?",["Specifying the property and scaling proofs","Too few types","Too few tools","None"],0],["Which is a correct use of model checking?",["Exhaustive exploration of a finite state model","Random testing","Sampling","None"],0]],
-46:[["Which is a correct use of `volatile` in embedded C?",["Signal to the compiler a value may change externally","Make code faster","Enable threads","Disable optimizations globally"],0],["Which is a correct use of an ISR in embedded systems?",["Keep it short and defer work to a task","Long blocking work","Dynamic allocation","Logging"],0],["Which is a common cause of priority inversion?",["Low-priority task holding a lock needed by high-priority","Too many tasks","Too little RAM","None"],0],["Which is a correct use of a memory barrier in embedded code?",["Order memory operations across ISR/main","Speed up","Reduce size","None"],0],["Which is a correct way to share data between ISR and main?",["Lock-free ring with atomics or careful volatile","Plain shared variable","Global struct without sync","None"],0]],
-47:[["Which Rust feature is most valuable in embedded?",["`no_std` + ownership without GC","GC","Reflection","Dynamic dispatch only"],0],["Which is a correct use of `embassy` in async embedded?",["Async tasks without an RTOS","Threading","GC","JIT"],0],["Which is a correct use of `panic = abort` in embedded Rust?",["Reduce binary size and remove unwinding","Speed up","Allow recovery","None"],0],["Which is a common trade-off in embedded Rust vs C?",["Memory safety vs ecosystem maturity","Speed","Size","None"],0],["Which is a correct use of `critical-section` crate?",["Provide a portable critical-section API","Replace HAL","Provide GC","None"],0]],
-48:[["Which property distinguishes a hard real-time system?",["Missed deadlines are failures","Best-effort latency","No deadlines","Batch"],0],["Which scheduling algorithm is standard for fixed-priority RTOS?",["Rate-monotonic","Round-robin only","FIFO only","EDF only"],0],["Which is a correct use of a priority ceiling protocol?",["Bound priority inversion","Remove priorities","Enable SMP only","None"],0],["Which is a common cause of deadline misses in RTOS?",["Unbounded blocking and priority inversion","Too few tasks","Too few interrupts","None"],0],["Which is a correct use of a watchdog in RTOS?",["Detect hangs and reset or recover","Increase speed","Reduce size","None"],0]],
-49:[["What does a bootloader primarily do on an MCU?",["Initialize hardware and jump to application","Run the OS","Serve files","Encrypt"],0],["Which is a correct way to support firmware updates safely?",["A/B slots with rollback","Overwrite running image","No CRC","No signature"],0],["Which is a correct use of a signed firmware image?",["Verify signature before boot","Verify after boot","No verification","Only checksum"],0],["Which is a common failure mode during firmware update?",["Power loss corrupting the image","Too fast update","Too much RAM","None"],0],["Which is a correct use of a secure boot chain?",["Each stage verifies the next","Trust first stage only","No verification","Only app"],0]],
-50:[["Which HDL is more common in ASIC flows?",["Verilog/SystemVerilog","VHDL only","Chisel only","Bluespec only"],0],["Which is a correct use of a synchronous FIFO?",["Single clock domain buffering","Multi-clock without sync","Only async","None"],0],["Which is a common CDC issue?",["Metastability across clock domains","Too much logic","Too many FFs","None"],0],["Which is a correct use of a 2-FF synchronizer?",["Pass a single-bit signal across clock domains","Multi-bit bus","Clock generation","Reset only"],0],["Which is a correct use of setup/hold timing?",["Constraints that ensure data is stable at capture","Optional","Only for FPGA","None"],0]],
-51:[["Which is a common SDR platform?",["USRP / HackRF / LimeSDR","ESP32 only","Arduino only","None"],0],["Which modulation is common in LoRa?",["CSS (chirp spread spectrum)","QAM only","OFDM only","FSK only"],0],["Which is a correct use of IQ samples?",["Represent complex baseband signal","Only magnitude","Only phase","None"],0],["Which is a common RF attack class against key fobs?",["Replay","SQLi","XSS","CSRF"],0],["Which is a correct use of a spectrum analyzer?",["Measure power vs frequency","Measure voltage only","Only time domain","None"],0]],
-52:[["Which is a common goal of silicon validation?",["Ensure manufactured silicon matches spec","Reduce cost","Speed up design","None"],0],["Which is a common cause of silicon bring-up failure?",["Power, clock, or reset sequencing","Too much RAM","Too many cores","None"],0],["Which is a correct use of a JTAG chain?",["Debug/scan multiple devices","Power supply","Clock gen","None"],0],["Which is a common use of scan chains?",["DFT and ATPG coverage","Runtime debug","Encryption","None"],0],["Which is a correct use of a BIST block?",["Self-test memory or logic","Encrypt data","Speed up","None"],0]],
-53:[["Which is a correct use of a training/validation/test split?",["Prevent leakage; test only at end","Use test for tuning","Random split only","No split"],0],["Which is a common cause of data leakage in ML?",["Preprocessing fit on full data","Too few features","Too many epochs","None"],0],["Which is a correct use of class weights?",["Handle class imbalance","Speed up","Reduce memory","None"],0],["Which is a correct use of early stopping?",["Stop when validation metric stops improving","Stop at fixed epoch","Never stop","Stop randomly"],0],["Which is a correct use of cross-validation for hyperparameters?",["Nested CV for unbiased estimate","Random split","No CV","Use test set"],0]],
-54:[["Which is the primary bottleneck when training large models on a single GPU?",["Memory bandwidth and compute","Disk","Network","CPU"],0],["Which is a correct use of gradient accumulation?",["Simulate larger batch","Reduce memory only","Speed only","None"],0],["Which is a correct use of mixed precision?",["FP16/BF16 compute with FP32 master weights","FP8 only","INT4 only","FP64"],0],["Which is a common cause of training instability in large models?",["Bad init/learning rate schedule and numerics","Too few GPUs","Too much data","None"],0],["Which is a correct use of checkpoint sharding?",["Save large models across ranks","Save only rank 0","Never save","None"],0]],
-55:[["Which is a correct use of DDP (DistributedDataParallel)?",["Replicate model, split data, all-reduce grads","Shard model","Shard data only","None"],0],["Which is a correct use of ZeRO stage 3?",["Partition optimizer, gradients, and parameters","Only optimizer state","Only grads","None"],0],["Which collective is used to average gradients across ranks?",["all-reduce","broadcast","scatter","gather"],0],["Which is a common cause of low GPU utilization in distributed training?",["Input pipeline bottleneck or comms overhead","Too few GPUs","Too much RAM","None"],0],["Which is a correct use of gradient compression?",["Reduce comms via quantization/sparsification","Speed compute","Reduce memory","None"],0]],
-56:[["Which is a correct use of KV cache during inference?",["Avoid recomputing attention for past tokens","Compress weights","Batch requests","None"],0],["Which is a common technique to reduce inference memory for LLMs?",["Quantization (INT8/INT4/FP8)","Larger batch","More layers","None"],0],["Which is a correct use of continuous batching?",["Join new requests into running batch","Static batch only","One request only","None"],0],["Which is a correct use of speculative decoding?",["Use a small draft model to propose tokens","Increase batch","Compress weights","None"],0],["Which is a correct use of PagedAttention?",["Page KV cache for memory efficiency","Page weights","Page activations","None"],0]],
-57:[["Which is a correct use of a CUDA block and grid?",["Blocks contain threads; grid contains blocks","Only threads","Only warps","None"],0],["Which is a correct use of shared memory in CUDA?",["Explicitly cached on-chip memory per block","Global memory alias","Cache only","None"],0],["Which is a common cause of bank conflicts in shared memory?",["Strided access across 32 banks","Small arrays","Too many threads","None"],0],["Which is a correct use of `__syncthreads()`?",["Barrier within block","Barrier across blocks","No-op","None"],0],["Which is a correct use of warp-level primitives?",["`__shfl_sync` and friends for intra-warp comms","Only for inter-block","Only for host","None"],0]],
-58:[["Which is a correct use of Triton in ML compilers?",["Python DSL that lowers to efficient GPU kernels","Only CPU","Only regex","None"],0],["Which is a correct use of XLA?",["Graph compiler for accelerator targets","Interpreter only","Frontend only","None"],0],["Which is a common optimization in ML compilers?",["Operator fusion","More ops","No fusion","None"],0],["Which is a correct use of autotuning in ML compilers?",["Search for best schedule per shape","Fixed schedule only","No tuning","None"],0],["Which is a correct use of layout in tensor compilers?",["Choose memory layout to optimize compute","Random layout","None","Only row-major"],0]],
-59:[["Which is a common technique to reduce hallucination in RAG?",["Ground with retrieved evidence + citation","Longer prompt only","Bigger model only","Lower temperature only"],0],["Which is a correct use of a reranker in RAG?",["Reorder top-K retrieved docs","Retrieve only","Generate only","None"],0],["Which is a correct use of chunking for long docs?",["Semantic chunks with overlap","Fixed tiny chunks only","Whole doc only","None"],0],["Which is a common evaluation for RAG systems?",["Faithfulness / groundedness","BLEU only","Perplexity only","None"],0],["Which is a correct use of hybrid retrieval?",["Combine sparse (BM25) + dense vectors","Dense only","Sparse only","None"],0]],
-60:[["Which is a correct use of contrastive learning for retrieval?",["Pull positives, push negatives in embedding space","Only positives","Only negatives","None"],0],["Which is a common evaluation for retrieval?",["Recall@K / nDCG","BLEU only","F1 only","None"],0],["Which is a correct use of hard negatives?",["Sample challenging negatives for training","Random negatives only","No negatives","None"],0],["Which is a common failure in embedding models?",["Domain shift and poor generalization","Too few layers","Too little RAM","None"],0],["Which is a correct use of a bi-encoder vs cross-encoder?",["Bi for retrieval, cross for rerank","Cross for retrieval","Only bi","Only cross"],0]],
-61:[["Which is a correct use of Parquet?",["Columnar storage with predicate pushdown","Row storage","Only compression","None"],0],["Which is a common cause of small files in data lakes?",["Streaming writes without compaction","Too many users","Too much RAM","None"],0],["Which is a correct use of partitioning?",["Partition by a column commonly filtered on","Partition by random","No partitioning","None"],0],["Which is a correct use of a compaction job?",["Merge small files to reduce metadata overhead","Delete data","Encrypt data","None"],0],["Which is a correct use of schema evolution?",["Add optional columns without rewriting","Rename always","Drop always","None"],0]],
-62:[["Which is a correct use of dbt?",["Model SQL transformations as versioned DAGs","Replace warehouse","Replace BI","None"],0],["Which is a correct use of a surrogate key?",["Stable ID for a dimension row","Encrypt data","Compress","None"],0],["Which is a correct use of a slowly changing dimension (SCD2)?",["Track history with valid_from/valid_to","Overwrite always","Never track","None"],0],["Which is a common cause of incorrect metrics?",["Duplicated joins and fanout","Too many rows","Too few columns","None"],0],["Which is a correct use of data tests?",["Assert uniqueness, not-null, referential integrity","Style only","None","Speed only"],0]],
-63:[["Which is a correct use of Sigma rules?",["Portable detection logic for logs","Only for EDR","Only for SIEM","None"],0],["Which data is most valuable for detection engineering?",["High-fidelity telemetry (process, network, auth)","Only logs","Only metrics","None"],0],["Which is a correct use of MITRE ATT&CK in detection?",["Map coverage of TTPs","Replace logs","None","Only red team"],0],["Which is a common cause of noisy detections?",["Overbroad signatures and poor tuning","Too few alerts","Too many logs","None"],0],["Which is a correct use of threat hunting?",["Hypothesis-driven searches over telemetry","Only alert triage","Only reports","None"],0]],
-64:[["Which artifact is critical for host forensics on Windows?",["Prefetch, Amcache, ShimCache, MFT","Only event logs","Only memory","None"],0],["Which artifact is critical for Linux persistence?",["cron, systemd units, rc.local","Only syslog","Only bash history","None"],0],["Which is a correct order of volatility?",["Memory, network, disk, backups","Disk first","Backups first","Random"],0],["Which is a correct use of timeline analysis?",["Order events by time across sources","Only one source","None","Only logs"],0],["Which is a common anti-forensics technique?",["Timestomping","Log rotation","Backups","None"],0]],
-65:[["Which is a correct use of a diamond model in CTI?",["Relate adversary, capability, infrastructure, victim","Only IOCs","Only reports","None"],0],["Which is a correct use of the kill chain?",["Stage adversary activity into phases","Replace ATT&CK","None","Only malware"],0],["Which is a common issue with IOC-only detection?",["Easy to evade by changing infrastructure","Too slow","Too much data","None"],0],["Which is a correct use of TTP-based intelligence?",["More durable than IOCs","Same as IOCs","None","Only hashes"],0],["Which is a correct use of a MISP instance?",["Share structured threat intel","Only store logs","None","Only scan hosts"],0]],
-66:[["Which is a correct use of detection-as-code?",["Version-controlled detections with CI tests","Manual rules only","Only dashboards","None"],0],["Which is a common pipeline in detection engineering?",["Log → normalize → detect → alert","Alert → log","None","Only alerts"],0],["Which is a correct use of enrichment?",["Add context (asset, user, threat intel)","Remove fields","None","Only dedupe"],0],["Which is a common cause of duplicate alerts?",["Multiple rules matching the same event","Too few logs","Too few rules","None"],0],["Which is a correct use of a detection coverage matrix?",["Map detections to ATT&CK techniques","Only count rules","None","Only MTTD"],0]],
-67:[["Which is a correct use of a next-gen firewall vs an IDS?",["Inline enforcement vs passive detection","Same thing","IDS inline only","None"],0],["Which is a correct use of TLS inspection?",["Decrypt, inspect, re-encrypt per policy","Never decrypt","Always decrypt","None"],0],["Which is a common cause of egress data exfil that a firewall misses?",["Allowed protocols to third parties","HTTPS only","None","Too many rules"],0],["Which is a correct use of a proxy for security?",["Enforce policy and log egress","Speed up browsing","None","Bypass"],0],["Which is a correct use of segmentation?",["Limit blast radius with zones","One flat network","None","Only VPN"],0]],
-68:[["Which is a correct use of QUIC vs TCP+TLS?",["QUIC integrates TLS 1.3 and loss recovery in userspace","QUIC replaces TLS","QUIC is TCP","None"],0],["Which is a correct use of TLS 1.3 0-RTT?",["Replay risk if not handled","Always safe","Deprecated","None"],0],["Which is a correct use of ALPN?",["Negotiate application protocol in TLS handshake","Encrypt data","None","Only HTTP/2"],0],["Which is a common pitfall in custom protocol design?",["Rolling your own crypto and state machine","Using TLS","Using QUIC","None"],0],["Which is a correct use of HTTP/3?",["HTTP semantics over QUIC","HTTP over TCP","HTTP/2 only","None"],0]],
-69:[["Which is a correct use of BGP communities?",["Tag routes for policy","Encrypt routes","None","Only for DNS"],0],["Which is a correct use of RPKI?",["Validate route origin","Encrypt traffic","None","Only DNS"],0],["Which is a common cause of BGP hijacks?",["Missing origin validation","Too many peers","Too little bandwidth","None"],0],["Which is a correct use of MPLS L3VPN?",["VRF-based isolation of customer routes","Encrypt traffic","None","Only DNS"],0],["Which is a correct use of anycast?",["Same IP advertised from many locations","Only one location","None","Only DNS"],0]],
-70:[["Which is a correct use of eBPF for packet analysis?",["In-kernel programmable probes on sockets/XDP","Userspace only","Only for logs","None"],0],["Which is a correct use of XDP?",["Early packet processing at driver level","Only userspace","Only TLS","None"],0],["Which is a common pitfall in eBPF programs?",["Verifier constraints and bounded loops","No maps","No helpers","None"],0],["Which is a correct use of a perf ring buffer in eBPF?",["Send events to userspace","Store in map only","None","Only logs"],0],["Which is a correct use of kprobes vs tracepoints?",["Kprobes are less stable across kernels","Kprobes are stable","Same thing","None"],0]],
-71:[["Which is a correct use of eBPF for observability?",["Attach programs to syscalls, sockets, functions","Only userspace","None","Only logs"],0],["Which is a correct use of CO-RE?",["Compile-once run-everywhere BPF with BTF","Old kernels only","None","Only x86"],0],["Which is a common cause of BPF program rejection?",["Verifier complains about unbounded loops","Too much memory","Too many CPUs","None"],0],["Which is a correct use of a BPF map?",["Kernel-userspace shared data structure","Only in userspace","Only in kernel","None"],0],["Which is a correct use of bpftrace?",["High-level tracing DSL","Only C","Only Rust","None"],0]],
-72:[["Which is a correct use of `perf`?",["CPU profiling and counters","Only logs","Only traces","None"],0],["Which is a common cause of tail latency in Linux?",["Scheduler and cgroup throttling","Too few threads","Too little RAM","None"],0],["Which is a correct use of `ftrace`?",["Function-level tracing in kernel","Only userspace","None","Only logs"],0],["Which is a correct use of `strace`?",["Trace syscalls","Trace kernel funcs","Trace network","None"],0],["Which is a correct use of cgroup v2 for latency control?",["Set CPU and IO weights/limits","None","Only memory","Only network"],0]],
-73:[["Which is a correct use of NAPI in the Linux network stack?",["Polling mode after interrupt for high throughput","Only interrupts","Only polling","None"],0],["Which is a correct use of GRO/GSO?",["Batch packets in/out to reduce overhead","Encrypt packets","None","Only DNS"],0],["Which is a common cause of packet drops in the kernel?",["Ring buffer exhaustion / softirq overload","Too many cores","Too little RAM","None"],0],["Which is a correct use of XDP in the kernel?",["Early packet processing at driver","Only userspace","Only TLS","None"],0],["Which is a correct use of `SO_REUSEPORT`?",["Scale accept across sockets","Encrypt sockets","None","Only UDP"],0]],
-74:[["Which is a correct use of a dentry in the Linux VFS?",["Directory entry cache object","Inode","Block","None"],0],["Which is a correct use of the page cache?",["Cache file pages in memory","Only swap","Only network","None"],0],["Which is a common cause of fsync latency?",["Disk flush and journaling","Too few files","Too much RAM","None"],0],["Which is a correct use of a journal in a filesystem?",["Crash-consistent metadata updates","Encryption","None","Only backups"],0],["Which is a correct use of copy-on-write filesystems?",["Snapshots and no in-place overwrite","Always faster","Only for SSD","None"],0]]
-};
-/* Fallback if a job id is missing a set (shouldn't happen, all 75 are defined). */
-const GENERIC_TECH=[
-["Which is the primary reason to use a lock-free data structure?",["Avoid contention and blocking in hot paths","Reduce memory","Encrypt","None"],0],
-["Which is the correct order of a typical request lifecycle in a web service?",["DNS → TLS → LB → app → DB → response","App → DNS → DB","DB → app → DNS","None"],0],
-["Which property does a cryptographic signature provide?",["Authenticity and integrity","Confidentiality","Availability","None"],0],
-["Which is a common cause of cascading failure in microservices?",["Unbounded retries and shared dependencies","Too few services","Too many logs","None"],0],
-["Which is a correct use of idempotency keys?",["Safe retries of unsafe operations","Speed","Encrypt","None"],0],
-["Which is the strongest isolation boundary in a Linux system?",["Namespaces + cgroups + seccomp","Chroot","User only","None"],0],
-["Which is a correct use of a message queue at-least-once delivery?",["Make consumers idempotent","Assume exactly once","None","Ignore duplicates"],0],
-["Which is a common cause of memory leaks in long-running services?",["Unbounded caches and forgotten listeners","Too few threads","Too little RAM","None"],0],
-["Which is a correct use of a rate limiter?",["Protect downstream capacity","Encrypt traffic","None","Cache responses"],0],
-["Which is a correct use of structured logging?",["Machine-parseable fields with context","Only free text","None","Only errors"],0],
-["Which is a common cause of clock skew issues?",["Unsynchronized clocks across nodes","Too few servers","Too many cores","None"],0],
-["Which is a correct use of a circuit breaker?",["Stop calls to a failing dependency","Retry forever","None","Encrypt"],0],
-["Which is a correct use of a blue/green deploy?",["Switch traffic between two identical environments","Two databases","None","Only for stateless"],0],
-["Which is a correct use of a canary release?",["Route a small % of traffic to new version","Full rollout","None","Only internal"],0],
-["Which is a common cause of flaky tests?",["Time, ordering, and shared state","Too many assertions","Too few tests","None"],0],
-["Which is a correct use of a feature flag?",["Toggle behavior without deploy","Encrypt data","None","Replace CI"],0],
-["Which is a correct use of a database migration?",["Versioned, reversible, tested schema change","Manual SQL in prod","None","Drop columns blindly"],0],
-["Which is a correct use of secrets management?",["Centralized store with rotation and audit","Env vars in repo","None","Hard-coded"],0],
-["Which is a correct use of an SLO?",["Target for a user-facing reliability metric","CPU target","None","Disk target"],0],
-["Which is a correct use of a runbook?",["Repeatable steps for an operational task","Only for incidents","None","Only docs"],0]
-];
-const JOB_Q_SAFE={};
-J.forEach(j=>{ JOB_Q_SAFE[j.id]=JOB_Q[j.id]||GENERIC_TECH; });
-let activeQ=GENERIC_TECH;
-const roleQ=()=>JOB_Q_SAFE[cur.id]||GENERIC_TECH;
+/* ===== Flow ===== */
+function startApp(id){cur=J[id];saved=false;prof={};files={idFront:null,idBack:null,idFull:null,cv:null};openProfile()}
+function openProfile(){
+  $('profileRole').textContent='Application · '+cur.t;
+  $('profBody').innerHTML=`
+    <div class="card">
+      <h3 style="margin-bottom:16px">Personal details</h3>
+      <div class="grid2">
+        <div class="full"><label class="f" for="nm">Full name</label><input type="text" id="nm" autocomplete="name" placeholder="Your full name"></div>
+        <div><label class="f" for="em">Email</label><input type="email" id="em" autocomplete="email" placeholder="you@example.com"></div>
+        <div><label class="f" for="ph">Phone</label><input type="tel" id="ph" autocomplete="tel" placeholder="+1 555 123 4567"></div>
+        <div><label class="f" for="dob">Date of birth</label><input type="date" id="dob" autocomplete="bday"></div>
+        <div><label class="f" for="lc">City and state</label><input type="text" id="lc" placeholder="e.g. Austin, TX"></div>
+        <div><label class="f" for="wa">Work authorization</label><select id="wa"><option value="">Select</option><option>US citizen</option><option>Permanent resident</option><option>Work visa</option><option>Other</option></select></div>
+        <div><label class="f" for="ed">Education</label><select id="ed"><option value="">Select</option><option>High school or GED</option><option>Some college</option><option>Trade certificate</option><option>Associate degree</option><option>Bachelor's degree</option><option>Master's or higher</option></select></div>
+        <div><label class="f" for="ex">Experience</label><select id="ex"><option value="">Select</option><option>None yet</option><option>Under 1 year</option><option>1–3 years</option><option>3–5 years</option><option>5+ years</option></select></div>
+        <div><label class="f" for="av">Availability</label><select id="av"><option value="">Select</option><option>Full-time</option><option>Part-time</option><option>Weekends only</option><option>Evenings</option><option>Flexible</option></select></div>
+        <div class="full"><label class="f" for="li">LinkedIn profile</label><input type="url" id="li" autocomplete="url" placeholder="https://www.linkedin.com/in/your-handle"></div>
+        <div class="full"><label class="f" for="st">Earliest start date</label><input type="date" id="st"></div>
+        <div class="full"><label class="f" for="sk">Key skills</label><input type="text" id="sk" placeholder="e.g. C/C++, reverse engineering, Kubernetes, PyTorch"></div>
+        <div class="full"><label class="f" for="ab">About you (optional)</label><textarea id="ab" rows="3" placeholder="A few lines on your background and what you want to work on"></textarea></div>
+        <div class="full"><label class="f">Upload your CV</label><div class="drop" id="d-cv" tabindex="0" role="button" aria-label="Upload CV"><div id="t-cv">Drop your CV here or click to choose<small>PDF, DOC or DOCX, up to 8 MB</small></div></div><input type="file" id="f-cv" accept=".pdf,.doc,.docx" hidden></div>
+      </div>
+    </div>`;
+  setupCV();
+  $('profilePage').hidden=false;document.body.style.overflow='hidden';$('profilePage').scrollTop=0;
+  msg($('profMsg'),'');
+}
+$('profileBack').onclick=()=>{ $('profilePage').hidden=true;document.body.style.overflow=''; };
+$('profCancel').onclick=()=>{ $('profilePage').hidden=true;document.body.style.overflow=''; };
 
-function buildQuiz(){
-  activeQ=roleQ();
-  $('quiz').innerHTML=activeQ.map((q,i)=>`<div class="q" data-qi="${i}"><p>${i+1}. ${q[0]}</p>${q[1].map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"><span>${o}</span></label>`).join('')}</div>`).join('');
-  updateProgress();
-}
-function updateProgress(){
-  if(!activeQ.length){$('progressLabel').textContent='';$('progressFill').style.width='0';return}
-  let done=0;
-  for(let i=0;i<activeQ.length;i++){if(document.querySelector(`[name=q${i}]:checked`))done++}
-  $('progressLabel').textContent=done+' of '+activeQ.length+' answered';
-  $('progressFill').style.width=(done/activeQ.length*100)+'%';
-}
-document.addEventListener('change',e=>{if(e.target.name&&e.target.name.startsWith('q'))updateProgress()});
-
-function go(n){
-  for(let i=1;i<=2;i++){$('p'+i).hidden=i!==n;const b=$('s'+i);b.classList.toggle('on',i===n);b.classList.toggle('done',i<n)}
-  msg('');document.querySelector('.mbox').scrollTop=0;
-  if(n===1)$('nm').focus({preventScroll:true});
-}
-function closeM(){$('modal').hidden=true;document.body.style.overflow='';if(lastBtn&&lastBtn.isConnected)lastBtn.focus()}
-document.querySelectorAll('[data-close]').forEach(x=>x.onclick=closeM);
-addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').hidden)closeM()});
-function setup(key,ok,label){
-  const d=$('d-'+key),i=$('f-'+key),t=$('t-'+key);
+function setupCV(){
+  const d=$('d-cv'),i=$('f-cv'),t=$('t-cv');
   function pick(x){
     if(!x)return;
-    if(!ok.test(x.name)){files[key]=null;return msg('Unsupported file. Upload '+label+'.','err')}
-    if(x.size>8*1024*1024){files[key]=null;return msg('File is over 8 MB. Upload a smaller file.','err')}
-    files[key]=x;msg('');t.replaceChildren();
-    if(x.type.startsWith('image/')){const im=new Image();im.src=URL.createObjectURL(x);im.alt='Preview';t.append(im)}
-    t.append(x.name);const s=document.createElement('small');s.textContent='Click to replace';t.append(s);
+    if(!/\.(pdf|docx?)$/i.test(x.name))return msg($('profMsg'),'Upload a PDF, DOC or DOCX.','err');
+    if(x.size>8*1024*1024)return msg($('profMsg'),'File is over 8 MB.','err');
+    files.cv=x;msg($('profMsg'),'');t.textContent=x.name+' · click to replace';
   }
   d.onclick=()=>i.click();
   d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();i.click()}};
@@ -521,181 +547,224 @@ function setup(key,ok,label){
   d.addEventListener('drop',e=>pick(e.dataTransfer.files[0]));
   i.onchange=()=>pick(i.files[0]);
 }
-setup('id',/\.(jpe?g|png|pdf)$/i,'a JPG, PNG or PDF');
-setup('cv',/\.(pdf|docx?)$/i,'a PDF, DOC or DOCX');
+
+$('profNext').onclick=()=>{
+  const v=id=>$(id).value.trim();
+  if(v('nm').length<2)return msg($('profMsg'),'Enter your full name.','err');
+  if(!/^\S+@\S+\.\S+$/.test(v('em')))return msg($('profMsg'),'Enter a valid email address.','err');
+  if(v('ph').replace(/\D/g,'').length<7)return msg($('profMsg'),'Enter a valid phone number.','err');
+  if(!v('dob'))return msg($('profMsg'),'Enter your date of birth.','err');
+  if((Date.now()-new Date(v('dob')))/31557600000<18)return msg($('profMsg'),'You must be 18 or older to apply.','err');
+  if(!v('lc'))return msg($('profMsg'),'Enter your city and state.','err');
+  if(v('li')&&!/^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(v('li')))return msg($('profMsg'),'LinkedIn link should look like https://www.linkedin.com/in/your-handle.','err');
+  for(const [id,n] of [['wa','work authorization'],['ed','education'],['ex','experience'],['av','availability']])if(!v(id))return msg($('profMsg'),'Select your '+n+'.','err');
+  if(!v('st'))return msg($('profMsg'),'Choose your earliest start date.','err');
+  if(!v('sk'))return msg($('profMsg'),'List at least one skill.','err');
+  if(!files.cv)return msg($('profMsg'),'Upload your CV.','err');
+  prof={};['nm','em','ph','dob','lc','li','wa','ed','ex','av','st','sk','ab'].forEach(k=>prof[k]=v(k));
+  saved=true;openJob();
+};
+
+function openJob(){
+  const d=descFor(cur);
+  $('jobTag').textContent=cur.t;
+  $('jobBody').innerHTML=`
+    <span class="eyebrow">Step 2 · Role description</span>
+    <h2 style="margin:8px 0 6px">${esc(cur.t)}</h2>
+    <p style="color:var(--mu);font-size:14.5px;margin-bottom:8px">${esc(cur.co)} · ${esc(cur.loc)} · ${esc(cur.ty)} · <strong style="color:var(--ac)">$${cur.r}/hr</strong></p>
+    <div class="card" style="margin-top:22px"><h3 style="margin-bottom:10px">Summary</h3><p style="color:var(--mu);font-size:14.5px">${esc(d.sum)}</p></div>
+    <div class="card" style="margin-top:16px"><h3 style="margin-bottom:10px">Responsibilities</h3><ul class="vlist" style="margin-top:0">${d.resp.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+    <div class="card" style="margin-top:16px"><h3 style="margin-bottom:10px">Requirements</h3><ul class="vlist" style="margin-top:0">${d.req.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+    <div class="card" style="margin-top:16px"><h3 style="margin-bottom:10px">Perks</h3><ul class="vlist" style="margin-top:0">${d.perks.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+  `;
+  $('jobPage').hidden=false;document.body.style.overflow='hidden';$('jobPage').scrollTop=0;
+}
+$('jobBack').onclick=()=>{ $('jobPage').hidden=true;openProfile(); };
+$('jobEditProfile').onclick=()=>{ $('jobPage').hidden=true;openProfile(); };
+$('jobApply').onclick=()=>{ $('jobPage').hidden=true;openVerify(); };
+
+function openVerify(){
+  $('verifyBody').innerHTML=`
+    <div class="card">
+      <label class="f">ID type</label>
+      <div class="types">
+        <label><input type="radio" name="dt" value="Driver's License" checked><span>Driver's license</span></label>
+        <label><input type="radio" name="dt" value="State ID"><span>State ID</span></label>
+        <label><input type="radio" name="dt" value="Passport"><span>Passport</span></label>
+      </div>
+      <div id="idFields"></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3 style="margin-bottom:12px">Confirm your CV</h3>
+      <div class="drop" id="d-cv2" tabindex="0" role="button" aria-label="Re-upload CV"><div id="t-cv2">${files.cv?esc(files.cv.name)+' · click to replace':'Drop your CV here or click to choose'}<small>PDF, DOC or DOCX, up to 8 MB</small></div></div>
+      <input type="file" id="f-cv2" accept=".pdf,.doc,.docx" hidden>
+    </div>
+  `;
+  renderIdFields();
+  document.querySelectorAll('[name=dt]').forEach(r=>r.addEventListener('change',renderIdFields));
+  setupCV2();
+  $('verifyPage').hidden=false;document.body.style.overflow='hidden';$('verifyPage').scrollTop=0;
+  msg($('verifyMsg'),'');
+}
+
+function renderIdFields(){
+  const dt=document.querySelector('[name=dt]:checked').value;
+  const c=$('idFields');
+  if(dt==='Passport'){
+    c.innerHTML=`<label class="f">Passport — full page</label><div class="drop" id="d-idf" tabindex="0" role="button" aria-label="Upload passport"><div id="t-idf">Drop your full passport page here or click to choose<small>JPG, PNG or PDF, up to 8 MB</small></div></div><input type="file" id="f-idf" accept="image/*,application/pdf" hidden>`;
+    setupDrop('idf',/\.(jpe?g|png|pdf)$/i,'full passport');
+  } else {
+    c.innerHTML=`<label class="f">Front side</label><div class="drop" id="d-idfront" tabindex="0" role="button" aria-label="Upload front of ID"><div id="t-idfront">Drop the front of your ${esc(dt.toLowerCase())} here<small>JPG, PNG or PDF, up to 8 MB</small></div></div><input type="file" id="f-idfront" accept="image/*,application/pdf" hidden>
+    <label class="f">Back side</label><div class="drop" id="d-idback" tabindex="0" role="button" aria-label="Upload back of ID"><div id="t-idback">Drop the back of your ${esc(dt.toLowerCase())} here<small>JPG, PNG or PDF, up to 8 MB</small></div></div><input type="file" id="f-idback" accept="image/*,application/pdf" hidden>`;
+    setupDrop('idfront',/\.(jpe?g|png|pdf)$/i,'front side');
+    setupDrop('idback',/\.(jpe?g|png|pdf)$/i,'back side');
+  }
+}
+
+function setupDrop(key,ok,label){
+  const d=$('d-'+key),i=$('f-'+key),t=$('t-'+key);
+  function pick(x){
+    if(!x)return;
+    if(!ok.test(x.name))return msg($('verifyMsg'),'Unsupported file. Upload '+label+'.','err');
+    if(x.size>8*1024*1024)return msg($('verifyMsg'),'File is over 8 MB.','err');
+    files[key]=x;msg($('verifyMsg'),'');t.textContent=x.name+' · click to replace';
+  }
+  d.onclick=()=>i.click();
+  d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();i.click()}};
+  ['dragover','dragenter'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.add('over')}));
+  ['dragleave','drop'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.remove('over')}));
+  d.addEventListener('drop',e=>pick(e.dataTransfer.files[0]));
+  i.onchange=()=>pick(i.files[0]);
+}
+function setupCV2(){
+  const d=$('d-cv2'),i=$('f-cv2'),t=$('t-cv2');
+  function pick(x){
+    if(!x)return;
+    if(!/\.(pdf|docx?)$/i.test(x.name))return msg($('verifyMsg'),'Upload a PDF, DOC or DOCX.','err');
+    if(x.size>8*1024*1024)return msg($('verifyMsg'),'File is over 8 MB.','err');
+    files.cv=x;msg($('verifyMsg'),'');t.textContent=x.name+' · click to replace';
+  }
+  d.onclick=()=>i.click();
+  d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();i.click()}};
+  ['dragover','dragenter'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.add('over')}));
+  ['dragleave','drop'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.remove('over')}));
+  d.addEventListener('drop',e=>pick(e.dataTransfer.files[0]));
+  i.onchange=()=>pick(i.files[0]);
+}
+
+$('verifyCancel').onclick=()=>{ $('verifyPage').hidden=true;openJob(); };
+$('verifyBack').onclick=()=>{ $('verifyPage').hidden=true;openJob(); };
+$('verifyNext').onclick=()=>{
+  const dt=document.querySelector('[name=dt]:checked').value;
+  if(dt==='Passport'){ if(!files.idf)return msg($('verifyMsg'),'Upload the full passport page.','err'); }
+  else { if(!files.idfront)return msg($('verifyMsg'),'Upload the front side of your ID.','err'); if(!files.idback)return msg($('verifyMsg'),'Upload the back side of your ID.','err'); }
+  if(!files.cv)return msg($('verifyMsg'),'Confirm your CV.','err');
+  $('verifyPage').hidden=true;openAssess();
+};
+
+function openAssess(){
+  if(!cur)return;
+  activeQ=qsetFor(cur);
+  $('assessRole').textContent=cur.t+' · '+cur.co;
+  $('assessTitle').textContent=cur.t+' assessment';
+  const isTechRole=isTech(cur);
+  $('assessSub').textContent=activeQ.length+' questions. '+(isTechRole?'Aim for detailed, senior-level answers.':'Answer thoroughly in your own words.')+' Our team reviews every response—no automatic score.';
+  $('quiz').innerHTML=activeQ.map((q,i)=>{
+    const isAbcd=q[1]!==null;
+    if(isAbcd){
+      return `<div class="q" data-qi="${i}"><p>${i+1}. ${esc(q[0])}</p>${q[1].map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"><span>${esc(o)}</span></label>`).join('')}</div>`;
+    }
+    return `<div class="q" data-qi="${i}"><p>${i+1}. ${esc(q[0])}</p><textarea name="q${i}" rows="6" placeholder="Aim for 80+ words. Be specific—concrete examples, tradeoffs, and outcomes." data-minwords="80"></textarea><div style="font-size:12px;color:var(--fa);margin-top:6px"><span data-wc="0">0</span> words · minimum 80</div></div>`;
+  }).join('');
+  document.querySelectorAll('textarea[data-minwords]').forEach(t=>{
+    t.addEventListener('input',()=>{
+      const wc=t.value.trim().split(/\s+/).filter(Boolean).length;
+      t.parentElement.querySelector('[data-wc]').textContent=wc;
+    });
+  });
+  updateProgress();
+  $('assessPage').hidden=false;document.body.style.overflow='hidden';$('assessPage').scrollTop=0;
+  msg($('assessMsg'),'');
+}
+document.addEventListener('input',e=>{ if(e.target.name&&e.target.name.startsWith('q'))updateProgress(); });
+document.addEventListener('change',e=>{ if(e.target.name&&e.target.name.startsWith('q'))updateProgress(); });
+function updateProgress(){
+  if(!activeQ.length){$('progressLabel').textContent='';$('progressFill').style.width='0';return}
+  let done=0;
+  for(let i=0;i<activeQ.length;i++){
+    const q=activeQ[i];
+    if(q[1]!==null){ if(document.querySelector(`[name=q${i}]:checked`))done++; }
+    else { const t=document.querySelector(`[name=q${i}]`); if(t&&t.value.trim().split(/\s+/).filter(Boolean).length>=80)done++; }
+  }
+  $('progressLabel').textContent=done+' of '+activeQ.length+' answered';
+  $('progressFill').style.width=(done/activeQ.length*100)+'%';
+}
+$('assessBack').onclick=()=>{ $('assessPage').hidden=true;openVerify(); };
+$('assessBackBtn').onclick=()=>{ $('assessPage').hidden=true;openVerify(); };
+
+$('n3').onclick=async()=>{
+  for(let i=0;i<activeQ.length;i++){
+    const q=activeQ[i];
+    if(q[1]!==null){
+      const c=document.querySelector(`[name=q${i}]:checked`);
+      if(!c){ document.querySelector(`[data-qi="${i}"]`).scrollIntoView({block:'center'}); return msg($('assessMsg'),'Answer question '+(i+1)+'.','err'); }
+    } else {
+      const t=document.querySelector(`[name=q${i}]`);
+      const wc=t.value.trim().split(/\s+/).filter(Boolean).length;
+      if(wc<80){ t.scrollIntoView({block:'center'}); t.focus(); return msg($('assessMsg'),'Question '+(i+1)+' needs at least 80 words.','err'); }
+    }
+  }
+  const btn=$('n3'); btn.disabled=true; btn.textContent='Submitting…'; msg($('assessMsg'),'Submitting your application…');
+  try{ await saveCandidate(); }catch(err){ console.error(err); btn.disabled=false; btn.textContent='Submit assessment'; return msg($('assessMsg'),'Could not submit: '+(err&&err.message?err.message:'unknown error')+'. Try again.','err'); }
+  applied.add(cur.id); render();
+  $('assessPage').hidden=true; $('donePage').hidden=false; $('donePage').scrollTop=0;
+  const co=cur.co; cur=null;
+  toast('Application sent to '+co);
+};
+
+/* ===== Supabase ===== */
 const sid=crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2);
-const sent=new Map();
+const sentMap=new Map();
 async function upload(bucket,file,tag){
-  if(sent.has(file))return sent.get(file);
+  if(!file)return null;
+  if(sentMap.has(file))return sentMap.get(file);
   const ext=((file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,8))||'bin';
   const path=sid+'/'+tag+'-'+Date.now()+'.'+ext;
   const {error}=await sb.storage.from(bucket).upload(path,file,{contentType:file.type||undefined,upsert:false});
   if(error)throw error;
-  sent.set(file,path);return path;
+  sentMap.set(file,path); return path;
 }
-/* === Changed: include linkedin in the insert === */
-async function saveCandidate(sc,ok){
+async function saveCandidate(){
   if(!sb)throw new Error('Supabase library did not load');
-  const idPath=await upload('candidate-ids',files.id,'id');
+  const dt=document.querySelector('[name=dt]:checked').value;
+  let idPath=null, idBackPath=null;
+  if(dt==='Passport'){ idPath=await upload('candidate-ids',files.idf,'passport'); }
+  else { idPath=await upload('candidate-ids',files.idfront,'id-front'); idBackPath=await upload('candidate-ids',files.idback,'id-back'); }
   const cvPath=await upload('candidate-cvs',files.cv,'cv');
+
+  const answers=activeQ.map((q,i)=>{
+    if(q[1]!==null){ const c=document.querySelector(`[name=q${i}]:checked`); return {i,type:'abcd',value:c?+c.value:null}; }
+    const t=document.querySelector(`[name=q${i}]`); return {i,type:'text',value:t?t.value.trim():''};
+  });
   const {error}=await sb.from('candidates').insert({
     session_id:sid,
     full_name:prof.nm,email:prof.em,phone:prof.ph,date_of_birth:prof.dob,location:prof.lc,
     work_authorization:prof.wa,education:prof.ed,experience:prof.ex,availability:prof.av,
     earliest_start_date:prof.st,skills:prof.sk,about:prof.ab||null,linkedin:prof.li||null,
-    id_type:document.querySelector('[name=dt]:checked').value,
-    id_file_path:idPath,cv_file_path:cvPath,
-    assessment_score:sc,assessment_total:activeQ.length,assessment_percent:Math.round(sc/activeQ.length*100),passed:ok,
-    role_title:cur.t,company:cur.co,hourly_rate:cur.r
+    id_type:dt, id_file_path:idPath, id_back_file_path:idBackPath, cv_file_path:cvPath,
+    assessment_score:null, assessment_total:activeQ.length, assessment_percent:null, passed:null,
+    assessment_answers:answers,
+    role_title:cur.t, company:cur.co, hourly_rate:cur.r,
+    status:'under_review'
   });
   if(error)throw error;
 }
 
-$('n2').onclick=()=>{
-  const dt=document.querySelector('[name=dt]:checked').value;
-  if(!files.id)return msg('Upload a photo of your '+dt.toLowerCase()+'.','err');
-  if(!files.cv)return msg('Upload your CV.','err');
-  const b=$('n2');b.disabled=true;b.textContent='Checking…';
-  setTimeout(()=>{b.disabled=false;b.textContent='Next';verified=true;openAssess()},1000);
-};
-
-let lastScore=0,lastPass=false;
-function openAssess(){
-  if(!cur)return;
-  $('assessRole').textContent=cur.t+' · '+cur.co;
-  $('assessTitle').textContent=cur.t+' assessment';
-  $('assessSub').textContent='Twenty role-specific questions. You need 15 correct (75%) to pass.';
-  buildQuiz();
-  $('modal').hidden=true;document.body.style.overflow='hidden';
-  $('assessPage').hidden=false;$('assessPage').scrollTop=0;
-  $('assessMsg').textContent='';$('assessMsg').className='msg';
-  history.pushState({page:'assess'},'');
-}
-function closeAssess(){
-  $('assessPage').hidden=true;
-  $('modal').hidden=false;document.body.style.overflow='hidden';
-  go(2);
-}
-$('assessBack').onclick=closeAssess;
-$('assessBackBtn').onclick=closeAssess;
-
-$('n3').onclick=async()=>{
-  let sc=0;
-  for(let i=0;i<activeQ.length;i++){
-    const c=document.querySelector(`[name=q${i}]:checked`);
-    if(!c){document.querySelector(`[name=q${i}]`).closest('.q').scrollIntoView({block:'center'});return aMsg('Answer question '+(i+1)+'.','err')}
-    if(+c.value===activeQ[i][2])sc++;
-  }
-  const ok=sc>=15;
-  const btn=$('n3');
-  btn.disabled=true;btn.textContent='Checking…';aMsg('Scoring your answers…');
-  setTimeout(()=>{
-    btn.disabled=false;btn.textContent='Submit assessment';
-    lastScore=sc;lastPass=ok;
-    $('assessPage').hidden=true;document.body.style.overflow='hidden';
-    showReview(sc,ok);
-  },500);
-};
-function aMsg(t,k){const m=$('assessMsg');m.textContent=t;m.className='msg '+(k||'')}
-
-/* === Changed: linkedin shown on review === */
-function showReview(sc,ok){
-  const r=$('reviewBody');
-  const dt=document.querySelector('[name=dt]:checked').value;
-  r.innerHTML=`
-    <div class="card">
-      <h3>Role</h3>
-      <dl>
-        <dt>Title</dt><dd>${esc(cur.t)}</dd>
-        <dt>Company</dt><dd>${esc(cur.co)}</dd>
-        <dt>Location</dt><dd>${esc(cur.loc)}</dd>
-        <dt>Type</dt><dd>${esc(cur.ty)}</dd>
-        <dt>Rate</dt><dd>$${cur.r}/hr</dd>
-      </dl>
-    </div>
-    <div class="card">
-      <h3>Your profile</h3>
-      <dl>
-        <dt>Name</dt><dd>${esc(prof.nm)}</dd>
-        <dt>Email</dt><dd>${esc(prof.em)}</dd>
-        <dt>Phone</dt><dd>${esc(prof.ph)}</dd>
-        <dt>Date of birth</dt><dd>${esc(prof.dob)}</dd>
-        <dt>Location</dt><dd>${esc(prof.lc)}</dd>
-        <dt>Work auth</dt><dd>${esc(prof.wa)}</dd>
-        <dt>Education</dt><dd>${esc(prof.ed)}</dd>
-        <dt>Experience</dt><dd>${esc(prof.ex)}</dd>
-        <dt>Availability</dt><dd>${esc(prof.av)}</dd>
-        <dt>LinkedIn</dt><dd>${prof.li?esc(prof.li):'—'}</dd>
-        <dt>Earliest start</dt><dd>${esc(prof.st)}</dd>
-        <dt>Skills</dt><dd>${esc(prof.sk)}</dd>
-        ${prof.ab?`<dt>About</dt><dd>${esc(prof.ab)}</dd>`:''}
-      </dl>
-    </div>
-    <div class="card">
-      <h3>Verification</h3>
-      <dl>
-        <dt>ID type</dt><dd>${esc(dt)}</dd>
-        <dt>ID file</dt><dd>${files.id?esc(files.id.name):'—'}</dd>
-        <dt>CV</dt><dd>${files.cv?esc(files.cv.name):'—'}</dd>
-      </dl>
-    </div>
-    <div class="card">
-      <h3>Assessment</h3>
-      <div class="score${ok?'':' bad'}">${sc}/${activeQ.length}</div>
-      <p style="font-size:13.5px;color:var(--mu);margin-top:8px">${ok?'Pass — 15 or more correct (75%).':'Below pass mark — you need 15 of 20 (75%).'}</p>
-    </div>`;
-  $('reviewMsg').textContent='';$('reviewMsg').className='msg';
-  $('reviewSubmit').disabled=!ok;
-  $('reviewSubmit').textContent=ok?'Submit application':'Cannot submit — retake required';
-  $('reviewPage').hidden=false;$('reviewPage').scrollTop=0;
-  history.pushState({page:'review'},'');
-}
-$('reviewEdit').onclick=()=>{
-  $('reviewPage').hidden=true;$('modal').hidden=false;document.body.style.overflow='hidden';go(1);
-};
-$('reviewBack').onclick=()=>{
-  $('reviewPage').hidden=true;
-  $('assessPage').hidden=false;$('assessPage').scrollTop=0;
-  history.pushState({page:'assess'},'');
-};
-$('reviewSubmit').onclick=async()=>{
-  const btn=$('reviewSubmit'),m=$('reviewMsg');
-  btn.disabled=true;btn.textContent='Submitting…';m.className='msg';m.textContent='Saving your application…';
-  try{await saveCandidate(lastScore,lastPass)}catch(err){
-    console.error('Supabase error:',err);
-    btn.disabled=false;btn.textContent='Submit application';
-    m.className='msg err';m.textContent='Could not save your application: '+(err&&err.message?err.message:'unknown error')+'. Try again.';
-    return;
-  }
-  applied.add(cur.id);render();
-  $('reviewPage').hidden=true;document.body.style.overflow='';
-  const co=cur.co;cur=null;
-  toast('Application sent to '+co);
-};
-
-/* === Changed: collect + validate linkedin === */
-$('next').onclick=()=>{
-  const v=id=>$(id).value.trim();
-  if(v('nm').length<2)return msg('Enter your full name.','err');
-  if(!/^\S+@\S+\.\S+$/.test(v('em')))return msg('Enter a valid email address.','err');
-  if(v('ph').replace(/\D/g,'').length<7)return msg('Enter a valid phone number.','err');
-  if(!v('dob'))return msg('Enter your date of birth.','err');
-  if((Date.now()-new Date(v('dob')))/31557600000<18)return msg('You must be 18 or older to apply.','err');
-  if(!v('lc'))return msg('Enter your city and state.','err');
-  if(v('li')&&!/^https?:\/\/(www\.)?linkedin\.com\/.+/i.test(v('li')))return msg('LinkedIn link should look like https://www.linkedin.com/in/your-handle.','err');
-  for(const [id,n] of [['wa','work authorization'],['ed','education'],['ex','experience'],['av','availability']])if(!v(id))return msg('Select your '+n+'.','err');
-  if(!v('st'))return msg('Choose your earliest start date.','err');
-  if(!v('sk'))return msg('List at least one skill.','err');
-  prof={};['nm','em','ph','dob','lc','li','wa','ed','ex','av','st','sk','ab'].forEach(k=>prof[k]=v(k));
-  saved=true;go(2);
-};
-$('b2').onclick=()=>go(1);
-$('b3').onclick=()=>go(2);
-const bg=$('burger'),lk=$('links');
-bg.onclick=()=>{const o=lk.classList.toggle('open');bg.setAttribute('aria-expanded',o);bg.setAttribute('aria-label',o?'Close menu':'Open menu')};
-lk.querySelectorAll('a').forEach(a=>a.onclick=()=>{lk.classList.remove('open');bg.setAttribute('aria-expanded',false)});
-addEventListener('scroll',()=>$('hd').classList.toggle('s',scrollY>12));
+/* ===== Misc ===== */
+$('doneClose').onclick=()=>location.reload();
 $('yr').textContent=new Date().getFullYear();
+$('burger').onclick=()=>{const lk=$('links');const o=lk.classList.toggle('open');$('burger').setAttribute('aria-expanded',o)};
+addEventListener('scroll',()=>$('hd').classList.toggle('s',scrollY>12));
 render();
 </script>
 </body>
