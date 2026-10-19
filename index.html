@@ -2065,15 +2065,35 @@ function openAdminEntry(){
   showOnly('adminLoginPage');
 }
 $('adminLoginBack').onclick=()=>{closePages()};
+async function ensureAdminAccount(){
+  // Sign in with the fixed reviewer credentials; if that account doesn't exist yet, create it
+  // on the spot and register it as an admin, so no manual Supabase steps are needed.
+  try{
+    return await authCall('token?grant_type=password',{email:ADMIN_SB_EMAIL,password:ADMIN_SB_PASSWORD});
+  }catch(e1){
+    const d=await authCall('signup',{email:ADMIN_SB_EMAIL,password:ADMIN_SB_PASSWORD});
+    let tok=d.access_token, uid=d.user&&d.user.id;
+    if(!tok){
+      // email confirmation is required on this project — try signing in anyway (works if
+      // "Confirm email" is off or the auto-confirm trigger from setup is in place)
+      const d2=await authCall('token?grant_type=password',{email:ADMIN_SB_EMAIL,password:ADMIN_SB_PASSWORD});
+      tok=d2.access_token; uid=d2.user&&d2.user.id; d.access_token=tok; d.user=d2.user;
+    }
+    if(tok&&uid){
+      try{ await fetch(SUPABASE_URL+'/rest/v1/admins?on_conflict=user_id',{method:'POST',headers:sbHeaders2({'Content-Type':'application/json','Authorization':'Bearer '+tok,'Prefer':'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify({user_id:uid})}); }catch(e3){}
+    }
+    return d;
+  }
+}
 $('adminGo').onclick=async()=>{
   const a=$('ac1').value.trim(),b=$('ac2').value;
   if(a!==ADMIN_CODE_A||b!==ADMIN_CODE_B)return msg($('adminLoginMsg'),'Those codes are not recognized.','err');
   msg($('adminLoginMsg'),'Signing in…');
   try{
-    const d=await authCall('token?grant_type=password',{email:ADMIN_SB_EMAIL,password:ADMIN_SB_PASSWORD});
+    const d=await ensureAdminAccount();
     adminToken=d.access_token; try{sessionStorage.setItem('synapse-admin-token',adminToken)}catch(e){}
     showOnly('adminPage'); loadAdminData();
-  }catch(err){ msg($('adminLoginMsg'),'Codes accepted, but the reviewer account could not sign in: '+err.message+'. Check ADMIN_SB_EMAIL/PASSWORD and that the account exists.','err'); }
+  }catch(err){ msg($('adminLoginMsg'),'Codes accepted, but could not set up the reviewer account: '+err.message+'. If your project requires email confirmation, run the auto-confirm SQL from setup, or turn "Confirm email" off, then try again.','err'); }
 };
 $('adminOut').onclick=()=>{adminToken=null;try{sessionStorage.removeItem('synapse-admin-token')}catch(e){}closePages()};
 try{const t=sessionStorage.getItem('synapse-admin-token');if(t)adminToken=t;}catch(e){}
