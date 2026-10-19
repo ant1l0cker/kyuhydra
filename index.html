@@ -208,7 +208,7 @@ textarea.essay-box:focus{border-color:var(--ac)!important;outline:none}
 <footer><div class="wrap">
 <a href="#top" class="logo">Synapse<b>AI</b></a>
 <p>AI hiring for technical and professional roles. Verified candidates, serious work.</p>
-<div class="ft"><span>&copy; <span id="yr"></span> SynapseAI. All rights reserved.</span><span>SYSTEM STATUS: OPERATIONAL</span></div>
+<div class="ft"><span>&copy; <span id="yr"></span> SynapseAI. All rights reserved. · build 4</span><span>SYSTEM STATUS: OPERATIONAL</span></div>
 </div></footer>
 <div class="toast" id="toast" role="status"></div>
 
@@ -1125,6 +1125,15 @@ const GENERIC_SET=[
 /* Ensure every job has a question set */
 J.forEach(j=>{ if(!QUESTIONS[j.c]) QUESTIONS[j.c]=GENERIC_SET; });
 
+
+/* ===== Page switcher: only ever one page visible ===== */
+function showOnly(id){
+  document.querySelectorAll('.page').forEach(p=>{p.hidden=true});
+  const el=$(id); el.hidden=false; el.scrollTop=0; document.body.style.overflow='hidden';
+}
+addEventListener('error',e=>{try{toast('Error: '+e.message)}catch(_){}});
+addEventListener('unhandledrejection',e=>{try{toast('Error: '+(e.reason&&e.reason.message||e.reason))}catch(_){}});
+
 /* ===== State ===== */
 let applied=new Set(),shown=12,cur=null,files={idFront:null,idBack:null,idFull:null,cv:null},prof={},saved=false,activeQ=[];
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2800)}
@@ -1170,7 +1179,7 @@ function openProfile(){
       </div>
     </div>`;
   setupCV();
-  $('profilePage').hidden=false;document.body.style.overflow='hidden';$('profilePage').scrollTop=0;
+  showOnly('profilePage');document.body.style.overflow='hidden';$('profilePage').scrollTop=0;
   msg($('profMsg'),'');
 }
 $('profileBack').onclick=()=>{ $('profilePage').hidden=true;document.body.style.overflow=''; };
@@ -1238,7 +1247,7 @@ function openJob(){
     <div class="section-div"></div>
     <p style="font-size:13px;color:var(--fa);line-height:1.7">We consider all qualified applicants without regard to legally protected characteristics and provide reasonable accommodations upon request. You will be engaged as an independent contractor. Projects can be extended, shortened, or concluded early depending on needs and performance.</p>
   `;
-  $('jobPage').hidden=false;document.body.style.overflow='hidden';$('jobPage').scrollTop=0;
+  showOnly('jobPage');document.body.style.overflow='hidden';$('jobPage').scrollTop=0;
 }
 $('jobBack').onclick=()=>{ $('jobPage').hidden=true;openProfile(); };
 $('jobEditProfile').onclick=()=>{ $('jobPage').hidden=true;openProfile(); };
@@ -1264,7 +1273,7 @@ function openVerify(){
   renderIdFields();
   document.querySelectorAll('[name=dt]').forEach(r=>r.addEventListener('change',renderIdFields));
   setupCV2();
-  $('verifyPage').hidden=false;document.body.style.overflow='hidden';$('verifyPage').scrollTop=0;
+  showOnly('verifyPage');document.body.style.overflow='hidden';$('verifyPage').scrollTop=0;
   msg($('verifyMsg'),'');
 }
 
@@ -1354,7 +1363,7 @@ function openAssess(){
   });
 
   updateProgress();
-  $('assessPage').hidden=false;document.body.style.overflow='hidden';$('assessPage').scrollTop=0;
+  showOnly('assessPage');document.body.style.overflow='hidden';$('assessPage').scrollTop=0;
   msg($('assessMsg'),'');
 }
 
@@ -1391,7 +1400,7 @@ $('n3').onclick=async()=>{
   const btn=$('n3'); btn.disabled=true; btn.textContent='Submitting…'; msg($('assessMsg'),'Submitting your application…');
   try{ await saveCandidate(); }catch(err){ console.error(err); btn.disabled=false; btn.textContent='Submit assessment'; return msg($('assessMsg'),'Could not submit: '+(err&&err.message?err.message:'unknown error')+'. Try again.','err'); }
   applied.add(cur.id); render();
-  $('assessPage').hidden=true; $('donePage').hidden=false; $('donePage').scrollTop=0;
+  $('assessPage').hidden=true; showOnly('donePage'); $('donePage').scrollTop=0;
   const co=cur.co; cur=null;
   toast('Application sent to '+co);
 };
