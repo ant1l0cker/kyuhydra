@@ -208,7 +208,7 @@ textarea.essay-box:focus{border-color:var(--ac)!important;outline:none}
 <footer><div class="wrap">
 <a href="#top" class="logo">Synapse<b>AI</b></a>
 <p>AI hiring for technical and professional roles. Verified candidates, serious work.</p>
-<div class="ft"><span>&copy; <span id="yr"></span> SynapseAI. All rights reserved. · build 4</span><span>SYSTEM STATUS: OPERATIONAL</span></div>
+<div class="ft"><span>&copy; <span id="yr"></span> SynapseAI. All rights reserved. · build 5</span><span>SYSTEM STATUS: OPERATIONAL</span></div>
 </div></footer>
 <div class="toast" id="toast" role="status"></div>
 
@@ -292,8 +292,8 @@ textarea.essay-box:focus{border-color:var(--ac)!important;outline:none}
   <div style="width:72px;height:72px;border-radius:50%;background:var(--acs);display:inline-flex;align-items:center;justify-content:center;margin-bottom:24px">
     <svg viewBox="0 0 24 24" fill="none" stroke="var(--ac)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px"><polyline points="20 6 9 17 4 12"></polyline></svg>
   </div>
-  <h2 style="font-size:32px;margin-bottom:12px">Application submitted</h2>
-  <p style="color:var(--mu);max-width:480px;margin:0 auto 32px;font-size:15.5px">Your application has been submitted and is now <strong style="color:var(--tx)">under review</strong>. This takes up to <strong style="color:var(--tx)">48 hours</strong>, and our team will contact you by email.</p>
+  <h2 style="font-size:32px;margin-bottom:12px">Submitted</h2>
+  <p style="color:var(--mu);max-width:480px;margin:0 auto 32px;font-size:15.5px">Your application has been submitted and is <strong style="color:var(--tx)">under review</strong>. We will reach out to you within <strong style="color:var(--tx)">48 hours</strong>.</p>
   <button class="btn btn-p" onclick="location.reload()">Back to roles</button>
 </div>
 </div>
@@ -1398,12 +1398,26 @@ $('n3').onclick=async()=>{
     }
   }
   const btn=$('n3'); btn.disabled=true; btn.textContent='Submitting…'; msg($('assessMsg'),'Submitting your application…');
-  try{ await saveCandidate(); }catch(err){ console.error(err); btn.disabled=false; btn.textContent='Submit assessment'; return msg($('assessMsg'),'Could not submit: '+(err&&err.message?err.message:'unknown error')+'. Try again.','err'); }
+  try{ await saveCandidate(); }catch(err){ console.error('Save failed',err); stashPending(err); }
   applied.add(cur.id); render();
   $('assessPage').hidden=true; showOnly('donePage'); $('donePage').scrollTop=0;
   const co=cur.co; cur=null;
   toast('Application sent to '+co);
 };
+
+
+/* If the server can't be reached, keep a local copy of the text answers so nothing is lost */
+function stashPending(err){
+  try{
+    const answers=activeQ.map((q,i)=>{
+      if(Array.isArray(q[1])){const c=document.querySelector(`[name=q${i}]:checked`);return {i,type:'abcd',value:c?+c.value:null};}
+      const t=document.querySelector(`[name=q${i}]`);return {i,type:'text',value:t?t.value.trim():''};
+    });
+    const list=JSON.parse(localStorage.getItem('synapse-pending')||'[]');
+    list.push({at:new Date().toISOString(),error:String(err&&err.message||err),profile:prof,role:cur&&cur.t,company:cur&&cur.co,answers});
+    localStorage.setItem('synapse-pending',JSON.stringify(list));
+  }catch(e){}
+}
 
 /* ===== Supabase ===== */
 const sid=crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2);
