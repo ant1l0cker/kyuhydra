@@ -292,8 +292,8 @@ textarea.essay-box:focus{border-color:var(--ac)!important;outline:none}
   <div style="width:72px;height:72px;border-radius:50%;background:var(--acs);display:inline-flex;align-items:center;justify-content:center;margin-bottom:24px">
     <svg viewBox="0 0 24 24" fill="none" stroke="var(--ac)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px"><polyline points="20 6 9 17 4 12"></polyline></svg>
   </div>
-  <h2 style="font-size:32px;margin-bottom:12px">Application received</h2>
-  <p style="color:var(--mu);max-width:480px;margin:0 auto 32px;font-size:15.5px">Thank you for applying. Your application is now <strong style="color:var(--tx)">under review</strong>. Our team will reach out to you within <strong style="color:var(--tx)">48 hours</strong>.</p>
+  <h2 style="font-size:32px;margin-bottom:12px">Application submitted</h2>
+  <p style="color:var(--mu);max-width:480px;margin:0 auto 32px;font-size:15.5px">Your application has been submitted and is now <strong style="color:var(--tx)">under review</strong>. This takes up to <strong style="color:var(--tx)">48 hours</strong>, and our team will contact you by email.</p>
   <button class="btn btn-p" onclick="location.reload()">Back to roles</button>
 </div>
 </div>
@@ -1206,7 +1206,7 @@ $('profNext').onclick=()=>{
   if(!v('sk'))return msg($('profMsg'),'List at least one skill.','err');
   if(!files.cv)return msg($('profMsg'),'Upload your CV.','err');
   prof={};['nm','em','ph','dob','lc','li','wa','ed','ex','av','st','sk','ab'].forEach(k=>prof[k]=v(k));
-  saved=true;openJob();
+  saved=true;$('profilePage').hidden=true;openJob();
 };
 
 function openJob(){
@@ -1240,20 +1240,98 @@ function openJob(){
   `;
   $('jobPage').hidden=false;document.body.style.overflow='hidden';$('jobPage').scrollTop=0;
 }
-$('jobBack').onclick=()=>{$('jobPage').hidden=true;openProfile(); };
-$('jobEditProfile').onclick=()=>{$('jobPage').hidden=true;openProfile(); };
+$('jobBack').onclick=()=>{ $('jobPage').hidden=true;openProfile(); };
+$('jobEditProfile').onclick=()=>{ $('jobPage').hidden=true;openProfile(); };
+$('jobApply').onclick=()=>{ $('jobPage').hidden=true;openVerify(); };
 
-/* FIX APPLIED HERE: Directly loading the assessment when clicking Apply to this job */
-$('jobApply').onclick=()=>{$('jobPage').hidden=true;openAssess(); };
+function openVerify(){
+  $('verifyBody').innerHTML=`
+    <div class="card">
+      <label class="f">ID type</label>
+      <div class="types">
+        <label><input type="radio" name="dt" value="Driver's License" checked><span>Driver's license</span></label>
+        <label><input type="radio" name="dt" value="State ID"><span>State ID</span></label>
+        <label><input type="radio" name="dt" value="Passport"><span>Passport</span></label>
+      </div>
+      <div id="idFields"></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3 style="margin-bottom:12px">Confirm your CV</h3>
+      <div class="drop" id="d-cv2" tabindex="0" role="button" aria-label="Re-upload CV"><div id="t-cv2">${files.cv?esc(files.cv.name)+' · click to replace':'Drop your CV here or click to choose'}<small>PDF, DOC or DOCX, up to 8 MB</small></div></div>
+      <input type="file" id="f-cv2" accept=".pdf,.doc,.docx" hidden>
+    </div>
+  `;
+  renderIdFields();
+  document.querySelectorAll('[name=dt]').forEach(r=>r.addEventListener('change',renderIdFields));
+  setupCV2();
+  $('verifyPage').hidden=false;document.body.style.overflow='hidden';$('verifyPage').scrollTop=0;
+  msg($('verifyMsg'),'');
+}
+
+function renderIdFields(){
+  const dt=document.querySelector('[name=dt]:checked').value;
+  const c=$('idFields');
+  if(dt==='Passport'){
+    c.innerHTML=`<label class="f">Passport — full page</label><div class="drop" id="d-idf" tabindex="0" role="button" aria-label="Upload passport"><div id="t-idf">Drop your full passport page here or click to choose<small>JPG, PNG or PDF, up to 8 MB</small></div></div><input type="file" id="f-idf" accept="image/*,application/pdf" hidden>`;
+    setupDrop('idf',/\.(jpe?g|png|pdf)$/i,'full passport');
+  } else {
+    c.innerHTML=`<label class="f">Front side</label><div class="drop" id="d-idfront" tabindex="0" role="button" aria-label="Upload front of ID"><div id="t-idfront">Drop the front of your ${esc(dt.toLowerCase())} here<small>JPG, PNG or PDF, up to 8 MB</small></div></div><input type="file" id="f-idfront" accept="image/*,application/pdf" hidden>
+    <label class="f">Back side</label><div class="drop" id="d-idback" tabindex="0" role="button" aria-label="Upload back of ID"><div id="t-idback">Drop the back of your ${esc(dt.toLowerCase())} here<small>JPG, PNG or PDF, up to 8 MB</small></div></div><input type="file" id="f-idback" accept="image/*,application/pdf" hidden>`;
+    setupDrop('idfront',/\.(jpe?g|png|pdf)$/i,'front side');
+    setupDrop('idback',/\.(jpe?g|png|pdf)$/i,'back side');
+  }
+}
+
+function setupDrop(key,ok,label){
+  const d=$('d-'+key),i=$('f-'+key),t=$('t-'+key);
+  function pick(x){
+    if(!x)return;
+    if(!ok.test(x.name))return msg($('verifyMsg'),'Unsupported file. Upload '+label+'.','err');
+    if(x.size>8*1024*1024)return msg($('verifyMsg'),'File is over 8 MB.','err');
+    files[key]=x;msg($('verifyMsg'),'');t.textContent=x.name+' · click to replace';
+  }
+  d.onclick=()=>i.click();
+  d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();i.click()}};
+  ['dragover','dragenter'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.add('over')}));
+  ['dragleave','drop'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.remove('over')}));
+  d.addEventListener('drop',e=>pick(e.dataTransfer.files[0]));
+  i.onchange=()=>pick(i.files[0]);
+}
+function setupCV2(){
+  const d=$('d-cv2'),i=$('f-cv2'),t=$('t-cv2');
+  function pick(x){
+    if(!x)return;
+    if(!/\.(pdf|docx?)$/i.test(x.name))return msg($('verifyMsg'),'Upload a PDF, DOC or DOCX.','err');
+    if(x.size>8*1024*1024)return msg($('verifyMsg'),'File is over 8 MB.','err');
+    files.cv=x;msg($('verifyMsg'),'');t.textContent=x.name+' · click to replace';
+  }
+  d.onclick=()=>i.click();
+  d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();i.click()}};
+  ['dragover','dragenter'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.add('over')}));
+  ['dragleave','drop'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.remove('over')}));
+  d.addEventListener('drop',e=>pick(e.dataTransfer.files[0]));
+  i.onchange=()=>pick(i.files[0]);
+}
+
+$('verifyCancel').onclick=()=>{ $('verifyPage').hidden=true;openJob(); };
+$('verifyBack').onclick=()=>{ $('verifyPage').hidden=true;openJob(); };
+$('verifyNext').onclick=()=>{
+  const dt=document.querySelector('[name=dt]:checked').value;
+  if(dt==='Passport'){ if(!files.idf)return msg($('verifyMsg'),'Upload the full passport page.','err'); }
+  else { if(!files.idfront)return msg($('verifyMsg'),'Upload the front side of your ID.','err'); if(!files.idback)return msg($('verifyMsg'),'Upload the back side of your ID.','err'); }
+  if(!files.cv)return msg($('verifyMsg'),'Confirm your CV.','err');
+  $('verifyPage').hidden=true;openAssess();
+};
 
 function openAssess(){
   if(!cur)return;
   activeQ=QUESTIONS[cur.c]||GENERIC_SET;
   $('assessRole').textContent=cur.t+' · '+cur.co;
-  $('assessTitle').textContent=cur.t+' assessment';$('assessSub').textContent=activeQ.length+' questions. Answer thoroughly in your own words. Our team reviews every response—no automatic score.';
+  $('assessTitle').textContent=cur.t+' assessment';
+  $('assessSub').textContent=activeQ.length+' questions. Answer thoroughly in your own words. Our team reviews every response—no automatic score.';
   
   $('quiz').innerHTML=activeQ.map((q,i)=>{
-    const isAbcd=q[1]!==null;
+    const isAbcd=Array.isArray(q[1]);
     if(isAbcd){
       return `<div class="q" data-qi="${i}"><p>${i+1}. ${esc(q[0])}</p><div style="display:flex;flex-direction:column;gap:8px">${q[1].map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"><span>${esc(o)}</span></label>`).join('')}</div></div>`;
     }
@@ -1288,18 +1366,19 @@ function updateProgress(){
   let done=0;
   for(let i=0;i<activeQ.length;i++){
     const q=activeQ[i];
-    if(q[1]!==null){ if(document.querySelector(`[name=q${i}]:checked`))done++; }
+    if(Array.isArray(q[1])){ if(document.querySelector(`[name=q${i}]:checked`))done++; }
     else { const t=document.querySelector(`[name=q${i}]`); if(t&&t.value.trim().length>0)done++; }
   }
-  $('progressLabel').textContent=done+' of '+activeQ.length+' answered';$('progressFill').style.width=(done/activeQ.length*100)+'%';
+  $('progressLabel').textContent=done+' of '+activeQ.length+' answered';
+  $('progressFill').style.width=(done/activeQ.length*100)+'%';
 }
-$('assessBack').onclick=()=>{$('assessPage').hidden=true;openJob(); };
-$('assessBackBtn').onclick=()=>{$('assessPage').hidden=true;openJob(); };
+$('assessBack').onclick=()=>{ $('assessPage').hidden=true;openVerify(); };
+$('assessBackBtn').onclick=()=>{ $('assessPage').hidden=true;openVerify(); };
 
 $('n3').onclick=async()=>{
   for(let i=0;i<activeQ.length;i++){
     const q=activeQ[i];
-    if(q[1]!==null){
+    if(Array.isArray(q[1])){
       const c=document.querySelector(`[name=q${i}]:checked`);
       if(!c){ document.querySelector(`[data-qi="${i}"]`).scrollIntoView({block:'center'}); return msg($('assessMsg'),'Answer question '+(i+1)+'.','err'); }
     } else {
@@ -1320,40 +1399,58 @@ $('n3').onclick=async()=>{
 /* ===== Supabase ===== */
 const sid=crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2);
 const sentMap=new Map();
+function sbHeaders(extra){
+  const h={apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY};
+  for(const k in (extra||{}))h[k]=extra[k];
+  return h;
+}
+async function sbErr(r){
+  let m='';try{const j=await r.json();m=j.message||j.error||JSON.stringify(j)}catch(e){}
+  return new Error((m||('HTTP '+r.status))+' ('+r.status+')');
+}
 async function upload(bucket,file,tag){
   if(!file)return null;
   if(sentMap.has(file))return sentMap.get(file);
   const ext=((file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,8))||'bin';
   const path=sid+'/'+tag+'-'+Date.now()+'.'+ext;
-  const {error}=await sb.storage.from(bucket).upload(path,file,{contentType:file.type||undefined,upsert:false});
-  if(error)throw error;
+  const r=await fetch(SUPABASE_URL+'/storage/v1/object/'+bucket+'/'+path,{
+    method:'POST',
+    headers:sbHeaders({'Content-Type':file.type||'application/octet-stream','x-upsert':'false'}),
+    body:file
+  });
+  if(!r.ok)throw await sbErr(r);
   sentMap.set(file,path); return path;
 }
 async function saveCandidate(){
-  if(!sb)throw new Error('Supabase library did not load');
+  const dt=document.querySelector('[name=dt]:checked').value;
+  let idPath=null, idBackPath=null;
+  if(dt==='Passport'){ idPath=await upload('candidate-ids',files.idf,'passport'); }
+  else { idPath=await upload('candidate-ids',files.idfront,'id-front'); idBackPath=await upload('candidate-ids',files.idback,'id-back'); }
   const cvPath=await upload('candidate-cvs',files.cv,'cv');
 
   const answers=activeQ.map((q,i)=>{
-    if(q[1]!==null){ const c=document.querySelector(`[name=q${i}]:checked`); return {i,type:'abcd',value:c?+c.value:null}; }
+    if(Array.isArray(q[1])){ const c=document.querySelector(`[name=q${i}]:checked`); return {i,type:'abcd',value:c?+c.value:null}; }
     const t=document.querySelector(`[name=q${i}]`); return {i,type:'text',value:t?t.value.trim():''};
   });
-  const {error}=await sb.from('candidates').insert({
+  const row={
     session_id:sid,
     full_name:prof.nm,email:prof.em,phone:prof.ph,date_of_birth:prof.dob,location:prof.lc,
     work_authorization:prof.wa,education:prof.ed,experience:prof.ex,availability:prof.av,
     earliest_start_date:prof.st,skills:prof.sk,about:prof.ab||null,linkedin:prof.li||null,
-    id_type:'Driver\'s License', id_file_path:null, id_back_file_path:null, cv_file_path:cvPath,
+    id_type:dt, id_file_path:idPath, id_back_file_path:idBackPath, cv_file_path:cvPath,
     assessment_score:null, assessment_total:activeQ.length, assessment_percent:null, passed:null,
     assessment_answers:answers,
     role_title:cur.t, company:cur.co, hourly_rate:cur.r,
     status:'under_review'
-  });
-  if(error)throw error;
+  };
+  const r=await fetch(SUPABASE_URL+'/rest/v1/candidates',{method:'POST',headers:sbHeaders({'Content-Type':'application/json','Prefer':'return=minimal'}),body:JSON.stringify(row)});
+  if(!r.ok)throw await sbErr(r);
 }
 
 /* ===== Misc ===== */
 $('doneClose').onclick=()=>location.reload();
-$('yr').textContent=new Date().getFullYear();$('burger').onclick=()=>{const lk=$('links');const o=lk.classList.toggle('open');$('burger').setAttribute('aria-expanded',o)};
+$('yr').textContent=new Date().getFullYear();
+$('burger').onclick=()=>{const lk=$('links');const o=lk.classList.toggle('open');$('burger').setAttribute('aria-expanded',o)};
 addEventListener('scroll',()=>$('hd').classList.toggle('s',scrollY>12));
 render();
 </script>
