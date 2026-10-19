@@ -1206,7 +1206,7 @@ $('profNext').onclick=()=>{
   if(!v('sk'))return msg($('profMsg'),'List at least one skill.','err');
   if(!files.cv)return msg($('profMsg'),'Upload your CV.','err');
   prof={};['nm','em','ph','dob','lc','li','wa','ed','ex','av','st','sk','ab'].forEach(k=>prof[k]=v(k));
-  saved=true;$('profilePage').hidden=true;openJob();
+  saved=true;msg($('profMsg'),'');$('profilePage').hidden=true;openJob();
 };
 
 function openJob(){
