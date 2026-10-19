@@ -157,18 +157,49 @@ textarea.essay-box:focus{border-color:var(--ac)!important;outline:none}
 .id-split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:560px){.id-split{grid-template-columns:1fr}}
 .section-div{height:1px;background:var(--bd);margin:28px 0}
+
+.card input[type=password]{font-family:inherit;width:100%;background:var(--bg);border:1px solid var(--bd2);color:var(--tx);padding:12px 14px;font-size:14px;margin-bottom:18px;border-radius:10px}
+.feat{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+@media(max-width:1000px){.feat{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.feat{grid-template-columns:1fr}}
+.feat>div{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:26px 22px;box-shadow:var(--shadow)}
+.feat h3{font-size:17px;margin:14px 0 8px}.feat p{font-size:13.5px;color:var(--mu)}
+.feat .ic{width:42px;height:42px;border-radius:12px;background:var(--acs);color:var(--ac);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:700}
+.faq{max-width:820px;margin-top:36px}
+.faq details{border-top:1px solid var(--bd);padding:18px 0}.faq details:last-child{border-bottom:1px solid var(--bd)}
+.faq summary{cursor:pointer;font-family:var(--fd);font-weight:600;font-size:16px;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}.faq summary::after{content:"+";color:var(--ac);font-size:20px;line-height:1}
+.faq details[open] summary::after{content:"\2013"}
+.faq p{color:var(--mu);font-size:14.5px;margin-top:10px;max-width:700px}
+footer .fl{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;max-width:none}footer .fl a{font-size:13.5px;color:var(--mu)}footer .fl a:hover{color:var(--ac)}
+#navAuth{display:flex;gap:10px;align-items:center}
+@media(max-width:560px){#navAuth .btn-g{display:none}}
+.atabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px}
+.atabs button{padding:12px;border:1.5px solid var(--bd2);background:var(--sf);color:var(--mu);font-family:var(--fd);font-weight:600;font-size:14px;border-radius:10px;cursor:pointer;transition:var(--t)}
+.atabs button.on{border-color:var(--ac);color:var(--ac);background:var(--acs)}
+.dstats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.dstat{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+.dstat b{display:block;font-family:var(--fd);font-size:30px;color:var(--ac)}.dstat span{font-size:12px;color:var(--fa);text-transform:uppercase;letter-spacing:.06em}
+.dtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.dtabs button{padding:9px 16px;border:1px solid var(--bd2);background:var(--sf);color:var(--mu);border-radius:999px;font-weight:600;font-size:13px;cursor:pointer}
+.dtabs button.on{border-color:var(--ac);color:var(--ac);background:var(--acs)}
+.dcard{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:22px;margin-bottom:12px;box-shadow:var(--shadow)}
+.dcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.dcard h3{font-size:18px}.dcard .m{font-size:13px;color:var(--mu);margin-top:4px}.dcard .d{font-size:13.5px;color:var(--mu);margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)}
+.pill{font-family:var(--fm);font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:999px;border:1px solid var(--bd2);white-space:nowrap}
+.pill.under_review{color:var(--ac);border-color:var(--ac);background:var(--acs)}.pill.pending{color:#b7791f;border-color:#b7791f}
+@media(max-width:560px){.dstats{grid-template-columns:1fr}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <header id="hd"><div class="wrap"><nav>
 <a href="#top" class="logo">Synapse<b>AI</b></a>
-<ul class="links" id="links"><li><a href="#how">How it works</a></li><li><a href="#jobs">Jobs</a></li></ul>
+<ul class="links" id="links"><li><a href="#how">How it works</a></li><li><a href="#jobs">Jobs</a></li><li><a href="#why">Why SynapseAI</a></li><li><a href="#faq">FAQ</a></li></ul>
 <div class="nr">
   <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
     <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
   </button>
-  <a href="#jobs" class="btn btn-p btn-sm">Find jobs</a>
+  <span id="navAuth"></span>
   <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </div>
 </nav></div></header>
@@ -186,7 +217,7 @@ textarea.essay-box:focus{border-color:var(--ac)!important;outline:none}
 <span class="eyebrow">How it works</span><h2>From sign-up to applied in five steps.</h2>
 <div class="steps">
 <div class="step"><div class="ix">01</div><h3>Pick a role</h3><p>Search 53 roles and filter by pay.</p></div>
-<div class="step"><div class="ix">02</div><h3>Build your profile</h3><p>Add details and upload your CV.</p></div>
+<div class="step"><div class="ix">02</div><h3>Build your profile</h3><p>Create a free account, add your details and upload your CV.</p></div>
 <div class="step"><div class="ix">03</div><h3>Review the role</h3><p>Read the full description and apply.</p></div>
 <div class="step"><div class="ix">04</div><h3>Verify identity</h3><p>Upload your ID and confirm your details.</p></div>
 <div class="step"><div class="ix">05</div><h3>Complete assessment</h3><p>Role-specific questions reviewed by our team.</p></div>
@@ -203,12 +234,32 @@ textarea.essay-box:focus{border-color:var(--ac)!important;outline:none}
 <div class="jobs" id="list"></div>
 <div style="text-align:center;margin-top:28px"><button class="btn btn-g" id="more">Show more jobs</button></div>
 </div></section>
+<section class="alt pad" id="why"><div class="wrap">
+<span class="eyebrow">Why SynapseAI</span><h2>A hiring process built for serious technical work.</h2>
+<div class="feat">
+<div><div class="ic">&#10003;</div><h3>Verified candidates</h3><p>Every applicant confirms their identity before assessment, so employers review real people with real credentials.</p></div>
+<div><div class="ic">&#9678;</div><h3>Role-specific assessments</h3><p>Questions are written for the discipline you apply to, from exploit development to clinical research, not a generic quiz.</p></div>
+<div><div class="ic">$</div><h3>Transparent pay</h3><p>The hourly rate is shown on every listing before you apply. No surprises after the interview.</p></div>
+<div><div class="ic">&#8962;</div><h3>Remote-first roles</h3><p>Work from where you are. Almost every role is remote, with flexible schedules and clear contract terms.</p></div>
+</div></div></section>
+
+<section class="pad" id="faq"><div class="wrap">
+<span class="eyebrow">FAQ</span><h2>Questions applicants ask us.</h2>
+<div class="faq">
+<details><summary>Do I need an account to apply?</summary><p>Yes. A free account lets you apply to roles, track every application from your dashboard and see its status in one place.</p></details>
+<details><summary>What happens after I submit?</summary><p>Your application moves to <strong>Under review</strong>. A member of our team reads your profile and assessment answers, and we reach out within 48 hours.</p></details>
+<details><summary>Why do you ask for ID verification?</summary><p>We verify identity so employers can trust the people they meet. Your ID is used only for verification and the name must match your profile.</p></details>
+<details><summary>Are the assessments scored automatically?</summary><p>No. Multiple-choice and written answers are reviewed by our team, so please answer in your own words.</p></details>
+<details><summary>Can I apply to more than one role?</summary><p>Yes. Apply to as many roles as fit your experience. Each application appears separately on your dashboard.</p></details>
+<details><summary>Are these employee or contractor roles?</summary><p>Each listing states whether it is full-time, part-time or contract. Contractor engagements can be extended, shortened or concluded early depending on needs and performance.</p></details>
+</div></div></section>
 </main>
 
 <footer><div class="wrap">
 <a href="#top" class="logo">Synapse<b>AI</b></a>
 <p>AI hiring for technical and professional roles. Verified candidates, serious work.</p>
-<div class="ft"><span>&copy; <span id="yr"></span> SynapseAI. All rights reserved. · build 5</span><span>SYSTEM STATUS: OPERATIONAL</span></div>
+<p class="fl"><a href="#jobs">Jobs</a><a href="#how">How it works</a><a href="#why">Why SynapseAI</a><a href="#faq">FAQ</a></p>
+<div class="ft"><span>&copy; <span id="yr"></span> SynapseAI. All rights reserved. · build 6</span><span>SYSTEM STATUS: OPERATIONAL</span></div>
 </div></footer>
 <div class="toast" id="toast" role="status"></div>
 
@@ -282,6 +333,29 @@ textarea.essay-box:focus{border-color:var(--ac)!important;outline:none}
 </div>
 </div>
 
+<div class="page" id="authPage" hidden>
+<div class="page-head"><div class="wrap"><div class="row"><button type="button" class="back" id="authBack">&larr; Back</button><span class="eyebrow">Account</span></div></div></div>
+<div class="page-body" style="max-width:480px">
+<h2 id="authTitle">Welcome back</h2><p class="sub" id="authSub"></p>
+<div class="atabs"><button type="button" data-m="login">Log in</button><button type="button" data-m="signup">Sign up</button></div>
+<div class="card">
+<div id="au-nmw"><label class="f" for="au-nm">Full name</label><input type="text" id="au-nm" autocomplete="name" placeholder="Your full name"></div>
+<label class="f" for="au-em">Email</label><input type="email" id="au-em" autocomplete="email" placeholder="you@example.com">
+<label class="f" for="au-pw">Password</label><input type="password" id="au-pw" autocomplete="current-password" placeholder="At least 8 characters">
+<button type="button" class="btn btn-p" id="authGo">Log in</button>
+<div class="msg" id="authMsg" role="status"></div>
+</div></div></div>
+
+<div class="page" id="dashPage" hidden>
+<div class="page-head"><div class="wrap"><div class="row"><button type="button" class="back" id="dashBack">&larr; Back to roles</button><button type="button" class="back" id="dashOut">Log out</button></div></div></div>
+<div class="page-body" style="max-width:900px">
+<span class="eyebrow">Dashboard</span><h2 id="dashHi">Welcome</h2><p class="sub" id="dashSub"></p>
+<div class="dstats"><div class="dstat"><b id="dTotal">0</b><span>Applications</span></div><div class="dstat"><b id="dPend">0</b><span>Pending</span></div><div class="dstat"><b id="dRev">0</b><span>Under review</span></div></div>
+<div class="dtabs"><button type="button" data-f="all">All</button><button type="button" data-f="pending">Pending</button><button type="button" data-f="under_review">Under review</button></div>
+<div id="dList"></div>
+<div class="count" id="dashNote" style="margin-top:14px"></div>
+</div></div>
+
 <div class="page" id="donePage" hidden>
 <div class="page-head"><div class="wrap"><div class="row">
 <button type="button" class="back" id="doneClose">Close</button>
@@ -294,7 +368,7 @@ textarea.essay-box:focus{border-color:var(--ac)!important;outline:none}
   </div>
   <h2 style="font-size:32px;margin-bottom:12px">Submitted</h2>
   <p style="color:var(--mu);max-width:480px;margin:0 auto 32px;font-size:15.5px">Your application has been submitted and is <strong style="color:var(--tx)">under review</strong>. We will reach out to you within <strong style="color:var(--tx)">48 hours</strong>.</p>
-  <button class="btn btn-p" onclick="location.reload()">Back to roles</button>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="btn btn-p" id="doneDash">View my applications</button><button class="btn btn-g" onclick="location.reload()">Back to roles</button></div>
 </div>
 </div>
 </div>
@@ -1155,7 +1229,7 @@ $('more').onclick=()=>{shown+=12;render()};
 $('list').addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(b)startApp(+b.dataset.id)});
 
 /* ===== Flow ===== */
-function startApp(id){cur=J[id];saved=false;prof={};files={idFront:null,idBack:null,idFull:null,cv:null};openProfile()}
+function startApp(id){if(!session){pendingJob=id;return openAuth('signup','Create a free account to apply for this role.')}cur=J[id];saved=false;prof={};files={idFront:null,idBack:null,idFull:null,cv:null};openProfile()}
 function openProfile(){
   $('profileRole').textContent='Application · '+cur.t;
   $('profBody').innerHTML=`
@@ -1178,7 +1252,7 @@ function openProfile(){
         <div class="full"><label class="f">Upload your CV</label><div class="drop" id="d-cv" tabindex="0" role="button" aria-label="Upload CV"><div id="t-cv">Drop your CV here or click to choose<small>PDF, DOC or DOCX, up to 8 MB</small></div></div><input type="file" id="f-cv" accept=".pdf,.doc,.docx" hidden></div>
       </div>
     </div>`;
-  setupCV();
+  setupCV();prefill();
   showOnly('profilePage');document.body.style.overflow='hidden';$('profilePage').scrollTop=0;
   msg($('profMsg'),'');
 }
@@ -1398,7 +1472,7 @@ $('n3').onclick=async()=>{
     }
   }
   const btn=$('n3'); btn.disabled=true; btn.textContent='Submitting…'; msg($('assessMsg'),'Submitting your application…');
-  try{ await saveCandidate(); }catch(err){ console.error('Save failed',err); stashPending(err); }
+  let synced=false; try{ await saveCandidate(); synced=true; }catch(err){ console.error('Save failed',err); stashPending(err); } recordApp(synced);
   applied.add(cur.id); render();
   $('assessPage').hidden=true; showOnly('donePage'); $('donePage').scrollTop=0;
   const co=cur.co; cur=null;
@@ -1469,6 +1543,118 @@ async function saveCandidate(){
   const r=await fetch(SUPABASE_URL+'/rest/v1/candidates',{method:'POST',headers:sbHeaders({'Content-Type':'application/json','Prefer':'return=minimal'}),body:JSON.stringify(row)});
   if(!r.ok)throw await sbErr(r);
 }
+
+/* ===== Auth & dashboard ===== */
+const SKEY='synapse-session';
+let session=null,pendingJob=null,authMode='login',dashFilter='all',dashData=[];
+try{session=JSON.parse(localStorage.getItem(SKEY)||'null')}catch(e){}
+function saveSession(){try{session?localStorage.setItem(SKEY,JSON.stringify(session)):localStorage.removeItem(SKEY)}catch(e){}}
+async function authCall(path,body){
+  const r=await fetch(SUPABASE_URL+'/auth/v1/'+path,{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  let j={};try{j=await r.json()}catch(e){}
+  if(!r.ok)throw new Error(j.msg||j.error_description||j.message||j.error||('Request failed ('+r.status+')'));
+  return j;
+}
+function setSession(d){
+  const u=d.user||{};
+  session={access_token:d.access_token,refresh_token:d.refresh_token,expires_at:d.expires_at||Math.floor(Date.now()/1000)+(d.expires_in||3600),email:(u.email||'').toLowerCase(),name:(u.user_metadata&&u.user_metadata.full_name)||''};
+  saveSession();
+}
+async function getToken(){
+  if(!session)return null;
+  if(session.expires_at*1000-Date.now()<60000){
+    try{const nm=session.name;const d=await authCall('token?grant_type=refresh_token',{refresh_token:session.refresh_token});setSession(d);if(!session.name)session.name=nm;saveSession();}catch(e){}
+  }
+  return session.access_token;
+}
+const lk=()=>'synapse-apps:'+(session?session.email:'');
+function getLocal(){try{return JSON.parse(localStorage.getItem(lk())||'[]')}catch(e){return[]}}
+function recordApp(synced){
+  if(!session||!cur)return;
+  try{const l=getLocal();l.push({id:cur.id,role:cur.t,co:cur.co,rate:cur.r,loc:cur.loc,ty:cur.ty,at:Date.now(),status:synced?'under_review':'pending'});localStorage.setItem(lk(),JSON.stringify(l))}catch(e){}
+}
+function closePages(){document.querySelectorAll('.page').forEach(p=>{p.hidden=true});document.body.style.overflow=''}
+function updateNav(){
+  $('navAuth').innerHTML=session
+    ?'<button class="btn btn-g btn-sm" data-a="dash">Dashboard</button><button class="btn btn-p btn-sm" data-a="out">Log out</button>'
+    :'<button class="btn btn-g btn-sm" data-a="login">Log in</button><button class="btn btn-p btn-sm" data-a="signup">Sign up</button>';
+}
+$('navAuth').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;if(a==='dash')openDash();else if(a==='out')logout();else openAuth(a)});
+function logout(){session=null;saveSession();applied=new Set();updateNav();render();closePages();toast('You have been logged out')}
+function prefill(){if(!session)return;const e=$('em');e.value=session.email;e.readOnly=true;if(session.name&&!$('nm').value)$('nm').value=session.name}
+
+function setMode(m){
+  authMode=m;
+  document.querySelectorAll('.atabs button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  $('au-nmw').hidden=m!=='signup';
+  $('authTitle').textContent=m==='signup'?'Create your account':'Welcome back';
+  $('authGo').textContent=m==='signup'?'Create account':'Log in';
+  $('au-pw').autocomplete=m==='signup'?'new-password':'current-password';
+  msg($('authMsg'),'');
+}
+function openAuth(m,note){setMode(m||'login');$('authSub').textContent=note||(m==='signup'?'Track every application from your dashboard.':'Log in to view your applications.');showOnly('authPage')}
+document.querySelectorAll('.atabs button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+$('authBack').onclick=()=>{pendingJob=null;closePages()};
+$('au-pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('authGo').click()});
+$('authGo').onclick=async()=>{
+  const em=$('au-em').value.trim().toLowerCase(),pw=$('au-pw').value,nm=$('au-nm').value.trim(),m=$('authMsg'),b=$('authGo');
+  if(authMode==='signup'&&nm.length<2)return msg(m,'Enter your full name.','err');
+  if(!/^\S+@\S+\.\S+$/.test(em))return msg(m,'Enter a valid email address.','err');
+  if(pw.length<8)return msg(m,'Password must be at least 8 characters.','err');
+  b.disabled=true;msg(m,authMode==='signup'?'Creating your account…':'Logging in…');
+  try{
+    let d;
+    if(authMode==='signup'){
+      d=await authCall('signup',{email:em,password:pw,data:{full_name:nm}});
+      if(!d.access_token){setMode('login');msg(m,'Account created. Check your email to confirm it, then log in.','ok');b.disabled=false;return}
+    }else d=await authCall('token?grant_type=password',{email:em,password:pw});
+    setSession(d);if(!session.name&&nm){session.name=nm;saveSession()}
+    updateNav();applied=new Set(getLocal().map(a=>a.id));render();closePages();
+    toast('Welcome'+(session.name?', '+session.name.split(' ')[0]:''));
+    if(pendingJob!=null){const id=pendingJob;pendingJob=null;startApp(id)}
+  }catch(err){msg(m,/fetch|Network/i.test(err.message)?'Cannot reach the server. Check your connection or VPN and try again.':err.message,'err')}
+  b.disabled=false;
+};
+
+const LBL={under_review:'Under review',pending:'Pending'};
+const nice=s=>LBL[s]||String(s||'').replace(/_/g,' ').replace(/^./,c=>c.toUpperCase());
+async function fetchServer(){
+  const t=await getToken();
+  const r=await fetch(SUPABASE_URL+'/rest/v1/candidates?select=*&email=eq.'+encodeURIComponent(session.email),{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+t}});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return (await r.json()).map(x=>({role:x.role_title,co:x.company,rate:x.hourly_rate,at:x.created_at?Date.parse(x.created_at):0,status:x.status||'under_review'}));
+}
+async function openDash(){
+  if(!session)return openAuth('login');
+  showOnly('dashPage');
+  $('dashHi').textContent='Welcome'+(session.name?', '+session.name.split(' ')[0]:'');
+  $('dashSub').textContent='Signed in as '+session.email;
+  dashData=getLocal();drawDash();msg($('dashNote'),'Syncing…');
+  try{
+    const srv=await fetchServer(),seen=new Set(),out=[];
+    srv.sort((a,b)=>b.at-a.at).forEach(a=>{const k=a.role+'|'+a.co;if(!seen.has(k)){seen.add(k);out.push(a)}});
+    getLocal().forEach(a=>{if(!seen.has(a.role+'|'+a.co))out.push(a)});
+    dashData=out;msg($('dashNote'),'');
+  }catch(e){msg($('dashNote'),'Showing applications saved on this device.')}
+  drawDash();
+}
+function drawDash(){
+  const d=dashData.slice().sort((a,b)=>b.at-a.at),n=s=>d.filter(x=>x.status===s).length;
+  $('dTotal').textContent=d.length;$('dPend').textContent=n('pending');$('dRev').textContent=n('under_review');
+  document.querySelectorAll('.dtabs button').forEach(b=>b.classList.toggle('on',b.dataset.f===dashFilter));
+  const L=dashFilter==='all'?d:d.filter(x=>x.status===dashFilter);
+  $('dList').innerHTML=L.length?L.map(a=>{
+    const when=a.at?new Date(a.at).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}):'';
+    const info=a.status==='pending'?'Received. Your application is waiting to be passed to our review team.':a.status==='under_review'?'Our team is reviewing your profile and assessment. Expect to hear from us within 48 hours.':'Status: '+nice(a.status)+'.';
+    return `<div class="dcard"><div class="top"><div><h3>${esc(a.role||'Application')}</h3><div class="m">${esc(a.co||'')}${a.rate?' · $'+esc(a.rate)+'/hr':''}${a.loc?' · '+esc(a.loc):''}${when?' · Applied '+esc(when):''}</div></div><span class="pill ${esc(a.status)}">${esc(nice(a.status))}</span></div><div class="d">${esc(info)}</div></div>`;
+  }).join(''):'<div class="empty">No applications here yet.<br><br><button class="btn btn-p btn-sm" data-browse="1">Browse open roles</button></div>';
+}
+document.querySelectorAll('.dtabs button').forEach(b=>b.onclick=()=>{dashFilter=b.dataset.f;drawDash()});
+$('dList').addEventListener('click',e=>{if(e.target.closest('[data-browse]')){closePages();location.hash='jobs'}});
+$('dashBack').onclick=()=>closePages();
+$('dashOut').onclick=logout;
+$('doneDash').onclick=()=>openDash();
+updateNav();if(session)applied=new Set(getLocal().map(a=>a.id));
 
 /* ===== Misc ===== */
 $('doneClose').onclick=()=>location.reload();
