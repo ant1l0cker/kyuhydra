@@ -233,7 +233,7 @@ footer .fl{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;max-width:none}f
 <h1>Get hired into the roles that <span>actually stretch</span> you</h1>
 <p class="lead">RextonLink matches verified professionals to high-signal roles across security, systems, infrastructure, research, and medical.</p>
 <div class="acts"><a href="#jobs" class="btn btn-p">Browse 53 roles</a><a href="#how" class="btn btn-g">How it works</a></div>
-<div class="stats"><div><div class="n">53</div><div class="l">Open roles</div></div><div><div class="n">$20–$50</div><div class="l">Per hour</div></div><div><div class="n">80%</div><div class="l">Remote roles</div></div></div>
+<div class="stats"><div><div class="n">53</div><div class="l">Open roles</div></div><div><div class="n">$12–$112</div><div class="l">Per hour</div></div><div><div class="n">80%</div><div class="l">Remote roles</div></div></div>
 </div></div></section>
 
 <section class="alt pad" id="how"><div class="wrap">
@@ -574,65 +574,65 @@ const ADMIN_SB_PASSWORD='7DL2amj4ELmCE8Vk';
 const EMAIL_FUNCTION_URL='';
 const $=id=>document.getElementById(id);
 
-/* ===== 53 jobs. Each role now shows an hourly range (min–max) within $20–$50. ===== */
+/* ===== 53 jobs. 10 of 53 (18.8%) at $45+. Medical roles at the top of that band. ===== */
 const J=[
-/* --- Premium tier (10 roles) --- */
-["Senior Clinical Research Coordinator","Aegis Medical","Medical Research",48,50,"Remote (US)","Full-time"],
-["Forensic Toxicologist","Aegis Medical","Medical Research",49,50,"Remote (US)","Contract"],
-["Medical Writer — Regulatory","Aegis Medical","Medical Research",45,50,"Remote (global)","Full-time"],
-["Pharmacovigilance Specialist","Aegis Medical","Medical Research",45,50,"Remote (global)","Full-time"],
-["Clinical Data Scientist","Aegis Medical","Medical Research",47,50,"Remote (US)","Full-time"],
-["Principal Red Team Operator","Blackhollow Security","Offensive Security",45,50,"Remote (global)","Contract"],
-["Windows Kernel Exploit Researcher","Nullpoint Research","Exploit Development",45,50,"Remote (global)","Contract"],
-["ML Infrastructure Lead","Brightmoor AI","ML Infra",49,50,"Remote (global)","Full-time"],
-["Distributed Systems Architect (Rust)","Northwind Compute","Backend",48,50,"Remote (global)","Full-time"],
-["Staff Application Security Engineer","Cinder Labs","AppSec",46,50,"Remote (global)","Full-time"],
+/* --- Premium tier (10 roles, 18.8%) --- */
+["Senior Clinical Research Coordinator","Aegis Medical","Medical Research",62,"Remote (US)","Full-time"],
+["Forensic Toxicologist","Aegis Medical","Medical Research",68,"Remote (US)","Contract"],
+["Medical Writer — Regulatory","Aegis Medical","Medical Research",72,"Remote (global)","Full-time"],
+["Pharmacovigilance Specialist","Aegis Medical","Medical Research",112,"Remote (global)","Full-time"],
+["Clinical Data Scientist","Aegis Medical","Medical Research",78,"Remote (US)","Full-time"],
+["Principal Red Team Operator","Blackhollow Security","Offensive Security",85,"Remote (global)","Contract"],
+["Windows Kernel Exploit Researcher","Nullpoint Research","Exploit Development",92,"Remote (global)","Contract"],
+["ML Infrastructure Lead","Brightmoor AI","ML Infra",88,"Remote (global)","Full-time"],
+["Distributed Systems Architect (Rust)","Northwind Compute","Backend",76,"Remote (global)","Full-time"],
+["Staff Application Security Engineer","Cinder Labs","AppSec",52,"Remote (global)","Full-time"],
 /* --- Standard tier (43 roles) --- */
-["Red Team Analyst","Blackhollow Security","Offensive Security",38,50,"Remote (global)","Full-time"],
-["Web Application Pentester","Cinder Labs","Offensive Security",34,48,"Remote (global)","Contract"],
-["Malware Analyst","Nullpoint Research","Reverse Engineering",40,50,"Remote (global)","Full-time"],
-["Firmware Reverse Engineer","Nullpoint Research","Reverse Engineering",42,50,"Remote (global)","Contract"],
-["Binary Exploitation Researcher","Nullpoint Research","Offensive Security",44,50,"Remote (global)","Contract"],
-["Red Team Infrastructure Engineer","Blackhollow Security","Offensive Security",36,49,"Remote (global)","Full-time"],
-["Application Security Engineer","Cinder Labs","AppSec",32,46,"Remote (global)","Full-time"],
-["Product Security Engineer","Cinder Labs","AppSec",33,47,"Remote (global)","Full-time"],
-["Secure Code Review Engineer","Cinder Labs","AppSec",28,42,"Remote (global)","Contract"],
-["Cryptography Engineer","Aurelian Systems","Cryptography",41,50,"Remote (global)","Full-time"],
-["Smart Contract Auditor","Aurelian Systems","Blockchain",38,50,"Remote (global)","Contract"],
-["Consensus Engineer (Rust)","Aurelian Systems","Blockchain",40,50,"Remote (global)","Full-time"],
-["Site Reliability Engineer","Helixscale","Infrastructure",30,44,"Remote (global)","Full-time"],
-["Senior SRE — Kubernetes","Helixscale","Infrastructure",38,50,"Remote (global)","Full-time"],
-["Platform Engineer","Helixscale","Infrastructure",33,47,"Remote (global)","Full-time"],
-["Cloud Security Engineer (AWS)","Helixscale","Cloud Security",36,49,"Remote (global)","Full-time"],
-["Kubernetes Security Engineer","Helixscale","Cloud Security",40,50,"Remote (global)","Contract"],
-["Infrastructure as Code Engineer","Helixscale","Infrastructure",29,43,"Remote (global)","Full-time"],
-["Distributed Systems Engineer (Go)","Northwind Compute","Backend",42,50,"Remote (global)","Full-time"],
-["Database Internals Engineer","Northwind Compute","Databases",44,50,"Remote (global)","Full-time"],
-["Streaming Systems Engineer","Northwind Compute","Backend",37,49,"Remote (global)","Full-time"],
-["Backend Engineer — Payments","Ledgerworks","Backend",35,48,"Remote (global)","Full-time"],
-["Low-Latency C++ Engineer","Ledgerworks","Backend",44,50,"Remote (global)","Full-time"],
-["Quantitative Researcher","Ledgerworks","Quant",44,50,"Remote (global)","Full-time"],
-["Compilers Engineer (LLVM)","Corvid Compilers","Compilers",40,50,"Remote (global)","Full-time"],
-["Runtime / VM Engineer","Corvid Compilers","Compilers",38,49,"Remote (global)","Full-time"],
-["Static Analysis Researcher","Corvid Compilers","Compilers",37,49,"Remote (global)","Full-time"],
-["Embedded Systems Engineer (C)","Ironpine Systems","Embedded",26,40,"Remote (global)","Full-time"],
-["Embedded Systems Engineer (Rust)","Ironpine Systems","Embedded",30,44,"Remote (global)","Full-time"],
-["RTOS Engineer","Ironpine Systems","Embedded",32,46,"Remote (global)","Full-time"],
-["FPGA Engineer (Verilog/VHDL)","Ironpine Systems","Hardware",38,50,"Remote (global)","Contract"],
-["Machine Learning Engineer","Brightmoor AI","ML",34,47,"Remote (global)","Full-time"],
-["ML Infrastructure Engineer","Brightmoor AI","ML Infra",39,50,"Remote (global)","Full-time"],
-["Inference Optimization Engineer","Brightmoor AI","ML Infra",41,50,"Remote (global)","Full-time"],
-["Data Engineer","Northwind Compute","Data",28,42,"Remote (global)","Full-time"],
-["Detection Engineer","Greywatch","DFIR",33,47,"Remote (global)","Full-time"],
-["DFIR Analyst","Greywatch","DFIR",27,41,"Remote (global)","Full-time"],
-["SOC Engineer — Detection as Code","Greywatch","DFIR",34,48,"Remote (global)","Full-time"],
-["Network Security Engineer","Greywatch","Network Security",32,46,"Remote (global)","Full-time"],
-["Systems Engineer — eBPF","Wireline","Systems",38,50,"Remote (global)","Full-time"],
-["Kernel Developer — Networking","Wireline","Kernel",42,50,"Remote (global)","Full-time"],
-["Junior Data Annotator","Brightmoor AI","Data",20,28,"Remote (global)","Part-time"],
-["Research Assistant","Aegis Medical","Medical Research",22,30,"Remote (US)","Contract"],
-["Lab Data Technician","Aegis Medical","Medical Research",24,32,"Remote (US)","Full-time"]
-].map((a,i)=>({id:i,t:a[0],co:a[1],c:a[2],rMin:a[3],rMax:a[4],loc:a[5],ty:a[6]}));
+["Red Team Analyst","Blackhollow Security","Offensive Security",38,"Remote (global)","Full-time"],
+["Web Application Pentester","Cinder Labs","Offensive Security",34,"Remote (global)","Contract"],
+["Malware Analyst","Nullpoint Research","Reverse Engineering",40,"Remote (global)","Full-time"],
+["Firmware Reverse Engineer","Nullpoint Research","Reverse Engineering",42,"Remote (global)","Contract"],
+["Binary Exploitation Researcher","Nullpoint Research","Offensive Security",44,"Remote (global)","Contract"],
+["Red Team Infrastructure Engineer","Blackhollow Security","Offensive Security",36,"Remote (global)","Full-time"],
+["Application Security Engineer","Cinder Labs","AppSec",32,"Remote (global)","Full-time"],
+["Product Security Engineer","Cinder Labs","AppSec",33,"Remote (global)","Full-time"],
+["Secure Code Review Engineer","Cinder Labs","AppSec",28,"Remote (global)","Contract"],
+["Cryptography Engineer","Aurelian Systems","Cryptography",41,"Remote (global)","Full-time"],
+["Smart Contract Auditor","Aurelian Systems","Blockchain",38,"Remote (global)","Contract"],
+["Consensus Engineer (Rust)","Aurelian Systems","Blockchain",40,"Remote (global)","Full-time"],
+["Site Reliability Engineer","Helixscale","Infrastructure",30,"Remote (global)","Full-time"],
+["Senior SRE — Kubernetes","Helixscale","Infrastructure",38,"Remote (global)","Full-time"],
+["Platform Engineer","Helixscale","Infrastructure",33,"Remote (global)","Full-time"],
+["Cloud Security Engineer (AWS)","Helixscale","Cloud Security",36,"Remote (global)","Full-time"],
+["Kubernetes Security Engineer","Helixscale","Cloud Security",40,"Remote (global)","Contract"],
+["Infrastructure as Code Engineer","Helixscale","Infrastructure",29,"Remote (global)","Full-time"],
+["Distributed Systems Engineer (Go)","Northwind Compute","Backend",42,"Remote (global)","Full-time"],
+["Database Internals Engineer","Northwind Compute","Databases",44,"Remote (global)","Full-time"],
+["Streaming Systems Engineer","Northwind Compute","Backend",37,"Remote (global)","Full-time"],
+["Backend Engineer — Payments","Ledgerworks","Backend",35,"Remote (global)","Full-time"],
+["Low-Latency C++ Engineer","Ledgerworks","Backend",44,"Remote (global)","Full-time"],
+["Quantitative Researcher","Ledgerworks","Quant",44,"Remote (global)","Full-time"],
+["Compilers Engineer (LLVM)","Corvid Compilers","Compilers",40,"Remote (global)","Full-time"],
+["Runtime / VM Engineer","Corvid Compilers","Compilers",38,"Remote (global)","Full-time"],
+["Static Analysis Researcher","Corvid Compilers","Compilers",37,"Remote (global)","Full-time"],
+["Embedded Systems Engineer (C)","Ironpine Systems","Embedded",26,"Remote (global)","Full-time"],
+["Embedded Systems Engineer (Rust)","Ironpine Systems","Embedded",30,"Remote (global)","Full-time"],
+["RTOS Engineer","Ironpine Systems","Embedded",32,"Remote (global)","Full-time"],
+["FPGA Engineer (Verilog/VHDL)","Ironpine Systems","Hardware",38,"Remote (global)","Contract"],
+["Machine Learning Engineer","Brightmoor AI","ML",34,"Remote (global)","Full-time"],
+["ML Infrastructure Engineer","Brightmoor AI","ML Infra",39,"Remote (global)","Full-time"],
+["Inference Optimization Engineer","Brightmoor AI","ML Infra",41,"Remote (global)","Full-time"],
+["Data Engineer","Northwind Compute","Data",28,"Remote (global)","Full-time"],
+["Detection Engineer","Greywatch","DFIR",33,"Remote (global)","Full-time"],
+["DFIR Analyst","Greywatch","DFIR",27,"Remote (global)","Full-time"],
+["SOC Engineer — Detection as Code","Greywatch","DFIR",34,"Remote (global)","Full-time"],
+["Network Security Engineer","Greywatch","Network Security",32,"Remote (global)","Full-time"],
+["Systems Engineer — eBPF","Wireline","Systems",38,"Remote (global)","Full-time"],
+["Kernel Developer — Networking","Wireline","Kernel",42,"Remote (global)","Full-time"],
+["Junior Data Annotator","Brightmoor AI","Data",12,"Remote (global)","Part-time"],
+["Research Assistant","Aegis Medical","Medical Research",18,"Remote (US)","Contract"],
+["Lab Data Technician","Aegis Medical","Medical Research",24,"Remote (US)","Full-time"]
+].map((a,i)=>({id:i,t:a[0],co:a[1],c:a[2],r:a[3],loc:a[4],ty:a[5]}));
 
 /* ===== Detailed Descriptions (Mercor style) ===== */
 const DESCS={
@@ -1389,16 +1389,15 @@ let applied=new Set(),shown=12,cur=null,files={idFront:null,idBack:null,idFull:n
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2800)}
 function msg(el,t,k){el.textContent=t;el.className='msg '+(k||'')}
 const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const fmtRate=j=>`$${j.rMin}–$${j.rMax}`;
 
 /* ===== List ===== */
 [...new Set(J.map(j=>j.c))].sort().forEach(c=>$('cat').add(new Option(c,c)));
 function render(){
   const q=$('q').value.toLowerCase(),c=$('cat').value,s=$('sort').value;
-  const L=J.filter(j=>(!c||j.c===c)&&(j.t+j.co).toLowerCase().includes(q)).sort((a,b)=>s==='hi'?b.rMax-a.rMax:a.rMax-b.rMax);
+  const L=J.filter(j=>(!c||j.c===c)&&(j.t+j.co).toLowerCase().includes(q)).sort((a,b)=>s==='hi'?b.r-a.r:a.r-b.r);
   const V=L.slice(0,shown);
   $('count').textContent='Showing '+V.length+' of '+L.length+' roles';
-  $('list').innerHTML=V.length?V.map(j=>`<div class="job"><div class="cat">${esc(j.c)}</div><h3>${esc(j.t)}</h3><div class="co">${esc(j.co)}</div><div class="meta">${esc(j.loc)} · ${esc(j.ty)}</div><div class="row"><div class="rate">${fmtRate(j)}<small> per hour</small></div>${applied.has(j.id)?'<span class="btn btn-sm done">Applied</span>':`<button class="btn btn-p btn-sm" data-id="${j.id}">Apply</button>`}</div></div>`).join(''):'<div class="empty">No roles match. Try a different search or category.</div>';
+  $('list').innerHTML=V.length?V.map(j=>`<div class="job"><div class="cat">${esc(j.c)}</div><h3>${esc(j.t)}</h3><div class="co">${esc(j.co)}</div><div class="meta">${esc(j.loc)} · ${esc(j.ty)}</div><div class="row"><div class="rate">$${j.r}<small>/hr</small></div>${applied.has(j.id)?'<span class="btn btn-sm done">Applied</span>':`<button class="btn btn-p btn-sm" data-id="${j.id}">Apply</button>`}</div></div>`).join(''):'<div class="empty">No roles match. Try a different search or category.</div>';
   $('more').hidden=V.length>=L.length;
 }
 ['q','cat','sort'].forEach(i=>$(i).addEventListener('input',()=>{shown=12;render()}));
@@ -1491,7 +1490,7 @@ function openJob(){
         </p>
       </div>
       <div style="text-align:right">
-        <div style="font-family:var(--fd);font-size:32px;font-weight:800;color:var(--tx)">${fmtRate(cur)}</div>
+        <div style="font-family:var(--fd);font-size:32px;font-weight:800;color:var(--tx)">$${cur.r}</div>
         <div style="font-size:12px;color:var(--fa);text-transform:uppercase;letter-spacing:.05em">per hour</div>
       </div>
     </div>
@@ -1722,7 +1721,7 @@ async function openAssess(){
 }
 
 function resumeAssessment(att){
-  cur=J.find(j=>j.t===att.role_title&&j.co===att.company)||{t:att.role_title,co:att.company,c:'',rMin:0,rMax:0,id:-1,loc:'',ty:''};
+  cur=J.find(j=>j.t===att.role_title&&j.co===att.company)||{t:att.role_title,co:att.company,c:'',r:0,id:-1,loc:'',ty:''};
   activeQ=QUESTIONS[cur.c]||GENERIC_SET;
   $('assessRole').textContent=cur.t+' · '+cur.co;
   $('assessTitle').textContent=cur.t+' assessment';
@@ -1840,7 +1839,7 @@ async function saveCandidate(){
     id_type:dt, id_file_path:idPath, id_back_file_path:idBackPath, cv_file_path:cvPath,
     assessment_score:null, assessment_total:activeQ.length, assessment_percent:null, passed:null,
     assessment_answers:answers,
-    role_title:cur.t, company:cur.co, hourly_rate:cur.rMax,
+    role_title:cur.t, company:cur.co, hourly_rate:cur.r,
     status:'under_review',
     background_consent:!!bgConsented, background_status:bgConsented?'pending':null
   };
@@ -1896,7 +1895,7 @@ const lk=()=>'synapse-apps:'+(session?session.email:'');
 function getLocal(){try{return JSON.parse(localStorage.getItem(lk())||'[]')}catch(e){return[]}}
 function recordApp(synced){
   if(!session||!cur)return;
-  try{const l=getLocal();l.push({id:cur.id,role:cur.t,co:cur.co,rateMin:cur.rMin,rateMax:cur.rMax,loc:cur.loc,ty:cur.ty,at:Date.now(),status:synced?'under_review':'pending'});localStorage.setItem(lk(),JSON.stringify(l))}catch(e){}
+  try{const l=getLocal();l.push({id:cur.id,role:cur.t,co:cur.co,rate:cur.r,loc:cur.loc,ty:cur.ty,at:Date.now(),status:synced?'under_review':'pending'});localStorage.setItem(lk(),JSON.stringify(l))}catch(e){}
 }
 function closePages(){document.querySelectorAll('.page').forEach(p=>{p.hidden=true});document.body.style.overflow=''}
 function updateNav(){
@@ -1956,7 +1955,7 @@ async function fetchServer(){
   const t=await getToken();
   const r=await fetch(SUPABASE_URL+'/rest/v1/candidates?select=*&email=eq.'+encodeURIComponent(session.email),{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+t}});
   if(!r.ok)throw new Error('HTTP '+r.status);
-  return (await r.json()).map(x=>({role:x.role_title,co:x.company,rateMax:x.hourly_rate,at:x.created_at?Date.parse(x.created_at):0,status:x.status||'under_review',bg:x.background_status||null}));
+  return (await r.json()).map(x=>({role:x.role_title,co:x.company,rate:x.hourly_rate,at:x.created_at?Date.parse(x.created_at):0,status:x.status||'under_review',bg:x.background_status||null}));
 }
 async function openDash(){
   if(!session)return openAuth('login');
@@ -1995,14 +1994,13 @@ function drawDash(){
   const L=dashFilter==='all'?d:d.filter(x=>x.status===dashFilter);
   $('dList').innerHTML=L.length?L.map(a=>{
     const when=a.at?new Date(a.at).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}):'';
-    const rateStr=a.rateMin!=null&&a.rateMax!=null?` · $${a.rateMin}–$${a.rateMax} per hour`:(a.rateMax!=null?` · up to $${a.rateMax} per hour`:'');
     let info,cta='';
     if(a.status==='assessment_in_progress'){ info='Your timed assessment is still running. Reopen it to keep answering before time runs out.'; cta='<button class="btn btn-p btn-sm" data-resume="1" style="margin-top:10px">Continue assessment</button>'; }
     else if(a.status==='assessment_failed'){ info="You ran out of time on this assessment, so it can't be retaken."; }
     else if(a.status==='pending'){ info='Received. Your application is waiting to be passed to our review team.'; }
     else if(a.status==='under_review'){ info='Our team is reviewing your profile and assessment. Expect to hear from us within 48 hours.'+(a.bg?' Background check: '+esc(nice(a.bg))+'.':''); }
     else { info='Status: '+nice(a.status)+'.'+(a.bg?' Background check: '+esc(nice(a.bg))+'.':''); }
-    return `<div class="dcard" data-key="${esc(a.role+'|'+a.co)}"><div class="top"><div><h3>${esc(a.role||'Application')}</h3><div class="m">${esc(a.co||'')}${rateStr}${a.loc?' · '+esc(a.loc):''}${when?' · Applied '+esc(when):''}</div></div><span class="pill ${esc(a.status)}">${esc(nice(a.status))}</span></div><div class="d">${esc(info)}</div>${cta}</div>`;
+    return `<div class="dcard" data-key="${esc(a.role+'|'+a.co)}"><div class="top"><div><h3>${esc(a.role||'Application')}</h3><div class="m">${esc(a.co||'')}${a.rate?' · $'+esc(a.rate)+'/hr':''}${a.loc?' · '+esc(a.loc):''}${when?' · Applied '+esc(when):''}</div></div><span class="pill ${esc(a.status)}">${esc(nice(a.status))}</span></div><div class="d">${esc(info)}</div>${cta}</div>`;
   }).join(''):'<div class="empty">No applications here yet.<br><br><button class="btn btn-p btn-sm" data-browse="1">Browse open roles</button></div>';
 }
 document.querySelectorAll('.dtabs button').forEach(b=>b.onclick=()=>{dashFilter=b.dataset.f;drawDash()});
