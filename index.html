@@ -397,11 +397,51 @@ footer .fl{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;max-width:none}f
   <p style="color:var(--mu);font-size:14px">Payment setup becomes available once you've passed an assessment for one of your applications.</p>
 </div>
 <div id="payW2" class="card" hidden>
-  <h3 style="margin-bottom:6px">Upload your W-9 / W-2</h3>
-  <p style="color:var(--mu);font-size:13.5px;margin-bottom:16px">Before we can set up payment, we need your completed tax form on file. Upload it below to continue.</p>
-  <div class="drop" id="d-w2" tabindex="0" role="button" aria-label="Upload tax form"><div id="t-w2">Drop your W-9 / W-2 here or click to choose<small>PDF, JPG or PNG, up to 8 MB</small></div></div>
-  <input type="file" id="f-w2" accept=".pdf,image/*" hidden>
-  <button type="button" class="btn btn-p" id="w2Save" style="margin-top:14px">Upload and continue</button>
+  <h3 style="margin-bottom:4px">Taxpayer information (Form W-9)</h3>
+  <p style="color:var(--mu);font-size:13.5px;margin-bottom:22px">Before we can set up payment, U.S. tax law requires us to collect this information from independent contractors. Fill it in exactly as it appears on your tax return.</p>
+
+  <div class="section-div" style="margin:0 0 20px"></div>
+  <label class="f" for="w2Name">1 · Name (as shown on your income tax return)</label>
+  <input type="text" id="w2Name" placeholder="Full legal name">
+  <label class="f" for="w2Business">2 · Business name / disregarded entity name, if different from above</label>
+  <input type="text" id="w2Business" placeholder="Optional">
+
+  <label class="f">3 · Federal tax classification</label>
+  <select id="w2Class">
+    <option value="individual">Individual / sole proprietor</option>
+    <option value="c_corp">C Corporation</option>
+    <option value="s_corp">S Corporation</option>
+    <option value="partnership">Partnership</option>
+    <option value="trust">Trust / estate</option>
+    <option value="llc">Limited liability company (LLC)</option>
+    <option value="other">Other</option>
+  </select>
+  <div id="w2ClassSub" hidden><label class="f" for="w2ClassSubIn">LLC tax classification (enter C, S or P)</label><input type="text" id="w2ClassSubIn" maxlength="1" style="max-width:120px;text-transform:uppercase"></div>
+
+  <div class="section-div"></div>
+  <label class="f">5 · Address (number, street, apt. or suite no.)</label>
+  <input type="text" id="w2Addr" placeholder="Street address">
+  <div class="grid2">
+    <div><label class="f" for="w2City">City</label><input type="text" id="w2City"></div>
+    <div><label class="f" for="w2State">State</label><input type="text" id="w2State"></div>
+    <div class="full"><label class="f" for="w2Zip">ZIP code</label><input type="text" id="w2Zip" style="max-width:220px"></div>
+  </div>
+
+  <div class="section-div"></div>
+  <label class="f">6 · Taxpayer Identification Number (TIN)</label>
+  <div class="types" style="grid-template-columns:1fr 1fr;max-width:360px">
+    <label><input type="radio" name="w2TinType" value="ssn" checked><span>SSN</span></label>
+    <label><input type="radio" name="w2TinType" value="ein"><span>EIN</span></label>
+  </div>
+  <input type="text" id="w2Tin" placeholder="e.g. 123-45-6789">
+
+  <div class="section-div"></div>
+  <p style="font-size:12.5px;color:var(--mu);line-height:1.7;margin-bottom:14px">Under penalties of perjury, I certify that the number shown above is my correct taxpayer identification number, that I am not subject to backup withholding, and that I am a U.S. person as defined by the IRS.</p>
+  <label class="f" for="w2Sign">7 · Signature (type your full legal name to sign)</label>
+  <input type="text" id="w2Sign" placeholder="Type your name">
+  <label class="opt" style="margin-top:4px"><input type="checkbox" id="w2Cert"><span style="text-align:left">I certify the statement above is true and accurate, and this typed signature is my legal signature.</span></label>
+
+  <button type="button" class="btn btn-p" id="w2Save" style="margin-top:18px">Submit W-9</button>
   <div class="msg" id="w2Msg" role="status"></div>
 </div>
 <div id="payForm" class="card" hidden>
@@ -1995,7 +2035,7 @@ $('inboxList').addEventListener('click',async e=>{
 });
 
 /* ===== Payment method (gated behind a W-2/W-9 upload) ===== */
-let payRow=null, w2File=null;
+let payRow=null;
 function payFieldsHTML(type){
   if(type==='paypal')return '<label class="f" for="payPaypal">PayPal email</label><input type="text" id="payPaypal" placeholder="you@example.com">';
   if(type==='bank')return '<div class="grid2"><div class="full"><label class="f" for="payBankName">Account holder name</label><input type="text" id="payBankName"></div><div><label class="f" for="payBankNum">Account number</label><input type="text" id="payBankNum"></div><div><label class="f" for="payBankRoute">Routing / SWIFT code</label><input type="text" id="payBankRoute"></div></div>';
@@ -2003,31 +2043,28 @@ function payFieldsHTML(type){
   return '';
 }
 $('payType').addEventListener('change',()=>{$('payFields').innerHTML=payFieldsHTML($('payType').value)});
+$('w2Class').addEventListener('change',()=>{$('w2ClassSub').hidden=$('w2Class').value!=='llc'});
 
-function setupW2Drop(){
-  const d=$('d-w2'),i=$('f-w2'),t=$('t-w2');
-  function pick(x){
-    if(!x)return;
-    if(!/\.(pdf|jpe?g|png)$/i.test(x.name))return msg($('w2Msg'),'Upload a PDF, JPG or PNG.','err');
-    if(x.size>8*1024*1024)return msg($('w2Msg'),'File is over 8 MB.','err');
-    w2File=x; msg($('w2Msg'),''); t.textContent=x.name+' · click to replace';
-  }
-  d.onclick=()=>i.click();
-  d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();i.click()}};
-  ['dragover','dragenter'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.add('over')}));
-  ['dragleave','drop'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault();d.classList.remove('over')}));
-  d.addEventListener('drop',e=>pick(e.dataTransfer.files[0]));
-  i.onchange=()=>pick(i.files[0]);
+function fillW9(f){
+  f=f||{};
+  $('w2Name').value=f.name||(savedP&&savedP.nm)||(session&&session.name)||'';
+  $('w2Business').value=f.business||'';
+  $('w2Class').value=f.classification||'individual'; $('w2ClassSub').hidden=$('w2Class').value!=='llc';
+  $('w2ClassSubIn').value=f.classification_sub||'';
+  $('w2Addr').value=f.address||(savedP&&savedP.lc)||'';
+  $('w2City').value=f.city||''; $('w2State').value=f.state||''; $('w2Zip').value=f.zip||'';
+  const tt=document.querySelector('[name=w2TinType][value="'+(f.tin_type||'ssn')+'"]'); if(tt)tt.checked=true;
+  $('w2Tin').value=f.tin||'';
+  $('w2Sign').value=f.signature||''; $('w2Cert').checked=!!f.signature;
 }
-setupW2Drop();
 
 function drawPayGate(){
   $('payLocked').hidden=true; $('payW2').hidden=true; $('payForm').hidden=true;
   if(!hasPassedApp){ $('payLocked').hidden=false; return; }
-  if(!payRow||!payRow.w2_file_path){ $('payW2').hidden=false; return; }
+  if(!payRow||!payRow.w2_form){ fillW9(payRow&&payRow.w2_form); $('payW2').hidden=false; return; }
   $('payForm').hidden=false;
   const when=payRow.w2_uploaded_at?new Date(payRow.w2_uploaded_at).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}):'';
-  $('w2Status').textContent='W-9/W-2 on file'+(when?' (uploaded '+when+')':'')+'. Contact us if you need to replace it.';
+  $('w2Status').textContent='Form W-9 on file'+(when?' (signed '+when+')':'')+'. Contact us if any of your tax details change.';
 }
 async function loadPayment(){
   if(!session)return;
@@ -2048,17 +2085,31 @@ async function loadPayment(){
   drawPayGate();
 }
 $('w2Save').onclick=async()=>{
-  if(!w2File)return msg($('w2Msg'),'Choose your W-9/W-2 file first.','err');
-  const btn=$('w2Save'); btn.disabled=true; btn.textContent='Uploading…'; msg($('w2Msg'),'');
+  const v=id=>$(id).value.trim();
+  if(v('w2Name').length<2)return msg($('w2Msg'),'Enter the name shown on your tax return.','err');
+  if(!v('w2Addr')||!v('w2City')||!v('w2State')||!v('w2Zip'))return msg($('w2Msg'),'Fill in your full address.','err');
+  const classification=$('w2Class').value, classification_sub=v('w2ClassSubIn').toUpperCase();
+  if(classification==='llc'&&!['C','S','P'].includes(classification_sub))return msg($('w2Msg'),'Enter C, S or P for the LLC tax classification.','err');
+  const tin_type=document.querySelector('[name=w2TinType]:checked').value;
+  const tinDigits=v('w2Tin').replace(/\D/g,'');
+  if(tinDigits.length!==9)return msg($('w2Msg'),(tin_type==='ssn'?'Enter a 9-digit SSN.':'Enter a 9-digit EIN.'),'err');
+  if(v('w2Sign').length<2)return msg($('w2Msg'),'Type your full legal name to sign.','err');
+  if(v('w2Sign').toLowerCase()!==v('w2Name').toLowerCase())return msg($('w2Msg'),'Your signature must match the name entered in field 1.','err');
+  if(!$('w2Cert').checked)return msg($('w2Msg'),'Check the certification box to confirm this information is accurate.','err');
+
+  const w2_form={ name:v('w2Name'), business:v('w2Business'), classification, classification_sub,
+    address:v('w2Addr'), city:v('w2City'), state:v('w2State'), zip:v('w2Zip'),
+    tin_type, tin:tinDigits.slice(0,-4).replace(/\d/g,'•')+tinDigits.slice(-4), tin_last4:tinDigits.slice(-4),
+    signature:v('w2Sign') };
+  const btn=$('w2Save'); btn.disabled=true; btn.textContent='Submitting…'; msg($('w2Msg'),'');
   try{
-    const path=await upload('candidate-tax',w2File,'w2');
     const t=await getToken();
-    const r=await fetch(SUPABASE_URL+'/rest/v1/payment_methods?on_conflict=email',{method:'POST',headers:sbHeaders2({'Content-Type':'application/json','Authorization':'Bearer '+t,'Prefer':'resolution=merge-duplicates,return=representation'}),body:JSON.stringify({email:session.email,type:(payRow&&payRow.type)||'',details:(payRow&&payRow.details)||{},w2_file_path:path,w2_uploaded_at:new Date().toISOString()})});
+    const r=await fetch(SUPABASE_URL+'/rest/v1/payment_methods?on_conflict=email',{method:'POST',headers:sbHeaders2({'Content-Type':'application/json','Authorization':'Bearer '+t,'Prefer':'resolution=merge-duplicates,return=representation'}),body:JSON.stringify({email:session.email,type:(payRow&&payRow.type)||'',details:(payRow&&payRow.details)||{},w2_form,w2_uploaded_at:new Date().toISOString()})});
     if(!r.ok)throw await sbErr(r);
     const saved=await r.json(); payRow=saved[0]||payRow;
-    toast('W-9/W-2 uploaded'); drawPayGate();
-  }catch(e){ msg($('w2Msg'),'Could not upload: '+e.message,'err'); }
-  btn.disabled=false; btn.textContent='Upload and continue';
+    toast('Form W-9 submitted'); drawPayGate();
+  }catch(e){ msg($('w2Msg'),'Could not submit: '+e.message,'err'); }
+  btn.disabled=false; btn.textContent='Submit W-9';
 };
 $('paySave').onclick=async()=>{
   const type=$('payType').value; if(!type)return msg($('payMsg'),'Select a payment method.','err');
@@ -2069,7 +2120,7 @@ $('paySave').onclick=async()=>{
   msg($('payMsg'),'Saving…');
   try{
     const t=await getToken();
-    const r=await fetch(SUPABASE_URL+'/rest/v1/payment_methods?on_conflict=email',{method:'POST',headers:sbHeaders2({'Content-Type':'application/json','Authorization':'Bearer '+t,'Prefer':'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify({email:session.email,type,details,w2_file_path:payRow&&payRow.w2_file_path,w2_uploaded_at:payRow&&payRow.w2_uploaded_at})});
+    const r=await fetch(SUPABASE_URL+'/rest/v1/payment_methods?on_conflict=email',{method:'POST',headers:sbHeaders2({'Content-Type':'application/json','Authorization':'Bearer '+t,'Prefer':'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify({email:session.email,type,details,w2_form:payRow&&payRow.w2_form,w2_uploaded_at:payRow&&payRow.w2_uploaded_at})});
     if(!r.ok)throw await sbErr(r);
     msg($('payMsg'),'Saved.','ok');
   }catch(e){ msg($('payMsg'),'Could not save: '+e.message,'err'); }
@@ -2180,12 +2231,12 @@ function drawAdmin(){
     const pay=adminPay[(x.email||'').toLowerCase()];
     return `<div class="admin-card" data-id="${esc(x.id)}" data-email="${esc(x.email||'')}">
       <div class="top"><div><h3>${esc(x.full_name||'Unnamed')}</h3><div class="m">${esc(x.email||'')} · ${esc(x.role_title||'')} @ ${esc(x.company||'')} · Applied ${esc(when)}</div></div><span class="pill ${esc(x.status)}">${esc(nice(x.status))}</span></div>
-      <div class="m" style="margin-top:8px">Skills: ${esc(x.skills||'—')}${x.background_status?' · Background check: '+esc(nice(x.background_status)):''}${pay&&pay.w2_file_path?' · W-9/W-2: on file':(x.status==='passed'?' · W-9/W-2: not uploaded yet':'')}</div>
+      <div class="m" style="margin-top:8px">Skills: ${esc(x.skills||'—')}${x.background_status?' · Background check: '+esc(nice(x.background_status)):''}${pay&&pay.w2_form?' · Form W-9: on file':(x.status==='passed'?' · Form W-9: not submitted yet':'')}</div>
       <div class="admin-actions">
         ${x.cv_file_path?'<button class="btn btn-g btn-sm" data-dl="cv">Download CV</button>':''}
         ${x.id_file_path?'<button class="btn btn-g btn-sm" data-dl="idf">Download ID front</button>':''}
         ${x.id_back_file_path?'<button class="btn btn-g btn-sm" data-dl="idb">Download ID back</button>':''}
-        ${pay&&pay.w2_file_path?'<button class="btn btn-g btn-sm" data-dl="w2">Download W-9/W-2</button>':''}
+        ${pay&&pay.w2_form?'<button class="btn btn-g btn-sm" data-w9="1">View W-9</button>':''}
         <select data-status>
           <option value="under_review" ${x.status==='under_review'?'selected':''}>Under review</option>
           <option value="passed" ${x.status==='passed'?'selected':''}>Passed</option>
@@ -2223,7 +2274,21 @@ $('adminList').addEventListener('click',async e=>{
   if(e.target.closest('[data-dl="cv"]'))return adminDownload('candidate-cvs',x.cv_file_path);
   if(e.target.closest('[data-dl="idf"]'))return adminDownload('candidate-ids',x.id_file_path);
   if(e.target.closest('[data-dl="idb"]'))return adminDownload('candidate-ids',x.id_back_file_path);
-  if(e.target.closest('[data-dl="w2"]')){ const pay=adminPay[(x.email||'').toLowerCase()]; if(pay&&pay.w2_file_path)return adminDownload('candidate-tax',pay.w2_file_path); return; }
+  if(e.target.closest('[data-w9]')){
+    const pay=adminPay[(x.email||'').toLowerCase()]; if(!pay||!pay.w2_form)return;
+    let box=card.querySelector('[data-w9box]');
+    if(box){ box.remove(); return; }
+    const f=pay.w2_form, when=pay.w2_uploaded_at?new Date(pay.w2_uploaded_at).toLocaleString():'';
+    box=document.createElement('div'); box.setAttribute('data-w9box','1'); box.className='compose';
+    box.innerHTML=`<div style="font-size:13px;color:var(--mu);line-height:2">
+      <strong style="color:var(--tx)">${esc(f.name||'')}</strong>${f.business?' · '+esc(f.business):''}<br>
+      Classification: ${esc(f.classification||'')}${f.classification_sub?' ('+esc(f.classification_sub)+')':''}<br>
+      Address: ${esc(f.address||'')}, ${esc(f.city||'')}, ${esc(f.state||'')} ${esc(f.zip||'')}<br>
+      ${f.tin_type==='ein'?'EIN':'SSN'}: ${esc(f.tin||'—')}<br>
+      Signed: ${esc(f.signature||'')}${when?' on '+esc(when):''}
+    </div>`;
+    card.querySelector('.admin-actions').insertAdjacentElement('afterend',box);
+  }
   if(e.target.closest('[data-compose]')){ const c=card.querySelector('[data-composer]'); c.hidden=!c.hidden; return; }
   if(e.target.closest('[data-send]')){
     const subject=card.querySelector('[data-msub]').value.trim();
