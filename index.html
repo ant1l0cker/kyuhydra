@@ -233,7 +233,7 @@ footer .fl{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;max-width:none}f
 <h1>Get hired into the roles that <span>actually stretch</span> you</h1>
 <p class="lead">RextonLink matches verified professionals to high-signal roles across security, systems, infrastructure, research, and medical.</p>
 <div class="acts"><a href="#jobs" class="btn btn-p">Browse 53 roles</a><a href="#how" class="btn btn-g">How it works</a></div>
-<div class="stats"><div><div class="n">53</div><div class="l">Open roles</div></div><div><div class="n">$12–$112</div><div class="l">Per hour</div></div><div><div class="n">80%</div><div class="l">Remote roles</div></div></div>
+<div class="stats"><div><div class="n">53</div><div class="l">Open roles</div></div><div><div class="n">$20–$50</div><div class="l">Per hour</div></div><div><div class="n">80%</div><div class="l">Remote roles</div></div></div>
 </div></div></section>
 
 <section class="alt pad" id="how"><div class="wrap">
@@ -574,19 +574,19 @@ const ADMIN_SB_PASSWORD='7DL2amj4ELmCE8Vk';
 const EMAIL_FUNCTION_URL='';
 const $=id=>document.getElementById(id);
 
-/* ===== 53 jobs. 10 of 53 (18.8%) at $45+. Medical roles at the top of that band. ===== */
+/* ===== 53 jobs. All hourly rates now sit within the $20–$50 band. ===== */
 const J=[
-/* --- Premium tier (10 roles, 18.8%) --- */
-["Senior Clinical Research Coordinator","Aegis Medical","Medical Research",62,"Remote (US)","Full-time"],
-["Forensic Toxicologist","Aegis Medical","Medical Research",68,"Remote (US)","Contract"],
-["Medical Writer — Regulatory","Aegis Medical","Medical Research",72,"Remote (global)","Full-time"],
-["Pharmacovigilance Specialist","Aegis Medical","Medical Research",112,"Remote (global)","Full-time"],
-["Clinical Data Scientist","Aegis Medical","Medical Research",78,"Remote (US)","Full-time"],
-["Principal Red Team Operator","Blackhollow Security","Offensive Security",85,"Remote (global)","Contract"],
-["Windows Kernel Exploit Researcher","Nullpoint Research","Exploit Development",92,"Remote (global)","Contract"],
-["ML Infrastructure Lead","Brightmoor AI","ML Infra",88,"Remote (global)","Full-time"],
-["Distributed Systems Architect (Rust)","Northwind Compute","Backend",76,"Remote (global)","Full-time"],
-["Staff Application Security Engineer","Cinder Labs","AppSec",52,"Remote (global)","Full-time"],
+/* --- Premium tier (10 roles) --- */
+["Senior Clinical Research Coordinator","Aegis Medical","Medical Research",48,"Remote (US)","Full-time"],
+["Forensic Toxicologist","Aegis Medical","Medical Research",49,"Remote (US)","Contract"],
+["Medical Writer — Regulatory","Aegis Medical","Medical Research",50,"Remote (global)","Full-time"],
+["Pharmacovigilance Specialist","Aegis Medical","Medical Research",50,"Remote (global)","Full-time"],
+["Clinical Data Scientist","Aegis Medical","Medical Research",47,"Remote (US)","Full-time"],
+["Principal Red Team Operator","Blackhollow Security","Offensive Security",50,"Remote (global)","Contract"],
+["Windows Kernel Exploit Researcher","Nullpoint Research","Exploit Development",50,"Remote (global)","Contract"],
+["ML Infrastructure Lead","Brightmoor AI","ML Infra",49,"Remote (global)","Full-time"],
+["Distributed Systems Architect (Rust)","Northwind Compute","Backend",48,"Remote (global)","Full-time"],
+["Staff Application Security Engineer","Cinder Labs","AppSec",46,"Remote (global)","Full-time"],
 /* --- Standard tier (43 roles) --- */
 ["Red Team Analyst","Blackhollow Security","Offensive Security",38,"Remote (global)","Full-time"],
 ["Web Application Pentester","Cinder Labs","Offensive Security",34,"Remote (global)","Contract"],
@@ -629,8 +629,8 @@ const J=[
 ["Network Security Engineer","Greywatch","Network Security",32,"Remote (global)","Full-time"],
 ["Systems Engineer — eBPF","Wireline","Systems",38,"Remote (global)","Full-time"],
 ["Kernel Developer — Networking","Wireline","Kernel",42,"Remote (global)","Full-time"],
-["Junior Data Annotator","Brightmoor AI","Data",12,"Remote (global)","Part-time"],
-["Research Assistant","Aegis Medical","Medical Research",18,"Remote (US)","Contract"],
+["Junior Data Annotator","Brightmoor AI","Data",20,"Remote (global)","Part-time"],
+["Research Assistant","Aegis Medical","Medical Research",22,"Remote (US)","Contract"],
 ["Lab Data Technician","Aegis Medical","Medical Research",24,"Remote (US)","Full-time"]
 ].map((a,i)=>({id:i,t:a[0],co:a[1],c:a[2],r:a[3],loc:a[4],ty:a[5]}));
 
@@ -1397,7 +1397,7 @@ function render(){
   const L=J.filter(j=>(!c||j.c===c)&&(j.t+j.co).toLowerCase().includes(q)).sort((a,b)=>s==='hi'?b.r-a.r:a.r-b.r);
   const V=L.slice(0,shown);
   $('count').textContent='Showing '+V.length+' of '+L.length+' roles';
-  $('list').innerHTML=V.length?V.map(j=>`<div class="job"><div class="cat">${esc(j.c)}</div><h3>${esc(j.t)}</h3><div class="co">${esc(j.co)}</div><div class="meta">${esc(j.loc)} · ${esc(j.ty)}</div><div class="row"><div class="rate">$${j.r}<small>/hr</small></div>${applied.has(j.id)?'<span class="btn btn-sm done">Applied</span>':`<button class="btn btn-p btn-sm" data-id="${j.id}">Apply</button>`}</div></div>`).join(''):'<div class="empty">No roles match. Try a different search or category.</div>';
+  $('list').innerHTML=V.length?V.map(j=>`<div class="job"><div class="cat">${esc(j.c)}</div><h3>${esc(j.t)}</h3><div class="co">${esc(j.co)}</div><div class="meta">${esc(j.loc)} · ${esc(j.ty)}</div><div class="row"><div class="rate">$${j.r}<small> per hour</small></div>${applied.has(j.id)?'<span class="btn btn-sm done">Applied</span>':`<button class="btn btn-p btn-sm" data-id="${j.id}">Apply</button>`}</div></div>`).join(''):'<div class="empty">No roles match. Try a different search or category.</div>';
   $('more').hidden=V.length>=L.length;
 }
 ['q','cat','sort'].forEach(i=>$(i).addEventListener('input',()=>{shown=12;render()}));
@@ -2000,7 +2000,7 @@ function drawDash(){
     else if(a.status==='pending'){ info='Received. Your application is waiting to be passed to our review team.'; }
     else if(a.status==='under_review'){ info='Our team is reviewing your profile and assessment. Expect to hear from us within 48 hours.'+(a.bg?' Background check: '+esc(nice(a.bg))+'.':''); }
     else { info='Status: '+nice(a.status)+'.'+(a.bg?' Background check: '+esc(nice(a.bg))+'.':''); }
-    return `<div class="dcard" data-key="${esc(a.role+'|'+a.co)}"><div class="top"><div><h3>${esc(a.role||'Application')}</h3><div class="m">${esc(a.co||'')}${a.rate?' · $'+esc(a.rate)+'/hr':''}${a.loc?' · '+esc(a.loc):''}${when?' · Applied '+esc(when):''}</div></div><span class="pill ${esc(a.status)}">${esc(nice(a.status))}</span></div><div class="d">${esc(info)}</div>${cta}</div>`;
+    return `<div class="dcard" data-key="${esc(a.role+'|'+a.co)}"><div class="top"><div><h3>${esc(a.role||'Application')}</h3><div class="m">${esc(a.co||'')}${a.rate?' · $'+esc(a.rate)+' per hour':''}${a.loc?' · '+esc(a.loc):''}${when?' · Applied '+esc(when):''}</div></div><span class="pill ${esc(a.status)}">${esc(nice(a.status))}</span></div><div class="d">${esc(info)}</div>${cta}</div>`;
   }).join(''):'<div class="empty">No applications here yet.<br><br><button class="btn btn-p btn-sm" data-browse="1">Browse open roles</button></div>';
 }
 document.querySelectorAll('.dtabs button').forEach(b=>b.onclick=()=>{dashFilter=b.dataset.f;drawDash()});
