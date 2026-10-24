@@ -2357,7 +2357,7 @@ function drawAdmin(){
         ${x.id_back_file_path?'<button class="btn btn-g btn-sm" data-dl="idb">Download ID back</button>':''}
         ${pay&&pay.w2_file_path?'<button class="btn btn-g btn-sm" data-dl="w2">Download W-2 file</button>':''}
         ${pay&&pay.w2_form?'<button class="btn btn-g btn-sm" data-w9="1">View W-2 details</button>':''}
-        <select data-status>
+        <select data-status data-prev="${esc(x.status)}">
           <option value="under_review" ${x.status==='under_review'?'selected':''}>Under review</option>
           <option value="passed" ${x.status==='passed'?'selected':''}>Passed</option>
           <option value="failed" ${x.status==='failed'?'selected':''}>Failed</option>
@@ -2441,13 +2441,20 @@ $('adminList').addEventListener('click',async e=>{
 $('adminList').addEventListener('change',async e=>{
   const sel=e.target.closest('[data-status]'); if(!sel)return;
   const card=e.target.closest('[data-id]'), id=card.dataset.id;
+  const prevValue=sel.dataset.prev||sel.value;
   await refreshAdminTokenIfNeeded();
   try{
-    const r=await fetch(SUPABASE_URL+'/rest/v1/candidates?id=eq.'+id,{method:'PATCH',headers:adminHeaders({'Content-Type':'application/json','Prefer':'return=minimal'}),body:JSON.stringify({status:sel.value})});
+    // return=representation (not minimal) so we can see whether a row actually came back —
+    // Postgres silently updates zero rows when a permissions rule blocks it, and a plain
+    // "204 No Content" success looks identical to that, which is what was going wrong.
+    const r=await fetch(SUPABASE_URL+'/rest/v1/candidates?id=eq.'+id,{method:'PATCH',headers:adminHeaders({'Content-Type':'application/json','Prefer':'return=representation'}),body:JSON.stringify({status:sel.value})});
     if(!r.ok)throw await sbErr(r);
-    const x=adminData.find(c=>String(c.id)===String(id)); if(x)x.status=sel.value;
+    const rows=await r.json();
+    if(!rows.length){ sel.value=prevValue; return toast('Status NOT saved — the database rejected the update. Run the admin-policy SQL, then try again.'); }
+    const x=adminData.find(c=>String(c.id)===String(id)); if(x)x.status=rows[0].status;
+    sel.dataset.prev=rows[0].status;
     toast('Status updated'); drawAdmin();
-  }catch(err){ toast('Could not update status: '+err.message); }
+  }catch(err){ sel.value=prevValue; toast('Could not update status: '+err.message); }
 });
 if(location.hash==='#admin')openAdminEntry();
 addEventListener('hashchange',()=>{if(location.hash==='#admin')openAdminEntry()});
