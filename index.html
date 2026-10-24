@@ -2328,14 +2328,16 @@ async function loadAdminData(){
   if(!adminToken){ msg($('adminNote'),'Your admin session expired. Log out of admin and enter the two codes again.','err'); adminData=[]; drawAdmin(); return; }
   msg($('adminNote'),'Loading…');
   try{
-    const r=await fetch(SUPABASE_URL+'/rest/v1/candidates?select=*&order=created_at.desc',{headers:adminHeaders()});
+    // cache:'no-store' plus a changing query param stop the browser (or any CDN in front
+    // of Supabase) from quietly handing back a stale, previously-cached response here
+    const r=await fetch(SUPABASE_URL+'/rest/v1/candidates?select=*&order=created_at.desc&_='+Date.now(),{headers:adminHeaders(),cache:'no-store'});
     if(!r.ok)throw await sbErr(r);
     adminData=await r.json();
-    msg($('adminNote'),'');
+    msg($('adminNote'),'Loaded '+adminData.length+' application'+(adminData.length===1?'':'s')+' · last refreshed '+new Date().toLocaleTimeString());
   }catch(e){ msg($('adminNote'),'Could not load applications: '+e.message+'. Make sure the admin RLS policy and admins-table row from the setup SQL are in place.','err'); adminData=[]; }
   adminPay={};
   try{
-    const pr=await fetch(SUPABASE_URL+'/rest/v1/payment_methods?select=email,type,w2_file_path,w2_uploaded_at',{headers:adminHeaders()});
+    const pr=await fetch(SUPABASE_URL+'/rest/v1/payment_methods?select=email,type,w2_file_path,w2_uploaded_at&_='+Date.now(),{headers:adminHeaders(),cache:'no-store'});
     if(pr.ok){ (await pr.json()).forEach(p=>{adminPay[(p.email||'').toLowerCase()]=p}); }
   }catch(e){}
   drawAdmin();
