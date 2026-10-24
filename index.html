@@ -2361,6 +2361,7 @@ function drawAdmin(){
         ${x.id_back_file_path?'<button class="btn btn-g btn-sm" data-dl="idb">Download ID back</button>':''}
         ${pay&&pay.w2_file_path?'<button class="btn btn-g btn-sm" data-dl="w2">Download W-2 file</button>':''}
         ${pay&&pay.w2_form?'<button class="btn btn-g btn-sm" data-w9="1">View W-2 details</button>':''}
+        <button class="btn btn-g btn-sm" data-profile="1">Full profile</button>
         <select data-status data-prev="${esc(x.status)}">
           <option value="under_review" ${x.status==='under_review'?'selected':''}>Under review</option>
           <option value="passed" ${x.status==='passed'?'selected':''}>Passed</option>
@@ -2415,6 +2416,26 @@ $('adminList').addEventListener('click',async e=>{
       ${f.tin_type==='ein'?'EIN':'SSN'}: ${esc(f.tin||'—')}<br>
       Signed: ${esc(f.signature||'')}${when?' on '+esc(when):''}
     </div>`;
+    card.querySelector('.admin-actions').insertAdjacentElement('afterend',box);
+  }
+  if(e.target.closest('[data-profile]')){
+    let box=card.querySelector('[data-profilebox]');
+    if(box){ box.remove(); return; }
+    const row=(label,val)=>val?`<div><span style="color:var(--fa)">${esc(label)}:</span> ${esc(val)}</div>`:'';
+    box=document.createElement('div'); box.setAttribute('data-profilebox','1'); box.className='compose';
+    box.innerHTML=`<div style="font-size:13px;color:var(--mu);line-height:2.1;display:grid;grid-template-columns:1fr 1fr;gap:2px 20px">
+      ${row('Phone',x.phone)}
+      ${row('Date of birth',x.date_of_birth)}
+      ${row('Location',x.location)}
+      ${row('Work authorization',x.work_authorization)}
+      ${row('Education',x.education)}
+      ${row('Experience',x.experience)}
+      ${row('Availability',x.availability)}
+      ${row('Earliest start date',x.earliest_start_date)}
+      ${row('LinkedIn',x.linkedin)}
+      ${row('ID type',x.id_type)}
+    </div>
+    ${x.about?`<div style="margin-top:12px;font-size:13px;color:var(--mu)"><span style="color:var(--fa)">About:</span> ${esc(x.about)}</div>`:''}`;
     card.querySelector('.admin-actions').insertAdjacentElement('afterend',box);
   }
   if(e.target.closest('[data-compose]')){ const c=card.querySelector('[data-composer]'); c.hidden=!c.hidden; return; }
