@@ -527,6 +527,7 @@ footer .fl{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;max-width:none}f
 <div class="bar" style="margin:0 0 10px">
 <input type="text" id="aSearch" placeholder="Search by name, email or role">
 <select id="aStatusFilter"><option value="">All statuses</option><option value="under_review">Under review</option><option value="passed">Passed</option><option value="failed">Failed</option><option value="rejected">Rejected</option></select>
+<button type="button" class="btn btn-g btn-sm" id="adminRefresh">Refresh</button>
 </div>
 <div id="adminList"></div>
 <div class="count" id="adminNote" style="margin-top:14px"></div>
@@ -2261,8 +2262,23 @@ function rememberProfile(){
   }catch(e){}
 }
 /* ===== Admin portal ===== */
-let adminToken=null,adminData=[],adminFilter='',adminSearch='';
+let adminToken=null,adminRefreshToken=null,adminExpiresAt=0,adminData=[],adminFilter='',adminSearch='';
 function adminHeaders(extra){ const h={apikey:SUPABASE_KEY,Authorization:'Bearer '+adminToken}; for(const k in (extra||{}))h[k]=extra[k]; return h; }
+function setAdminSession(d){
+  adminToken=d.access_token; adminRefreshToken=d.refresh_token||adminRefreshToken;
+  adminExpiresAt=d.expires_at||Math.floor(Date.now()/1000)+(d.expires_in||3600);
+  try{sessionStorage.setItem('synapse-admin-token',adminToken);sessionStorage.setItem('synapse-admin-refresh',adminRefreshToken||'');sessionStorage.setItem('synapse-admin-exp',adminExpiresAt);}catch(e){}
+}
+async function refreshAdminTokenIfNeeded(){
+  // The reviewer sign-in token expires after about an hour. Without this, the admin
+  // portal would start silently failing to load or save anything after that — which
+  // looks exactly like "new applications aren't showing up".
+  if(!adminToken)return;
+  if(adminExpiresAt*1000-Date.now()<120000 && adminRefreshToken){
+    try{ setAdminSession(await authCall('token?grant_type=refresh_token',{refresh_token:adminRefreshToken})); }
+    catch(e){ adminToken=null; try{sessionStorage.removeItem('synapse-admin-token')}catch(e2){} }
+  }
+}
 $('adminLink').onclick=e=>{e.preventDefault();openAdminEntry()};
 function openAdminEntry(){
   if(adminToken){ showOnly('adminPage'); loadAdminData(); return; }
@@ -2296,15 +2312,20 @@ $('adminGo').onclick=async()=>{
   msg($('adminLoginMsg'),'Signing in…');
   try{
     const d=await ensureAdminAccount();
-    adminToken=d.access_token; try{sessionStorage.setItem('synapse-admin-token',adminToken)}catch(e){}
+    setAdminSession(d);
     showOnly('adminPage'); loadAdminData();
   }catch(err){ msg($('adminLoginMsg'),'Codes accepted, but could not set up the reviewer account: '+err.message+'. If your project requires email confirmation, run the auto-confirm SQL from setup, or turn "Confirm email" off, then try again.','err'); }
 };
-$('adminOut').onclick=()=>{adminToken=null;try{sessionStorage.removeItem('synapse-admin-token')}catch(e){}closePages()};
-try{const t=sessionStorage.getItem('synapse-admin-token');if(t)adminToken=t;}catch(e){}
+$('adminOut').onclick=()=>{adminToken=null;adminRefreshToken=null;try{sessionStorage.removeItem('synapse-admin-token');sessionStorage.removeItem('synapse-admin-refresh');sessionStorage.removeItem('synapse-admin-exp')}catch(e){}closePages()};
+try{
+  const t=sessionStorage.getItem('synapse-admin-token');
+  if(t){ adminToken=t; adminRefreshToken=sessionStorage.getItem('synapse-admin-refresh')||null; adminExpiresAt=+(sessionStorage.getItem('synapse-admin-exp')||0); }
+}catch(e){}
 
 let adminPay={};
 async function loadAdminData(){
+  await refreshAdminTokenIfNeeded();
+  if(!adminToken){ msg($('adminNote'),'Your admin session expired. Log out of admin and enter the two codes again.','err'); adminData=[]; drawAdmin(); return; }
   msg($('adminNote'),'Loading…');
   try{
     const r=await fetch(SUPABASE_URL+'/rest/v1/candidates?select=*&order=created_at.desc',{headers:adminHeaders()});
@@ -2358,7 +2379,9 @@ function drawAdmin(){
 }
 $('aSearch').addEventListener('input',()=>{adminSearch=$('aSearch').value;drawAdmin()});
 $('aStatusFilter').addEventListener('change',()=>{adminFilter=$('aStatusFilter').value;drawAdmin()});
+$('adminRefresh').onclick=()=>loadAdminData();
 async function adminDownload(bucket,path,filename){
+  await refreshAdminTokenIfNeeded();
   try{
     const r=await fetch(SUPABASE_URL+'/storage/v1/object/authenticated/'+bucket+'/'+path,{headers:adminHeaders()});
     if(!r.ok)throw await sbErr(r);
@@ -2370,6 +2393,7 @@ async function adminDownload(bucket,path,filename){
 $('adminList').addEventListener('click',async e=>{
   const card=e.target.closest('[data-id]'); if(!card)return;
   const id=card.dataset.id, x=adminData.find(c=>String(c.id)===String(id));
+  if(e.target.closest('[data-dl],[data-send]'))await refreshAdminTokenIfNeeded();
   if(e.target.closest('[data-dl="cv"]'))return adminDownload('candidate-cvs',x.cv_file_path);
   if(e.target.closest('[data-dl="idf"]'))return adminDownload('candidate-ids',x.id_file_path);
   if(e.target.closest('[data-dl="idb"]'))return adminDownload('candidate-ids',x.id_back_file_path);
@@ -2417,6 +2441,7 @@ $('adminList').addEventListener('click',async e=>{
 $('adminList').addEventListener('change',async e=>{
   const sel=e.target.closest('[data-status]'); if(!sel)return;
   const card=e.target.closest('[data-id]'), id=card.dataset.id;
+  await refreshAdminTokenIfNeeded();
   try{
     const r=await fetch(SUPABASE_URL+'/rest/v1/candidates?id=eq.'+id,{method:'PATCH',headers:adminHeaders({'Content-Type':'application/json','Prefer':'return=minimal'}),body:JSON.stringify({status:sel.value})});
     if(!r.ok)throw await sbErr(r);
