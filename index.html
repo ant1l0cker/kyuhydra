@@ -2047,8 +2047,9 @@ function drawDash(){
     if(a.status==='assessment_in_progress'){ info='Your timed assessment is still running. Reopen it to keep answering before time runs out.'; cta='<button class="btn btn-p btn-sm" data-resume="1" style="margin-top:10px">Continue assessment</button>'; }
     else if(a.status==='assessment_failed'){ info="You ran out of time on this assessment, so it can't be retaken."; }
     else if(a.status==='pending'){ info='Received. Your application is waiting to be passed to our review team.'; }
-    else if(a.status==='under_review'){ info='Our team is reviewing your profile and assessment. Expect to hear from us within 48 hours.'+(a.bg?' Background check: '+esc(nice(a.bg))+'.':''); }
-    else { info='Status: '+nice(a.status)+'.'+(a.bg?' Background check: '+esc(nice(a.bg))+'.':''); }
+    else if(a.status==='under_review'){ info='Our team is reviewing your profile and assessment. Expect to hear from us within 48 hours.'; }
+    else if(a.status==='passed'){ info="Congratulations — you've passed! Set up your payment method to get onboarded."; cta='<button class="btn btn-p btn-sm" data-setpay="1" style="margin-top:10px">Set up payment method</button>'; }
+    else { info='Status: '+nice(a.status)+'.'; }
     return `<div class="dcard" data-key="${esc(a.role+'|'+a.co)}"><div class="top"><div><h3>${esc(a.role||'Application')}</h3><div class="m">${esc(a.co||'')}${a.rate?' · $'+esc(rateRange(a.rate))+'/hr':''}${a.loc?' · '+esc(a.loc):''}${when?' · Applied '+esc(when):''}</div></div><span class="pill ${esc(a.status)}">${esc(nice(a.status))}</span></div><div class="d">${esc(info)}</div>${cta}</div>`;
   }).join(''):'<div class="empty">No applications here yet.<br><br><button class="btn btn-p btn-sm" data-browse="1">Browse open roles</button></div>';
 }
@@ -2056,7 +2057,8 @@ document.querySelectorAll('.dtabs button').forEach(b=>b.onclick=()=>{dashFilter=
 $('dList').addEventListener('click',e=>{
   if(e.target.closest('[data-browse]')){closePages();location.hash='jobs';return}
   const rb=e.target.closest('[data-resume]');
-  if(rb){ const card=rb.closest('[data-key]'); const key=card.dataset.key; const att=Object.values(attemptsIndex).find(a=>a.job_key===key); if(att)resumeAssessment(att); }
+  if(rb){ const card=rb.closest('[data-key]'); const key=card.dataset.key; const att=Object.values(attemptsIndex).find(a=>a.job_key===key); if(att)resumeAssessment(att); return; }
+  if(e.target.closest('[data-setpay]')){ setDashTab('pay'); }
 });
 $('dashBack').onclick=()=>closePages();
 $('dashOut').onclick=logout;
